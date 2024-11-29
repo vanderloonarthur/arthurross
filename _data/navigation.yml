@@ -1,0 +1,8 @@
+main:
+  - title: "Reizen"
+    url: "travelblog.html/"  # Assuming this is the main travel blog page
+    dropdown:
+      - title: "Milaan"
+        url: "/kraye/posts/milaan/"  # Corrected path without .md extension
+      - title: "Madrid"
+        url: "/kraye/posts/madrid/"  # Corrected path without .md extension

@@ -1,0 +1,157 @@
+/* Reset and Global Styles */
+body {
+    color: #ffd700;
+    background-color: #000;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Image Gallery Styles */
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.image-item {
+    overflow: hidden;
+    border: 2px solid green;
+    transition: border-color .3s;
+}
+
+.image-item img {
+    width: 100%;
+    height: auto;
+    border: 2px solid transparent;
+    transition: transform .3s ease-in-out, border-color .3s;
+}
+
+.image-item:hover img {
+    transform: scale(1.1);
+    border-color: #fff;
+}
+
+.image-caption {
+    text-align: center;
+    margin-top: 10px;
+    color: green;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #f8f8f8;
+    color: #333;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    max-width: 90%;
+    width: 800px;
+    position: relative;
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color .3s;
+}
+
+.close:hover {
+    color: #000;
+}
+
+/* Feedback Form Styles */
+#feedbackForm {
+    margin-top: 20px;
+}
+
+#feedbackForm label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+#selectedFeedback {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#additionalComments {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button[type="submit"] {
+    background-color: #ffd700;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color .3s, color .3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #000;
+    color: #ffd700;
+}
+
+/* Scroll to Top Button */
+#scrollUpBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ffd700;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    display: none;
+    transition: background-color .3s, color .3s, transform .3s;
+}
+
+#scrollUpBtn:hover {
+    background-color: #000;
+    color: #ffd700;
+}
+
+@media only screen and (max-width: 768px) {
+    .image-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+}

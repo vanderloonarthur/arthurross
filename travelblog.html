@@ -1,0 +1,482 @@
+---
+permalink: /travelblog.html/
+---
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Reis door Europa met Arthur Ross! Ontdek de schoonheid van Europa met deze boeiende reisverhalen.">
+    <meta name="keywords" content="Europa, reizen, Arthur Ross, reisverhalen, Milaan, Madrid, Stuttgart, Edinburgh">
+    <meta property="og:title" content="Gallery - Reis door Europa met Arthur Ross!">
+    <meta property="og:description" content="Ontdek de schoonheid van Europa met deze boeiende reisverhalen van Arthur Ross.">
+    <meta property="og:image" content="https://www.arthurross.nl/assets/images/madride.png">
+    <meta property="og:url" content="https://www.arthurross.nl/travelblog.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gallery - Reis door Europa met Arthur Ross!">
+    <meta name="twitter:description" content="Ontdek de schoonheid van Europa met deze boeiende reisverhalen van Arthur Ross.">
+    <meta name="twitter:image" content="https://www.arthurross.nl/assets/images/madride.png">
+    <title>Gallery - Reis door Europa met Arthur Ross!</title>
+        <!-- Favicon -->
+        <link rel="icon" href="/assets/images/europa.png" type="image/x-icon">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-25QWYDWGEP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-25QWYDWGEP');
+    </script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        header, nav, footer {
+            text-align: center;
+            padding: 0.5em;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+
+        main {
+            margin-top: 20px;
+            padding-top: 0;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .image-item {
+            position: relative;
+            overflow: hidden;
+            height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .check-mark {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 2em;
+            color: #4caf50;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s, border 0.3s;
+        }
+
+        .image-item img.pressed {
+            border: 5px solid gold;
+            box-sizing: border-box;
+            animation: vibrate 1s infinite;
+        }
+
+        .image-item img.second-pressed {
+            border: 5px solid red;
+            box-sizing: border-box;
+            animation: vibrate-red 1s infinite;
+        }
+
+        @keyframes vibrate-red {
+            0% { border-color: #FF0000; }
+            25% { border-color: #FF3333; }
+            50% { border-color: #FF6666; }
+            75% { border-color: #FF3333; }
+            100% { border-color: #FF0000; }
+        }
+
+        .image-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: #e0e0e0;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal.fade-in {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal.fade-out {
+            opacity: 0;
+        }
+
+        .modal-content {
+            background: #2e2e2e;
+            color: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+
+        .modal .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #444;
+            color: #f5f5f5;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 5px;
+            transition: background 0.3s;
+        }
+
+        .modal .close:hover {
+            background: #666;
+        }
+
+        .feedback-btn {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .feedback-btn:hover {
+            background: #e64a19;
+        }
+
+        .centered-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #e0e0e0;
+        }
+
+        input, select, textarea {
+            background: #444;
+            border: 1px solid #555;
+            border-radius: 5px;
+            color: #e0e0e0;
+            padding: 10px;
+            font-size: 1em;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            background: #555;
+            border-color: #666;
+            outline: none;
+        }
+
+        button {
+            background: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #e64a19;
+        }
+
+        #scrollUpBtn {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #scrollUpBtn:hover {
+            background-color: #b71c1c;
+        }
+
+        footer {
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+            }
+            .modal .close {
+                font-size: 1.2em;
+                padding: 4px;
+            }
+            button {
+                padding: 8px 16px;
+                font-size: 1em;
+            }
+            #scrollUpBtn {
+                bottom: 10px;
+                right: 10px;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                width: 100%;
+            }
+            .modal .close {
+                font-size: 1em;
+                padding: 3px;
+            }
+            button {
+                padding: 6px 12px;
+                font-size: 0.9em;
+            }
+            #scrollUpBtn {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>Reis door Europa met Arthur Ross!</h1>
+        </nav>
+    </header>
+    <main>
+        <section class="image-gallery">
+            <div class="image-item">
+                <a href="/posts/milaan.md" class="golden-link">
+                    <img src="/assets/images/skyline.jpg" alt="Milaan" data-image-id="milaan">
+                    <div class="check-mark hidden">✔️</div>
+                    <div class="image-caption">
+                        <p>Bedevaart naar Milaan [mei/ juni 2016]</p>
+                    </div>
+                </a>
+            </div>
+            <div class="image-item">
+                <a href="/posts/madrid.md" class="golden-link">
+                    <img src="/assets/images/bear-1.jpg" alt="Madrid" data-image-id="madrid">
+                    <div class="check-mark hidden">✔️</div>
+                    <div class="image-caption">
+                        <p>Van Gogh achterna [juni/ juli 2020]</p>
+                    </div>
+                </a>
+            </div>
+            <div class="image-item">
+                <a href="/posts/stuttgart.html" class="golden-link">
+                    <img src="/assets/images/stuttgart_stag.jpg" alt="Stuttgart" data-image-id="stuttgart">
+                    <div class="check-mark hidden">✔️</div>
+                    <div class="image-caption">
+                        <p>Marshall Stuttgart [december 2020]</p>
+                    </div>
+                </a>
+            </div>
+            <div class="image-item">
+                <a href="/posts/Edinburgh.md" class="golden-link">
+                    <img src="/assets/images/edin.jpg" alt="Edinburgh" data-image-id="edinburgh">
+                    <div class="check-mark hidden">✔️</div>
+                    <div class="image-caption">
+                        <p>D'Arthur is coming home! [april 2024]</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        <div class="centered-button">
+            <button id="feedbackButton" class="feedback-btn" onclick="openModal()" aria-label="Open feedback modal">Geef Feedback</button>
+        </div>
+
+        <div id="feedback-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Hoe blij bent u met de website?</h2>
+                <form id="my-form" action="https://formspree.io/f/xblrooaq" method="POST">
+                    <div>
+                        <label for="name">Naam:</label>
+                        <input type="text" id="name" name="name" placeholder="Voer uw naam in" required>
+                    </div>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="Voer uw e-mail in" required>
+                    </div>
+                    <div>
+                        <label for="selectedFeedback">Selecteer Feedback:</label>
+                        <select id="selectedFeedback" name="selectedFeedback" required>
+                            <option value="Zeer gelukkig">😀 Zeer gelukkig</option>
+                            <option value="Gelukkig">🙂 Gelukkig</option>
+                            <option value="Neutraal">😐 Neutraal</option>
+                            <option value="Ongelukkig">🙁 Ongelukkig</option>
+                            <option value="Zeer ongelukkig">😠 Zeer ongelukkig</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="message">Bericht:</label>
+                        <textarea id="message" name="message" placeholder="Voer uw bericht in" required></textarea>
+                    </div>
+                    <button id="my-form-button" type="submit">Verstuur Feedback</button>
+                    <p id="my-form-status"></p>
+                </form>
+            </div>
+        </div>
+
+        <button id="scrollUpBtn" onclick="scrollToTop()" aria-label="Scroll naar boven">Scroll naar boven</button>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Arthur Ross. Alle rechten voorbehouden.</p>
+    </footer>
+
+    <script>
+        function openModal() {
+            const modal = document.getElementById("feedback-modal");
+            modal.classList.add('fade-in');
+            modal.style.display = "flex";
+        }
+    
+        function closeModal() {
+            const modal = document.getElementById("feedback-modal");
+            modal.classList.remove('fade-in');
+            modal.classList.add('fade-out');
+    
+            setTimeout(() => {
+                modal.style.display = "none";
+                modal.classList.remove('fade-out');
+            }, 300);
+        }
+    
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    
+        window.onscroll = function() {
+            const scrollUpBtn = document.getElementById("scrollUpBtn");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                scrollUpBtn.style.display = "block";
+            } else {
+                scrollUpBtn.style.display = "none";
+            }
+        };
+    
+        document.getElementById("my-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            var status = document.getElementById("my-form-status");
+            var data = new FormData(event.target);
+            try {
+                const response = await fetch(event.target.action, {
+                    method: event.target.method,
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (response.ok) {
+                    status.innerHTML = "Bedankt voor uw inzending!";
+                    event.target.reset();
+                    document.getElementById("feedbackButton").style.backgroundColor = '#4caf50';
+                    setTimeout(() => closeModal(), 2000);
+                } else {
+                    const data = await response.json();
+                    if (data.errors) {
+                        status.innerHTML = data.errors.map(error => error.message).join(", ");
+                    } else {
+                        status.innerHTML = "Oeps! Er was een probleem bij het verzenden van uw formulier.";
+                    }
+                }
+            } catch (error) {
+                status.innerHTML = "Oeps! Er was een probleem bij het verzenden van uw formulier.";
+            }
+        });
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.image-item img');
+
+            images.forEach(image => {
+                const imageId = image.getAttribute('data-image-id');
+                let clickCount = parseInt(localStorage.getItem(`${imageId}-clicks`) || '0', 10);
+                const checkMark = image.nextElementSibling;
+
+                if (clickCount === 1) {
+                    image.classList.add('pressed');
+                } else if (clickCount >= 2) {
+                    image.classList.add('second-pressed');
+                    checkMark.classList.remove('hidden');
+                }
+
+                image.addEventListener('click', function() {
+                    clickCount++;
+                    localStorage.setItem(`${imageId}-clicks`, clickCount);
+                    
+                    if (clickCount === 1) {
+                        image.classList.add('pressed');
+                        checkMark.classList.add('hidden');
+                    } else if (clickCount >= 2) {
+                        image.classList.remove('pressed');
+                        image.classList.add('second-pressed');
+                        checkMark.classList.remove('hidden');
+                    } else if (clickCount === 0) {
+                        image.classList.remove('pressed', 'second-pressed');
+                        checkMark.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

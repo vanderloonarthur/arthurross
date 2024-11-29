@@ -1,0 +1,169 @@
+---
+permalink: /
+---
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-25QWYDWGEP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-25QWYDWGEP');
+    </script>
+    <title>{{ page.title | default: site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ site.baseurl }}/assets/images/europa.png" type="image/x-icon">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrollbars */
+            font-family: 'Arial', sans-serif;
+        }
+        h1 {
+            color: red;
+        }
+        .fade-out-element {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+        }
+        .fullscreen-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .fullscreen-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+            transition: opacity 2s ease;
+        }
+        .intro-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Add background color with transparency */
+            border-radius: 10px; /* Add rounded corners */
+            opacity: 0;
+            transition: opacity 2s ease;
+            font-size: 1.2em; /* Enhance font size */
+        }
+        .enter-button {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: 2px solid silver;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .enter-button:hover {
+            background-color: green;
+            color: white;
+        }
+        @media only screen and (max-width: 768px) {
+            .intro-text h1 {
+                font-size: 1.5em;
+            }
+            .intro-text p {
+                font-size: 1em;
+            }
+            .enter-button {
+                font-size: 0.8em;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TXS8FJVW" height="0" width="0" style="display: none; visibility: hidden;"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <div class="fade-out-element">
+        <div class="fullscreen-container">
+            <img src="{{ site.baseurl }}/assets/images/eiffeltore.jpg" alt="Eiffel Tower at sunset" class="fullscreen-image" id="fade-out-image" />
+            
+            <!-- Introductory Text Section -->
+            <div class="intro-text">
+                <h1>Reis door Europa met Arthur Ross!</h1>
+                <p>
+                    Ontdek de schoonheid van Europa met onze spannende reisverhalen.
+                    Laat je meevoeren naar de meest prachtige bestemmingen en ervaar de
+                    cultuur, geschiedenis en het avontuur!
+                </p>
+            </div>
+            <!-- End Introductory Text Section -->
+            
+            <!-- Enter Website Button -->
+            <button class="enter-button" id="enter-button" aria-label="Get ready to enter the website">
+                Haal diep adem
+            </button>
+        </div>
+    </div>
+    
+    <!-- Audio element to play the tune -->
+    <audio id="intro-tune" src="{{ site.baseurl }}/assets/audio/intro_tune.wav"></audio>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select the image, text, button, and audio elements
+            var image = document.querySelector('.fullscreen-image');
+            var introText = document.querySelector('.intro-text');
+            var button = document.getElementById('enter-button');
+            var audio = document.getElementById('intro-tune');
+
+            // Function to handle the button click
+            var enterWebsite = function() {
+                // Play the audio
+                audio.play().catch(function(error) {
+                    console.log('Autoplay failed:', error);
+                });
+
+                // Fade out the image
+                image.style.opacity = 0;
+
+                // Fade in the intro text
+                setTimeout(function() {
+                    introText.style.opacity = 1;
+                }, 2000); // Delay in milliseconds (2000ms = 2 seconds)
+
+                // Hide the button
+                button.style.display = 'none';
+            };
+
+            // Add event listener to the button
+            button.addEventListener('click', enterWebsite);
+
+            // Function to handle the tune end
+            audio.addEventListener('ended', function() {
+                // Redirect to the travelblog URL
+                window.location.href = '{{ site.baseurl }}/travelblog.html';
+            });
+
+            // Ensure button is focusable and accessible
+            button.focus();
+        });
+    </script>
+</body>
+</html>
