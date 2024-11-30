@@ -383,8 +383,16 @@ permalink: /posts/madrid.md/
     likeCounter.textContent = `Likes: ${likeCount}`;
   }
 });
-function addComment() {
-        // Get the comment text
+// Load comments for the specific page when the page loads
+    window.onload = function () {
+        loadComments();
+    };
+    // Get a unique identifier for the page
+    function getPageId() {
+        return window.location.pathname; // Use the URL path as a unique identifier
+    }
+    // Function to add a comment
+    function addComment() {
         const commentInput = document.getElementById('commentInput');
         const commentText = commentInput.value.trim();
         // Ensure the comment isn't empty
@@ -392,14 +400,46 @@ function addComment() {
             alert('Please enter a comment before posting.');
             return;
         }
-        // Create a new comment element
-        const commentList = document.getElementById('commentList');
-        const newComment = document.createElement('div');
-        newComment.classList.add('comment');
-        newComment.innerHTML = `<p>${commentText}</p>`;
-        // Add the new comment to the list
-        commentList.appendChild(newComment);
+        // Save the comment for the specific page
+        saveComment(commentText);
         // Clear the input field
         commentInput.value = '';
     }
+    // Save a comment to localStorage for the specific page
+    function saveComment(commentText) {
+        const pageId = getPageId(); // Get the unique page identifier
+        const comments = JSON.parse(localStorage.getItem(pageId)) || [];
+        // Create a new comment object with a timestamp
+        const newComment = {
+            text: commentText,
+            timestamp: new Date().toLocaleString()
+        };
+        // Add the new comment to the list
+        comments.push(newComment);
+        localStorage.setItem(pageId, JSON.stringify(comments));
+        // Render the new comment
+        renderComment(newComment);
+    }
+    // Load comments from localStorage for the specific page
+    function loadComments() {
+        const pageId = getPageId(); // Get the unique page identifier
+        const comments = JSON.parse(localStorage.getItem(pageId)) || [];
+        // Render all comments for this page
+        comments.forEach(comment => renderComment(comment));
+    }
+    // Render a single comment to the page
+    function renderComment(comment) {
+        const commentList = document.getElementById('commentList');
+        const commentElement = document.createElement('div');
+        commentElement.classList.add('comment');
+        commentElement.innerHTML = `<p>${comment.text}</p><small>Posted on: ${comment.timestamp}</small>`;
+        commentList.appendChild(commentElement);
+    }
+function deleteComment(index) {
+    const comments = JSON.parse(localStorage.getItem('comments')) || [];
+    comments.splice(index, 1);
+    localStorage.setItem('comments', JSON.stringify(comments));
+    document.getElementById('commentList').innerHTML = '';
+    loadComments();
+}
       </script>
