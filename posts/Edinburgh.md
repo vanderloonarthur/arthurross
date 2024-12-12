@@ -423,8 +423,8 @@ permalink: /posts/Edinburgh.md/
     const likeStateKey = `isLiked_${pageId}`;
     const likeCountKey = `likeCount_${pageId}`;
 
-    let isLiked = JSON.parse(sessionStorage.getItem(likeStateKey)) || false;
-    let likeCount = parseInt(sessionStorage.getItem(likeCountKey)) || 0;
+    let isLiked = JSON.parse(localStorage.getItem(likeStateKey)) || false;
+    let likeCount = parseInt(localStorage.getItem(likeCountKey)) || 0;
 
     function updateLikeUI() {
       if (likeButton) {
@@ -439,8 +439,8 @@ permalink: /posts/Edinburgh.md/
         isLiked = !isLiked;
         likeCount += isLiked ? 1 : -1;
 
-        sessionStorage.setItem(likeStateKey, JSON.stringify(isLiked));
-        sessionStorage.setItem(likeCountKey, likeCount);
+        localStorage.setItem(likeStateKey, JSON.stringify(isLiked));
+        localStorage.setItem(likeCountKey, likeCount);
 
         updateLikeUI();
       });
@@ -448,9 +448,9 @@ permalink: /posts/Edinburgh.md/
       updateLikeUI();
     }
 
-    // Load comments from sessionStorage
+    // Load comments from localStorage
     function loadComments() {
-      const comments = JSON.parse(sessionStorage.getItem(`comments_${pageId}`)) || [];
+      const comments = JSON.parse(localStorage.getItem(`comments_${pageId}`)) || [];
 
       commentList.innerHTML = "";  // Clear the list before adding new comments
       comments.forEach((comment) => {
@@ -472,8 +472,8 @@ permalink: /posts/Edinburgh.md/
       const text = commentInput.value.trim();
 
       if (name && text) {
-        // Get existing comments from sessionStorage or create a new array if empty
-        const comments = JSON.parse(sessionStorage.getItem(`comments_${pageId}`)) || [];
+        // Get existing comments from localStorage or create a new array if empty
+        const comments = JSON.parse(localStorage.getItem(`comments_${pageId}`)) || [];
 
         // Create a new comment object
         const newComment = {
@@ -485,8 +485,8 @@ permalink: /posts/Edinburgh.md/
         // Add the new comment to the array
         comments.push(newComment);
 
-        // Save the updated comments array back to sessionStorage
-        sessionStorage.setItem(`comments_${pageId}`, JSON.stringify(comments));
+        // Save the updated comments array back to localStorage
+        localStorage.setItem(`comments_${pageId}`, JSON.stringify(comments));
 
         // Clear the input fields
         userNameInput.value = "";
