@@ -365,16 +365,18 @@ permalink: /posts/Edinburgh.md/
       <img src="/assets/images/refugees.png" alt="Popup Image" class="modal-image" />
     </div>
   </div>
-  
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const userNameInput = document.getElementById("userName");
     const commentInput = document.getElementById("commentInput");
     const commentList = document.getElementById("commentList");
     const addCommentButton = document.getElementById("addCommentButton");
-    const pageId = window.location.pathname;
+    const likeButton = document.getElementById("like-button");
+    const likeCounter = document.getElementById("like-counter");
+    const pageId = window.location.pathname.split('/').pop(); // This will get 'Edinburgh.md'
 
-    // Modal functionality
+    // Modal functionality (unchanged)
     const modal = document.getElementById("myModal");
     const modalImage = document.querySelector(".modal-image");
     const smallImage = document.querySelector("#newText .small-image");
@@ -409,21 +411,22 @@ permalink: /posts/Edinburgh.md/
       });
     }
 
-    // Automatically show images on page load
-    setTimeout(() => {
-      if (smallImage) smallImage.classList.add("show");
-      const fullscreenImage = document.querySelector(".fullscreen-image");
-      if (fullscreenImage) fullscreenImage.classList.add("show");
-    }, 500);
+    // Like button functionality (server-side likes)
+    let isLiked = false;
+    let likeCount = 0;
 
-    // Like button functionality
-    const likeButton = document.getElementById("like-button");
-    const likeCounter = document.getElementById("like-counter");
-    const likeStateKey = `isLiked_${pageId}`;
-    const likeCountKey = `likeCount_${pageId}`;
-
-    let isLiked = JSON.parse(localStorage.getItem(likeStateKey)) || false;
-    let likeCount = parseInt(localStorage.getItem(likeCountKey)) || 0;
+    // Fetch current like state from the server
+    async function fetchLikeData() {
+      try {
+        const response = await fetch(`/api/likes${pageId}`);
+        const data = await response.json();
+        isLiked = data.isLiked;
+        likeCount = data.likeCount;
+        updateLikeUI();
+      } catch (error) {
+        console.error("Error fetching like data:", error);
+      }
+    }
 
     function updateLikeUI() {
       if (likeButton) {
@@ -433,65 +436,76 @@ permalink: /posts/Edinburgh.md/
       if (likeCounter) likeCounter.textContent = `Likes: ${likeCount}`;
     }
 
-    if (likeButton) {
-      likeButton.addEventListener("click", () => {
-        isLiked = !isLiked;
-        likeCount += isLiked ? 1 : -1;
+    likeButton.addEventListener("click", async () => {
+      isLiked = !isLiked;
+      likeCount += isLiked ? 1 : -1;
 
-        localStorage.setItem(likeStateKey, JSON.stringify(isLiked));
-        localStorage.setItem(likeCountKey, likeCount);
-
-        updateLikeUI();
+      // Send like data to the server
+      await fetch(`/api/likes${pageId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isLiked, likeCount }),
       });
 
       updateLikeUI();
-    }
-
-    // Load comments from localStorage
-    function loadComments() {
-      const comments = JSON.parse(localStorage.getItem(`comments_${pageId}`)) || [];
-      commentList.innerHTML = "";  // Clear the list before adding new comments
-      comments.forEach((comment) => {
-        const commentElement = document.createElement("div");
-        commentElement.classList.add("comment");
-
-        // Add the comment with name and message
-        commentElement.innerHTML = `<p><strong>${comment.name}:</strong> ${comment.text}</p>`;
-        commentList.appendChild(commentElement);
-      });
-    }
-
-    // Add new comment to the list and save to localStorage
-    addCommentButton.addEventListener("click", function () {
-      const name = userNameInput.value.trim();
-      const text = commentInput.value.trim();
-
-      if (name && text) {
-        const newComment = { name, text };
-        const comments = JSON.parse(localStorage.getItem(`comments_${pageId}`)) || [];
-        comments.push(newComment);
-
-        localStorage.setItem(`comments_${pageId}`, JSON.stringify(comments));
-
-        // Clear input fields after posting
-        userNameInput.value = "";
-        commentInput.value = "";
-
-        loadComments();
-      } else {
-        alert("Please enter both your name and a comment.");
-      }
     });
 
-    // Initial load of comments on page load
-    loadComments();
-
-    // Back to Gallery button functionality (moved inside DOMContentLoaded)
-    const backButton = document.querySelector(".back-to-gallery");
-    if (backButton) {
-      backButton.addEventListener("click", function () {
-        window.location.href = "/index/";  // Adjust this URL as needed
-      });
+    // Fetch and display comments from the server
+    async function loadComments() {
+      try {
+        const response = await fetch(`/api/comments${pageId}`);
+        const comments = await response.json();
+        commentList.innerHTML = "";  // Clear the list before adding new comments
+        comments.forEach((comment) => {
+          const commentElement = document.createElement("div");
+          commentElement.classList.add("comment");
+          commentElement.innerHTML = `<p><strong>${comment.name}:</strong> ${comment.text}</p>`;
+          commentList.appendChild(commentElement);
+        });
+      } catch (error) {
+        console.error("Error loading comments:", error);
+      }
     }
+
+    addCommentButton.addEventListener("click", async function () {
+  const name = userNameInput.value.trim();
+  const text = commentInput.value.trim();
+
+  if (name && text) {
+    const newComment = { name, text };
+
+    try {
+      await fetch(`/api/comments${pageId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newComment),
+      });
+
+      // Clear input fields after posting
+      userNameInput.value = "";
+      commentInput.value = "";
+
+      // Dynamically add the new comment to the list
+      const commentElement = document.createElement("div");
+      commentElement.classList.add("comment");
+      commentElement.innerHTML = `<p><strong>${newComment.name}:</strong> ${newComment.text}</p>`;
+      commentList.appendChild(commentElement);
+    } catch (error) {
+      console.error("Error posting comment:", error);
+      alert("There was an error posting your comment. Please try again.");
+    }
+  } else {
+    alert("Please enter both your name and a comment.");
+  }
+});
+
+
+    // Initial load of comments and likes
+    loadComments();
+    fetchLikeData();
   });
 </script>
