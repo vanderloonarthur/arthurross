@@ -339,15 +339,14 @@ permalink: /posts/Edinburgh.md/
   </button>
   <p id="like-counter" style="font-size: 1.5em; color: white;">Likes: 0</p>
 </div>
-<!-- Name input field added before the comment section -->
 <div class="comment-section">
-    <h2>Leave a Comment</h2>
-    <div class="comment-input">
-        <input type="text" id="userName" placeholder="Enter your name" />
-        <textarea id="commentInput" placeholder="Write a comment"></textarea>
-        <button id="addCommentButton">Post Comment</button>
-    </div>
-    <div id="commentList"></div>
+  <h2>Leave a Comment</h2>
+  <div class="comment-input">
+    <input type="text" id="userName" placeholder="Enter your name" />
+    <textarea id="commentInput" placeholder="Write a comment"></textarea>
+    <button id="addCommentButton">Post Comment</button>
+  </div>
+  <div id="commentList"></div>
 </div>
     <!-- Display Comments -->
     <div id="commentList">
@@ -366,7 +365,7 @@ permalink: /posts/Edinburgh.md/
       <img src="/assets/images/refugees.png" alt="Popup Image" class="modal-image" />
     </div>
   </div>
-
+  
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const userNameInput = document.getElementById("userName");
@@ -451,55 +450,43 @@ permalink: /posts/Edinburgh.md/
     // Load comments from localStorage
     function loadComments() {
       const comments = JSON.parse(localStorage.getItem(`comments_${pageId}`)) || [];
-
       commentList.innerHTML = "";  // Clear the list before adding new comments
       comments.forEach((comment) => {
         const commentElement = document.createElement("div");
         commentElement.classList.add("comment");
-        commentElement.innerHTML = `
-          <p><strong>${comment.name}</strong>: ${comment.text}</p>
-          <small>Posted at ${new Date(comment.createdAt).toLocaleString()}</small>
-        `;
+
+        // Add the comment with name and message
+        commentElement.innerHTML = `<p><strong>${comment.name}:</strong> ${comment.text}</p>`;
         commentList.appendChild(commentElement);
       });
     }
 
-    loadComments();  // Load and display comments on page load
-
-    // Add comment functionality
-    addCommentButton.addEventListener("click", () => {
+    // Add new comment to the list and save to localStorage
+    addCommentButton.addEventListener("click", function () {
       const name = userNameInput.value.trim();
       const text = commentInput.value.trim();
 
       if (name && text) {
-        // Get existing comments from localStorage or create a new array if empty
+        const newComment = { name, text };
         const comments = JSON.parse(localStorage.getItem(`comments_${pageId}`)) || [];
-
-        // Create a new comment object
-        const newComment = {
-          name: name,
-          text: text,
-          createdAt: new Date().toISOString(),
-        };
-
-        // Add the new comment to the array
         comments.push(newComment);
 
-        // Save the updated comments array back to localStorage
         localStorage.setItem(`comments_${pageId}`, JSON.stringify(comments));
 
-        // Clear the input fields
+        // Clear input fields after posting
         userNameInput.value = "";
         commentInput.value = "";
 
-        // Reload the comments list
         loadComments();
       } else {
-        alert("Please enter both your name and comment.");
+        alert("Please enter both your name and a comment.");
       }
     });
 
-    // Back to Gallery button functionality
+    // Initial load of comments on page load
+    loadComments();
+
+    // Back to Gallery button functionality (moved inside DOMContentLoaded)
     const backButton = document.querySelector(".back-to-gallery");
     if (backButton) {
       backButton.addEventListener("click", function () {
