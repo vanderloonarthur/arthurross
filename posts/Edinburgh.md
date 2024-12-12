@@ -418,7 +418,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fetch current like state from the server
   async function fetchLikeData() {
     try {
-      const response = await fetch(`/api/likes${pageId}`);
+      const response = await fetch(`/api/likes/${pageId}`);
       const data = await response.json();
       isLiked = data.isLiked;
       likeCount = data.likeCount;
@@ -452,6 +452,9 @@ document.addEventListener("DOMContentLoaded", function () {
     updateLikeUI();
   });
 
+  // Fetch initial like data
+  fetchLikeData();
+
   // Fetch and display comments from the server
   async function loadComments() {
     try {
@@ -461,7 +464,9 @@ document.addEventListener("DOMContentLoaded", function () {
       comments.forEach((comment) => {
         const commentElement = document.createElement("div");
         commentElement.classList.add("comment");
-        commentElement.innerHTML = `<p><strong>${comment.name}:</strong> ${comment.text}</p>`;
+        commentElement.innerHTML = `
+          <p><strong>${comment.user}</strong>: ${comment.text}</p>
+        `;
         commentList.appendChild(commentElement);
       });
     } catch (error) {
@@ -469,14 +474,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  addCommentButton.addEventListener("click", async function () {
-    const name = userNameInput.value.trim();
-    const text = commentInput.value.trim();
+  // Post a new comment
+  addCommentButton.addEventListener("click", async () => {
+    const userName = userNameInput.value.trim();
+    const commentText = commentInput.value.trim();
 
-    if (name && text) {
-      const newComment = { name, text };
-
+    if (userName && commentText) {
       try {
+        const newComment = { user: userName, text: commentText };
+
+        // Send the new comment to the server
         await fetch(`/api/comments${pageId}`, {
           method: "POST",
           headers: {
@@ -485,27 +492,21 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify(newComment),
         });
 
-        // Clear input fields after posting
+        // Clear input fields and reload comments
         userNameInput.value = "";
         commentInput.value = "";
-
-        // Dynamically add the new comment to the list
-        const commentElement = document.createElement("div");
-        commentElement.classList.add("comment");
-        commentElement.innerHTML = `<p><strong>${newComment.name}:</strong> ${newComment.text}</p>`;
-        commentList.appendChild(commentElement);
+        loadComments();
       } catch (error) {
         console.error("Error posting comment:", error);
-        alert("There was an error posting your comment. Please try again.");
       }
     } else {
-      alert("Please enter both your name and a comment.");
+      alert("Please enter a name and a comment.");
     }
   });
 
-  // Initial load of comments and likes
+  // Initial loading of comments
   loadComments();
-  fetchLikeData();
 });
+
 
 </script>

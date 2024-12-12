@@ -28,18 +28,8 @@ app.post('/api/comments', (req, res) => {
   res.json(comments);
 });
 
-// API to get like data
-app.get('/api/likes', (req, res) => {
-  res.json({ likeCount, isLiked });
-});
+curl http://localhost:4000/api/likes
 
-// API to post like data
-app.post('/api/likes', (req, res) => {
-  const { isLiked: newLikeStatus, likeCount: newLikeCount } = req.body;
-  isLiked = newLikeStatus;
-  likeCount = newLikeCount;
-  res.json({ likeCount, isLiked });
-});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
