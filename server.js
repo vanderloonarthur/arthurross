@@ -1,58 +1,71 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors'); // You might need this if you're working with a different frontend domain/port
-
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
-// Middleware
-app.use(cors()); // Enable Cross-Origin Resource Sharing (if needed)
-app.use(bodyParser.json()); // Parse JSON data from request body
+// Enable CORS for all routes
+app.use(cors()); // This is the CORS setup
 
-// In-memory data for comments and likes
-const commentsData = {}; // { pageId: [comments] }
-const likesData = {}; // { pageId: { isLiked: true/false, likeCount: number } }
+app.use(express.json());
 
-// Endpoint to fetch comments for a specific page
-app.get('/api/comments/:pageId', (req, res) => {
-  const pageId = req.params.pageId;
-  // Return comments for the pageId or an empty array if none exist
-  res.json(commentsData[pageId] || []);
-});
+let likes = {
+  'Edinburgh.md': { isLiked: false, likeCount: 0 }
+};
 
-// Endpoint to post a new comment
-app.post('/api/comments/:pageId', (req, res) => {
-  const pageId = req.params.pageId;
-  const newComment = req.body;
+let comments = {
+  'Edinburgh.md': [
+    { name: 'John', text: 'Great post!' },
+    { name: 'Alice', text: 'Very informative.' }
+  ]
+};
 
-  // Ensure commentsData for pageId exists
-  if (!commentsData[pageId]) {
-    commentsData[pageId] = [];
-  }
-
-  // Push new comment to the page's comment array
-  commentsData[pageId].push(newComment);
-  res.status(201).send('Comment added');
-});
-
-// Endpoint to get like status and count for a page
+// Route to get likes
 app.get('/api/likes/:pageId', (req, res) => {
   const pageId = req.params.pageId;
-  // Return like data for pageId, or a default object if not found
-  res.json(likesData[pageId] || { isLiked: false, likeCount: 0 });
+  if (likes[pageId]) {
+    res.json(likes[pageId]);
+  } else {
+    res.status(404).json({ error: 'Page not found' });
+  }
 });
 
-// Endpoint to update like status and count
+// Route to update likes
 app.post('/api/likes/:pageId', (req, res) => {
   const pageId = req.params.pageId;
   const { isLiked, likeCount } = req.body;
-
-  // Save like data for the page
-  likesData[pageId] = { isLiked, likeCount };
-  res.status(201).send('Like data updated');
+  if (likes[pageId]) {
+    likes[pageId] = { isLiked, likeCount };
+    res.json(likes[pageId]);
+  } else {
+    res.status(404).json({ error: 'Page not found' });
+  }
 });
 
-// Start the server
+// Route to get comments
+app.get('/api/comments/:pageId', (req, res) => {
+  const pageId = req.params.pageId;
+  if (comments[pageId]) {
+    res.json(comments[pageId]);
+  } else {
+    res.status(404).json({ error: 'Page not found' });
+  }
+});
+
+// Route to post a comment
+app.post('/api/comments/:pageId', (req, res) => {
+  const pageId = req.params.pageId;
+  const { name, text } = req.body;
+  if (!name || !text) {
+    return res.status(400).json({ error: 'Name and text are required' });
+  }
+  if (comments[pageId]) {
+    comments[pageId].push({ name, text });
+    res.json(comments[pageId]);
+  } else {
+    res.status(404).json({ error: 'Page not found' });
+  }
+});
+
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
