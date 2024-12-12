@@ -339,14 +339,16 @@ permalink: /posts/Edinburgh.md/
   </button>
   <p id="like-counter" style="font-size: 1.5em; color: white;">Likes: 0</p>
 </div>
-<!-- Comment Section -->
-    <div id="commentSection">
-    <input type="text" id="commentInput" placeholder="Write a comment" />
-    <button id="addCommentButton">Add Comment</button>
+<!-- Name input field added before the comment section -->
+<div class="comment-section">
+    <h2>Leave a Comment</h2>
+    <div class="comment-input">
+        <input type="text" id="userName" placeholder="Enter your name" />
+        <textarea id="commentInput" placeholder="Write a comment"></textarea>
+        <button id="addCommentButton">Post Comment</button>
+    </div>
     <div id="commentList"></div>
 </div>
-      <div id="commentList"></div>
-    </div>
     <!-- Display Comments -->
     <div id="commentList">
         <!-- Comments will be dynamically added here -->
@@ -367,135 +369,142 @@ permalink: /posts/Edinburgh.md/
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    const userNameInput = document.getElementById("userName");
+    const commentInput = document.getElementById("commentInput");
+    const commentList = document.getElementById("commentList");
+    const addCommentButton = document.getElementById("addCommentButton");
+    const pageId = window.location.pathname;
+
     // Modal functionality
     const modal = document.getElementById("myModal");
     const modalImage = document.querySelector(".modal-image");
     const smallImage = document.querySelector("#newText .small-image");
 
     function openModal(event) {
-        if (event.target.classList.contains("small-image")) {
-            modalImage.src = event.target.src;
-            modal.style.display = "flex";
-            modal.classList.add("fade-in");
-            modal.style.pointerEvents = "auto";
-        }
+      if (event.target.classList.contains("small-image")) {
+        modalImage.src = event.target.src;
+        modal.style.display = "flex";
+        modal.classList.add("fade-in");
+        modal.style.pointerEvents = "auto";
+      }
     }
 
     function closeModal() {
-        modal.classList.add("fade-out");
-        setTimeout(() => {
-            modal.style.display = "none";
-            modal.classList.remove("fade-out", "fade-in");
-            modal.style.pointerEvents = "none";
-        }, 1000);
+      modal.classList.add("fade-out");
+      setTimeout(() => {
+        modal.style.display = "none";
+        modal.classList.remove("fade-out", "fade-in");
+        modal.style.pointerEvents = "none";
+      }, 1000);
     }
 
     if (smallImage) {
-        smallImage.addEventListener("click", openModal);
+      smallImage.addEventListener("click", openModal);
     }
 
     if (modal) {
-        modal.addEventListener("click", function (event) {
-            if (event.target === modal || event.target === modalImage) {
-                closeModal();
-            }
-        });
+      modal.addEventListener("click", function (event) {
+        if (event.target === modal || event.target === modalImage) {
+          closeModal();
+        }
+      });
     }
 
     // Automatically show images on page load
     setTimeout(() => {
-        if (smallImage) smallImage.classList.add("show");
-        const fullscreenImage = document.querySelector(".fullscreen-image");
-        if (fullscreenImage) fullscreenImage.classList.add("show");
+      if (smallImage) smallImage.classList.add("show");
+      const fullscreenImage = document.querySelector(".fullscreen-image");
+      if (fullscreenImage) fullscreenImage.classList.add("show");
     }, 500);
 
     // Like button functionality
     const likeButton = document.getElementById("like-button");
     const likeCounter = document.getElementById("like-counter");
-    const pageId = window.location.pathname; // Use the path as a unique identifier
     const likeStateKey = `isLiked_${pageId}`;
     const likeCountKey = `likeCount_${pageId}`;
 
-    let isLiked = JSON.parse(localStorage.getItem(likeStateKey)) || false;
-    let likeCount = parseInt(localStorage.getItem(likeCountKey)) || 0;
+    let isLiked = JSON.parse(sessionStorage.getItem(likeStateKey)) || false;
+    let likeCount = parseInt(sessionStorage.getItem(likeCountKey)) || 0;
 
     function updateLikeUI() {
-        if (likeButton) {
-            likeButton.textContent = isLiked ? "❤️ Liked" : "❤️ Like";
-            likeButton.style.backgroundColor = isLiked ? "red" : "green";
-        }
-        if (likeCounter) likeCounter.textContent = `Likes: ${likeCount}`;
+      if (likeButton) {
+        likeButton.textContent = isLiked ? "❤️ Liked" : "❤️ Like";
+        likeButton.style.backgroundColor = isLiked ? "red" : "green";
+      }
+      if (likeCounter) likeCounter.textContent = `Likes: ${likeCount}`;
     }
 
     if (likeButton) {
-        likeButton.addEventListener("click", () => {
-            isLiked = !isLiked;
-            likeCount += isLiked ? 1 : -1;
+      likeButton.addEventListener("click", () => {
+        isLiked = !isLiked;
+        likeCount += isLiked ? 1 : -1;
 
-            localStorage.setItem(likeStateKey, JSON.stringify(isLiked));
-            localStorage.setItem(likeCountKey, likeCount);
-
-            updateLikeUI();
-        });
+        sessionStorage.setItem(likeStateKey, JSON.stringify(isLiked));
+        sessionStorage.setItem(likeCountKey, likeCount);
 
         updateLikeUI();
+      });
+
+      updateLikeUI();
     }
 
-    // Comment functionality
-    const commentInput = document.getElementById("commentInput");
-    const commentList = document.getElementById("commentList");
-    const addCommentButton = document.getElementById("addCommentButton");
-
-    function getPageId() {
-        return window.location.pathname;
-    }
-
-    function saveComment(commentText) {
-        const pageId = getPageId();
-        const comments = JSON.parse(localStorage.getItem(pageId)) || [];
-        const newComment = { text: commentText, timestamp: new Date().toLocaleString() };
-
-        comments.push(newComment);
-        localStorage.setItem(pageId, JSON.stringify(comments));
-        renderComment(newComment);
-    }
-
+    // Load comments from sessionStorage
     function loadComments() {
-        const pageId = getPageId();
-        const comments = JSON.parse(localStorage.getItem(pageId)) || [];
-        comments.forEach(renderComment);
-    }
+      const comments = JSON.parse(sessionStorage.getItem(`comments_${pageId}`)) || [];
 
-    function renderComment(comment) {
+      commentList.innerHTML = "";  // Clear the list before adding new comments
+      comments.forEach((comment) => {
         const commentElement = document.createElement("div");
         commentElement.classList.add("comment");
         commentElement.innerHTML = `
-            <p><strong>Comment on ${comment.timestamp}:</strong></p>
-            <p>${comment.text}</p>
+          <p><strong>${comment.name}</strong>: ${comment.text}</p>
+          <small>Posted at ${new Date(comment.createdAt).toLocaleString()}</small>
         `;
         commentList.appendChild(commentElement);
+      });
     }
 
-    if (addCommentButton) {
-        addCommentButton.addEventListener("click", function () {
-            const commentText = commentInput.value.trim();
-            if (commentText) {
-                saveComment(commentText);
-                commentInput.value = ""; // Clear the input field after adding the comment
-            }
-        });
-    }
+    loadComments();  // Load and display comments on page load
 
-    // Load existing comments on page load
-    loadComments();
+    // Add comment functionality
+    addCommentButton.addEventListener("click", () => {
+      const name = userNameInput.value.trim();
+      const text = commentInput.value.trim();
+
+      if (name && text) {
+        // Get existing comments from sessionStorage or create a new array if empty
+        const comments = JSON.parse(sessionStorage.getItem(`comments_${pageId}`)) || [];
+
+        // Create a new comment object
+        const newComment = {
+          name: name,
+          text: text,
+          createdAt: new Date().toISOString(),
+        };
+
+        // Add the new comment to the array
+        comments.push(newComment);
+
+        // Save the updated comments array back to sessionStorage
+        sessionStorage.setItem(`comments_${pageId}`, JSON.stringify(comments));
+
+        // Clear the input fields
+        userNameInput.value = "";
+        commentInput.value = "";
+
+        // Reload the comments list
+        loadComments();
+      } else {
+        alert("Please enter both your name and comment.");
+      }
+    });
 
     // Back to Gallery button functionality
     const backButton = document.querySelector(".back-to-gallery");
     if (backButton) {
-        backButton.addEventListener("click", function () {
-            window.location.href = "{{ site.baseurl }}/index/";
-        });
+      backButton.addEventListener("click", function () {
+        window.location.href = "/index/";  // Adjust this URL as needed
+      });
     }
-});
-
+  });
 </script>
