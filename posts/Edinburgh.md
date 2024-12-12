@@ -333,20 +333,19 @@ permalink: /posts/Edinburgh.md/
         Zaterdag 13 april, 2024
         Om 9 uur s’ ochtends kwam ik aan waarna ik naar Arthur’s Seat liep om het eind van de “parkrun” mee te maken.
       </p>
-    </div>
-  </div>
   <div id="like-container" style="text-align: center; margin-top: 20px;">
   <button id="like-button" style="padding: 10px 20px; background-color: green; color: white; border: none; border-radius: 5px; cursor: pointer;">
     ❤️ Like
   </button>
   <p id="like-counter" style="font-size: 1.5em; color: white;">Likes: 0</p>
 </div>
-<div class="comment-section">
-    <h2>Comments</h2>
-    <!-- Input Area -->
-    <div class="comment-input">
-        <textarea id="commentInput" placeholder="Write your comment here..." rows="4"></textarea>
-        <button id="postComment" onclick="addComment()">Post Comment</button>
+<!-- Comment Section -->
+    <div id="commentSection">
+    <input type="text" id="commentInput" placeholder="Write a comment" />
+    <button id="addCommentButton">Add Comment</button>
+    <div id="commentList"></div>
+</div>
+      <div id="commentList"></div>
     </div>
     <!-- Display Comments -->
     <div id="commentList">
@@ -367,138 +366,136 @@ permalink: /posts/Edinburgh.md/
   </div>
 
 <script>
- document.addEventListener("DOMContentLoaded", function () {
-          const smallImage = document.querySelector("#newText .small-image");
-          const modal = document.getElementById('myModal');
-          const modalImage = document.querySelector(".modal-image");
-          // Function to open modal and show image
-          function openModal(event) {
-            if (event.target.classList.contains('small-image')) {
-              modalImage.src = event.target.src;
-              modal.style.display = 'flex';
-              modal.classList.add('fade-in');
-              modal.style.pointerEvents = 'auto';
-            }
-          }
-          // Event listener to open modal when clicking on small image
-          smallImage.addEventListener("click", openModal);
-          // Function to close modal
-          function closeModal() {
-            modal.classList.add('fade-out');
-            setTimeout(() => {
-              modal.style.display = 'none';
-              modal.classList.remove('fade-out', 'fade-in');
-              modal.style.pointerEvents = 'none';
-            }, 1000);
-          }
-          // Event listener to close modal when clicking anywhere on it
-          modal.addEventListener("click", function (event) {
-            if (event.target === modal || event.target === modalImage) {
-              closeModal();
-            }
-          });
-          // Automatically show small image and fullscreen image on page load
-          setTimeout(function () {
-            smallImage.classList.add('show');
-            const fullscreenImage = document.querySelector(".fullscreen-image");
-            fullscreenImage.classList.add('show');
-          }, 500);
-          // Back to Gallery button functionality
-          const backButton = document.querySelector(".back-to-gallery");
-          backButton.addEventListener("click", function () {
-            window.location.href = "{{ site.baseurl }}/index/";
-          });
-          // Close modal when clicking anywhere on fullscreen image
-          modalImage.addEventListener("click", closeModal);
-        });
-        document.addEventListener("DOMContentLoaded", function () {
-  const likeButton = document.getElementById("like-button");
-  const likeCounter = document.getElementById("like-counter");
-  // Generate a unique key for this page using the permalink
-  const pageId = "{{ page.permalink }}";
-  const likeStateKey = `isLiked_${pageId}`;
-  const likeCountKey = `likeCount_${pageId}`;
-  // Get the like state and counter from localStorage for this page
-  let isLiked = JSON.parse(localStorage.getItem(likeStateKey)) || false;
-  let likeCount = parseInt(localStorage.getItem(likeCountKey)) || 0;
-  // Update the button and counter UI based on stored values
-  updateLikeUI();
-  // Add event listener to the like button
-  likeButton.addEventListener("click", () => {
-    // Toggle the like state
-    isLiked = !isLiked;
-    // Update the like count based on the new state
-    likeCount += isLiked ? 1 : -1;
-    // Store the updated state in localStorage
-    localStorage.setItem(likeStateKey, JSON.stringify(isLiked));
-    localStorage.setItem(likeCountKey, likeCount);
-    // Update the UI
-    updateLikeUI();
-  });
-  // Function to update UI elements
-  function updateLikeUI() {
-    likeButton.textContent = isLiked ? "❤️ Liked" : "❤️ Like";
-    likeButton.style.backgroundColor = isLiked ? "red" : "green";
-    likeCounter.textContent = `Likes: ${likeCount}`;
-  }
-});
-// Load comments for the specific page when the page loads
-    window.onload = function () {
-        loadComments();
-    };
-    // Get a unique identifier for the page
-    function getPageId() {
-        return window.location.pathname; // Use the URL path as a unique identifier
-    }
-    // Function to add a comment
-    function addComment() {
-        const commentInput = document.getElementById('commentInput');
-        const commentText = commentInput.value.trim();
-        // Ensure the comment isn't empty
-        if (commentText === '') {
-            alert('Please enter a comment before posting.');
-            return;
+  document.addEventListener("DOMContentLoaded", function () {
+    // Modal functionality
+    const modal = document.getElementById("myModal");
+    const modalImage = document.querySelector(".modal-image");
+    const smallImage = document.querySelector("#newText .small-image");
+
+    function openModal(event) {
+        if (event.target.classList.contains("small-image")) {
+            modalImage.src = event.target.src;
+            modal.style.display = "flex";
+            modal.classList.add("fade-in");
+            modal.style.pointerEvents = "auto";
         }
-        // Save the comment for the specific page
-        saveComment(commentText);
-        // Clear the input field
-        commentInput.value = '';
     }
-    // Save a comment to localStorage for the specific page
+
+    function closeModal() {
+        modal.classList.add("fade-out");
+        setTimeout(() => {
+            modal.style.display = "none";
+            modal.classList.remove("fade-out", "fade-in");
+            modal.style.pointerEvents = "none";
+        }, 1000);
+    }
+
+    if (smallImage) {
+        smallImage.addEventListener("click", openModal);
+    }
+
+    if (modal) {
+        modal.addEventListener("click", function (event) {
+            if (event.target === modal || event.target === modalImage) {
+                closeModal();
+            }
+        });
+    }
+
+    // Automatically show images on page load
+    setTimeout(() => {
+        if (smallImage) smallImage.classList.add("show");
+        const fullscreenImage = document.querySelector(".fullscreen-image");
+        if (fullscreenImage) fullscreenImage.classList.add("show");
+    }, 500);
+
+    // Like button functionality
+    const likeButton = document.getElementById("like-button");
+    const likeCounter = document.getElementById("like-counter");
+    const pageId = window.location.pathname; // Use the path as a unique identifier
+    const likeStateKey = `isLiked_${pageId}`;
+    const likeCountKey = `likeCount_${pageId}`;
+
+    let isLiked = JSON.parse(localStorage.getItem(likeStateKey)) || false;
+    let likeCount = parseInt(localStorage.getItem(likeCountKey)) || 0;
+
+    function updateLikeUI() {
+        if (likeButton) {
+            likeButton.textContent = isLiked ? "❤️ Liked" : "❤️ Like";
+            likeButton.style.backgroundColor = isLiked ? "red" : "green";
+        }
+        if (likeCounter) likeCounter.textContent = `Likes: ${likeCount}`;
+    }
+
+    if (likeButton) {
+        likeButton.addEventListener("click", () => {
+            isLiked = !isLiked;
+            likeCount += isLiked ? 1 : -1;
+
+            localStorage.setItem(likeStateKey, JSON.stringify(isLiked));
+            localStorage.setItem(likeCountKey, likeCount);
+
+            updateLikeUI();
+        });
+
+        updateLikeUI();
+    }
+
+    // Comment functionality
+    const commentInput = document.getElementById("commentInput");
+    const commentList = document.getElementById("commentList");
+    const addCommentButton = document.getElementById("addCommentButton");
+
+    function getPageId() {
+        return window.location.pathname;
+    }
+
     function saveComment(commentText) {
-        const pageId = getPageId(); // Get the unique page identifier
+        const pageId = getPageId();
         const comments = JSON.parse(localStorage.getItem(pageId)) || [];
-        // Create a new comment object with a timestamp
-        const newComment = {
-            text: commentText,
-            timestamp: new Date().toLocaleString()
-        };
-        // Add the new comment to the list
+        const newComment = { text: commentText, timestamp: new Date().toLocaleString() };
+
         comments.push(newComment);
         localStorage.setItem(pageId, JSON.stringify(comments));
-        // Render the new comment
         renderComment(newComment);
     }
-    // Load comments from localStorage for the specific page
+
     function loadComments() {
-        const pageId = getPageId(); // Get the unique page identifier
+        const pageId = getPageId();
         const comments = JSON.parse(localStorage.getItem(pageId)) || [];
-        // Render all comments for this page
-        comments.forEach(comment => renderComment(comment));
+        comments.forEach(renderComment);
     }
-    // Render a single comment to the page
+
     function renderComment(comment) {
-        const commentList = document.getElementById('commentList');
-        const commentElement = document.createElement('div');
-        commentElement.classList.add('comment');
-        commentElement.innerHTML = `<p>${comment.text}</p><small>Posted on: ${comment.timestamp}</small>`;
+        const commentElement = document.createElement("div");
+        commentElement.classList.add("comment");
+        commentElement.innerHTML = `
+            <p><strong>Comment on ${comment.timestamp}:</strong></p>
+            <p>${comment.text}</p>
+        `;
         commentList.appendChild(commentElement);
     }
-function deleteComment(index) {
-    const comments = JSON.parse(localStorage.getItem('comments')) || [];
-    comments.splice(index, 1);
-    localStorage.setItem('comments', JSON.stringify(comments));
-    document.getElementById('commentList').innerHTML = '';
+
+    if (addCommentButton) {
+        addCommentButton.addEventListener("click", function () {
+            const commentText = commentInput.value.trim();
+            if (commentText) {
+                saveComment(commentText);
+                commentInput.value = ""; // Clear the input field after adding the comment
+            }
+        });
+    }
+
+    // Load existing comments on page load
     loadComments();
-}
-      </script>
+
+    // Back to Gallery button functionality
+    const backButton = document.querySelector(".back-to-gallery");
+    if (backButton) {
+        backButton.addEventListener("click", function () {
+            window.location.href = "{{ site.baseurl }}/index/";
+        });
+    }
+});
+
+</script>
