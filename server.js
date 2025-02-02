@@ -1,40 +1,43 @@
 const express = require('express');
-const cors = require('cors');
 const app = express();
-const port = 3000;
+const port = 4000;
 
-app.use(cors());
-app.use(express.json()); // To parse JSON body data
+// Middleware to parse JSON request bodies
+app.use(express.json());
 
-let comments = [
-  { name: 'John', text: 'Great post!' },
-  { name: 'Alice', text: 'Very informative.' }
-];
-let likeCount = 0;
-let isLiked = false;
+// In-memory data (for demo purposes)
+let likesData = {};
+let commentsData = {};
 
-// API to get all comments
-app.get('/api/comments', (req, res) => {
+app.get('/api/likes/:pageId', (req, res) => {
+  const pageId = req.params.pageId;
+  const data = likesData[pageId] || { isLiked: false, likeCount: 0 };
+  res.json(data);
+});
+
+app.post('/api/likes/:pageId', (req, res) => {
+  const pageId = req.params.pageId;
+  const { isLiked, likeCount } = req.body;
+  likesData[pageId] = { isLiked, likeCount };
+  res.status(200).json({ message: 'Like data updated successfully' });
+});
+
+app.get('/api/comments/:pageId', (req, res) => {
+  const pageId = req.params.pageId;
+  const comments = commentsData[pageId] || [];
   res.json(comments);
 });
 
-// API to post a new comment
-app.post('/api/comments', (req, res) => {
-  const { name, text } = req.body;
-  if (!name || !text) {
-    return res.status(400).json({ error: 'Name and text are required' });
+app.post('/api/comments/:pageId', (req, res) => {
+  const pageId = req.params.pageId;
+  const { user, text } = req.body;
+  if (!commentsData[pageId]) {
+    commentsData[pageId] = [];
   }
-  comments.push({ name, text });
-  res.json(comments);
+  commentsData[pageId].push({ user, text });
+  res.status(200).json({ message: 'Comment added successfully' });
 });
-
-curl http://localhost:4000/api/likes
-
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'posts/Edinburgh.md'));
+  console.log(`Server running on http://localhost:${port}`);
 });

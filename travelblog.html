@@ -56,13 +56,72 @@ permalink: /travelblog.html/
         }
 
         .image-item {
-            position: relative;
-            overflow: hidden;
-            height: 300px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: #2a2a2a;
+}
 
+.image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s, border 0.3s;
+}
+
+.image-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: #e0e0e0;
+    padding: 10px;
+    text-align: center;
+}
+
+.like-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    z-index: 10;
+}
+
+.like-button {
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.like-button:hover {
+    background: #e64a19;
+}
+
+.like-count-container {
+    margin-top: 5px;
+    color: #e0e0e0;
+    font-size: 1em;
+    text-align: center;
+}
+
+.like-count {
+    font-weight: bold;
+    color: #ffeb3b;
+}
         .check-mark {
             position: absolute;
             top: 10px;
@@ -116,58 +175,60 @@ permalink: /travelblog.html/
             text-align: center;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
+        /* Feedback modal should have a higher z-index to appear above others */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000; /* Higher value to make it appear above other modals */
+}
 
-        .modal.fade-in {
-            display: flex;
-            opacity: 1;
-        }
+.modal.fade-in {
+    display: flex;
+    opacity: 1;
+}
 
-        .modal.fade-out {
-            opacity: 0;
-        }
+.modal.fade-out {
+    opacity: 0;
+}
 
-        .modal-content {
-            background: #2e2e2e;
-            color: #f5f5f5;
-            padding: 20px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            margin-top: 20px;
-        }
+.modal-content {
+    background: #2e2e2e;
+    color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
+}
 
-        .modal .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #444;
-            color: #f5f5f5;
-            border: none;
-            border-radius: 50%;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 5px;
-            transition: background 0.3s;
-        }
+.modal .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #444;
+    color: #f5f5f5;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    transition: background 0.3s;
+}
 
-        .modal .close:hover {
-            background: #666;
-        }
+.modal .close:hover {
+    background: #666;
+}
 
         .feedback-btn {
             background-color: #ff5722;
@@ -304,41 +365,62 @@ permalink: /travelblog.html/
     </header>
     <main>
         <section class="image-gallery">
-            <div class="image-item">
+            <div class="image-item" id="milaan">
                 <a href="/posts/milaan.md" class="golden-link">
                     <img src="/assets/images/skyline.jpg" alt="Milaan" data-image-id="milaan">
-                    <div class="check-mark hidden">✔️</div>
                     <div class="image-caption">
                         <p>Bedevaart naar Milaan [mei/ juni 2016]</p>
                     </div>
                 </a>
+                <div class="like-container">
+                    <button class="like-button" onclick="likeImage('milaan')">👍 Like</button>
+                    <div class="like-count-container">
+                        <span class="like-count" id="milaan-like-count">0</span> Likes
+                    </div>
+                </div>
             </div>
-            <div class="image-item">
+            <div class="image-item" id="madrid">
                 <a href="/posts/madrid.md" class="golden-link">
                     <img src="/assets/images/bear-1.jpg" alt="Madrid" data-image-id="madrid">
-                    <div class="check-mark hidden">✔️</div>
                     <div class="image-caption">
                         <p>Van Gogh achterna [juni/ juli 2020]</p>
                     </div>
                 </a>
+                <div class="like-container">
+                    <button class="like-button" onclick="likeImage('madrid')">👍 Like</button>
+                    <div class="like-count-container">
+                        <span class="like-count" id="madrid-like-count">0</span> Likes
+                    </div>
+                </div>  
             </div>
-            <div class="image-item">
+
+            <div class="image-item" id="stuttgart">
                 <a href="/posts/stuttgart.html" class="golden-link">
                     <img src="/assets/images/stuttgart_stag.jpg" alt="Stuttgart" data-image-id="stuttgart">
-                    <div class="check-mark hidden">✔️</div>
                     <div class="image-caption">
                         <p>Marshall Stuttgart [december 2020]</p>
                     </div>
                 </a>
+                <div class="like-container">
+                    <button class="like-button" onclick="likeImage('stuttgart')">👍 Like</button>
+                    <div class="like-count-container">
+                        <span class="like-count" id="stuttgart-like-count">0</span> Likes
+                    </div>
+                </div>  
             </div>
-            <div class="image-item">
+            <div class="image-item" id="edinburgh">
                 <a href="/posts/Edinburgh.md" class="golden-link">
-                    <img src="/assets/images/edin.jpg" alt="Edinburgh" data-image-id="edinburgh">
-                    <div class="check-mark hidden">✔️</div>
+                    <img src="/assets/images/edin.jpg" alt="Stuttgart" data-image-id="edinburgh">
                     <div class="image-caption">
                         <p>D'Arthur is coming home! [april 2024]</p>
                     </div>
                 </a>
+                <div class="like-container">
+                    <button class="like-button" onclick="likeImage('edinburgh')">👍 Like</button>
+                    <div class="like-count-container">
+                        <span class="like-count" id="edinburgh-like-count">0</span> Likes
+                    </div>
+                </div>
             </div>
         </section>
         <div class="centered-button">
@@ -444,6 +526,105 @@ permalink: /travelblog.html/
             }
         });
     
+        // Spring Boot backend API URL for storing likes
+const API_URL = "http://localhost:8080/api/likes"; // Update with your server URL
+
+// Handle Like/Unlike functionality
+async function likeImage(imageId) {
+    const likeCountElem = document.getElementById(`${imageId}-like-count`);
+    let currentLikes = parseInt(likeCountElem.innerText) || 0;
+
+    // Check if the user has already liked this image using localStorage
+    if (localStorage.getItem(`${imageId}-liked`)) {
+        // The user has already liked, so we unlike
+        currentLikes--;
+        localStorage.removeItem(`${imageId}-liked`); // Remove the like status from localStorage
+        alert('You unliked this image.');
+
+        // Update the UI
+        likeCountElem.innerText = currentLikes;
+        const likeButton = document.querySelector(`#${imageId} .like-button`);
+        likeButton.innerText = '👍 Like'; // Change button to "Like"
+        likeCountElem.style.color = '#e0e0e0'; // Reset color
+
+    } else {
+        // The user has not liked, so we like the image
+        currentLikes++;
+        localStorage.setItem(`${imageId}-liked`, 'true'); // Store the like status in localStorage
+        alert('You liked this image.');
+
+        // Update the UI
+        likeCountElem.innerText = currentLikes;
+        const likeButton = document.querySelector(`#${imageId} .like-button`);
+        likeButton.innerText = 'Unlike'; // Change button to "Unlike"
+        likeCountElem.style.color = '#ffeb3b'; // Highlight liked image
+    }
+
+    // Send the like/unlike update to the backend
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ imageId: imageId, likes: currentLikes }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update like count');
+        }
+
+        console.log(`Like/unlike for ${imageId} updated successfully`);
+    } catch (error) {
+        console.error('Error updating like count:', error);
+    }
+
+    // Optionally, store the like count in localStorage for offline use
+    localStorage.setItem(imageId, currentLikes);
+}
+
+// Fetch the like count from the backend and update UI
+async function fetchLikeCount(imageId) {
+    try {
+        const response = await fetch(`${API_URL}/${imageId}`);
+        if (response.ok) {
+            const likes = await response.json();
+            document.getElementById(`${imageId}-like-count`).innerText = likes;
+        }
+    } catch (error) {
+        console.error('Error fetching like count:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const imageIds = ['milaan', 'madrid', 'stuttgart', 'edinburgh']; // List of image IDs to initialize like counts
+
+    // Initialize like counts for each image
+    imageIds.forEach(imageId => {
+        // First, check if there's a liked state saved in localStorage
+        if (localStorage.getItem(`${imageId}-liked`)) {
+            const likeCountElem = document.getElementById(`${imageId}-like-count`);
+            let currentLikes = parseInt(likeCountElem.innerText) || 0;
+            likeCountElem.style.color = '#ffeb3b'; // Highlight liked image
+            likeCountElem.innerText = currentLikes + 1; // Simulate an increased like count
+            const likeButton = document.querySelector(`#${imageId} .like-button`);
+            likeButton.innerText = 'Unlike'; // Change button to "Unlike"
+        }
+
+        // Optionally, fetch and set the like count from the server
+        fetchLikeCount(imageId);
+    });
+});
+fetch('http://127.0.0.1:8080/api/likes')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Data from backend:', data);
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+
+
         document.addEventListener('DOMContentLoaded', function() {
             const images = document.querySelectorAll('.image-item img');
 
@@ -462,7 +643,7 @@ permalink: /travelblog.html/
                 image.addEventListener('click', function() {
                     clickCount++;
                     localStorage.setItem(`${imageId}-clicks`, clickCount);
-                    
+
                     if (clickCount === 1) {
                         image.classList.add('pressed');
                         checkMark.classList.add('hidden');
@@ -478,5 +659,5 @@ permalink: /travelblog.html/
             });
         });
     </script>
-</body>
-</html>
+    </body>
+    </html>

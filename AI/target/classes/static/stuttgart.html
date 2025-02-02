@@ -361,8 +361,8 @@ Completely disconnected from society and from his generation. I’m hungry, my c
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const BASE_URL = "http://localhost:8080/api";
-    const pageId = window.location.pathname.split('/Stuttgart').pop();
-
+    const pageId = window.location.pathname.split('/').pop();
+  
     // DOM Elements
     const modal = document.getElementById('myModal');
     const modalImage = document.querySelector(".modal-image");
@@ -374,7 +374,7 @@ Completely disconnected from society and from his generation. I’m hungry, my c
     const smallImage = document.querySelector(".small-image");
     const fullscreenImage = document.querySelector(".fullscreen-image");
     const backButton = document.querySelector(".back-to-gallery");
-
+  
     // Validate required elements
     const missingElements = [];
     if (!commentInput) missingElements.push("commentInput");
@@ -384,16 +384,16 @@ Completely disconnected from society and from his generation. I’m hungry, my c
     if (!likeCounter) missingElements.push("likeCounter");
     if (!smallImage) missingElements.push("smallImage");
     if (!modalImage) missingElements.push("modalImage");
-
+  
     if (missingElements.length > 0) {
       console.error("Required elements are missing: ", missingElements.join(", "));
       return;
     }
-
+  
     // Initialize like state
     let isLiked = false;
     let likeCount = 0;
-
+  
     // Modal functionality
     function openModal(imageSrc) {
       modalImage.src = imageSrc;
@@ -401,7 +401,7 @@ Completely disconnected from society and from his generation. I’m hungry, my c
       modal.classList.add('fade-in');
       modal.style.pointerEvents = 'auto';
     }
-
+  
     function closeModal() {
       modal.classList.add('fade-out');
       setTimeout(() => {
@@ -410,35 +410,35 @@ Completely disconnected from society and from his generation. I’m hungry, my c
         modal.style.pointerEvents = 'none';
       }, 1000);
     }
-
+  
     // Event listeners
     modal.addEventListener('click', (event) => {
       if (event.target === modal || event.target === modalImage) {
         closeModal();
       }
     });
-
+  
     // Click on small image to open modal
     if (smallImage) {
       smallImage.addEventListener('click', () => {
         openModal(smallImage.src);
       });
     }
-
+  
     // Add like functionality
     likeButton.addEventListener('click', async () => {
       const updatedLikeState = !isLiked;
       const updatedLikeCount = likeCount + (updatedLikeState ? 1 : -1);
-
+  
       try {
         const response = await fetch(`${BASE_URL}/likes/${pageId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ isLiked: updatedLikeState, likeCount: updatedLikeCount }),
         });
-
+  
         if (!response.ok) throw new Error("Failed to update like data");
-
+  
         const data = await response.json();
         isLiked = data.isLiked;
         likeCount = data.likeCount;
@@ -447,31 +447,32 @@ Completely disconnected from society and from his generation. I’m hungry, my c
         console.error("Error updating like data:", error);
       }
     });
-
+  
     // Function to update the Like UI (button and counter)
     function updateLikeUI() {
       likeButton.textContent = isLiked ? "❤️ Liked" : "❤️ Like";
       likeButton.style.backgroundColor = isLiked ? "red" : "green";
       likeCounter.textContent = `Likes: ${likeCount}`;
     }
-
+  
     // Comment functionality (without user name input)
     addCommentButton.addEventListener("click", async () => {
       const commentText = commentInput.value.trim();
-
+  
       if (!commentText) {
         alert("Please enter a comment.");
         return;
       }
-
+  
       try {
         const response = await fetch(`${BASE_URL}/comments/${pageId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: commentText }),
         });
-
+  
         if (!response.ok) throw new Error("Failed to post comment");
+  
         // Clear the comment input field
         commentInput.value = "";
         await loadComments();
@@ -479,20 +480,20 @@ Completely disconnected from society and from his generation. I’m hungry, my c
         console.error("Error posting comment:", error);
       }
     });
-
+  
     // Function to load comments
     async function loadComments() {
       try {
         const response = await fetch(`${BASE_URL}/comments/${pageId}`);
         if (!response.ok) throw new Error("Failed to load comments");
-
+  
         const comments = await response.json();
         renderComments(comments);
       } catch (error) {
         console.error("Error loading comments:", error);
       }
     }
-
+  
     // Function to render comments
     function renderComments(comments) {
       commentList.innerHTML = "";
@@ -503,7 +504,7 @@ Completely disconnected from society and from his generation. I’m hungry, my c
         commentList.appendChild(commentElement);
       });
     }
-
+  
     // Initial Load
     loadComments();
     updateLikeUI();  // Ensure like button and counter are correctly initialized

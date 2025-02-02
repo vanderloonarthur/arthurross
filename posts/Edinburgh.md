@@ -267,7 +267,7 @@ permalink: /posts/Edinburgh.md/
   <div class="center-content">
     <div id="newText" style="display: block;">
       <h1>D'Arthur is coming home, 10 April, 2024</h1>
-      <img src="{{ site.baseurl }}/assets/images/refugees.png" alt="Kaleidoscope" class="small-image" />
+        <img class="small-image" src="/assets/images/refugees.png" alt="Refugees">
     </div>
     <div class="center-text">
       <h2>Een waargebeurd verhaal.</h2>
@@ -305,6 +305,7 @@ permalink: /posts/Edinburgh.md/
         Uiteindelijk vroeg ik een dame en haar zoon of ze me kon meenemen. Ze zei dat ze zondag pas ging, maar dat zou natuurlijk te laat zijn. Wel bracht ze me naar de ferry’s.
       </p>
       <img src="{{ site.baseurl }}/assets/images/Me_and_Richard.jpg" alt="Me and Richard">
+            <figcaption>The grey mouse and the red laces</figcaption>
       <p>
         Aldaar ontmoette ik Louis en Richard. Louis had een half jaar door India gereisd en was net weer onderweg naar huis. Hij was erg amicaal, met enkele mankementen en praatte veel. Hij stelde me erg op mijn gemak.
         Richard was een Roma, ex-militair, die blind was geraakt bij de Ariana Grande aanslag in Manchester. Gek genoeg voerde hij de groep aan, ondanks dat hij beperkt was, was hij toch ook heel erg bekwaam. Ik hoefde niet lang te wachten voordat Richard naar de balie liep en drie ferry tickets regelde.
@@ -365,148 +366,131 @@ permalink: /posts/Edinburgh.md/
       <img src="/assets/images/refugees.png" alt="Popup Image" class="modal-image" />
     </div>
   </div>
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const userNameInput = document.getElementById("userName");
-  const commentInput = document.getElementById("commentInput");
-  const commentList = document.getElementById("commentList");
-  const addCommentButton = document.getElementById("addCommentButton");
-  const likeButton = document.getElementById("like-button");
-  const likeCounter = document.getElementById("like-counter");
-  const pageId = window.location.pathname.split('/').pop(); // This will get 'Edinburgh.md'
-
-  // Modal functionality (unchanged)
-  const modal = document.getElementById("myModal");
-  const modalImage = document.querySelector(".modal-image");
-  const smallImage = document.querySelector("#newText .small-image");
-
-  function openModal(event) {
-    if (event.target.classList.contains("small-image")) {
-      modalImage.src = event.target.src;
-      modal.style.display = "flex";
-      modal.classList.add("fade-in");
-      modal.style.pointerEvents = "auto";
-    }
-  }
-
-  function closeModal() {
-    modal.classList.add("fade-out");
-    setTimeout(() => {
-      modal.style.display = "none";
-      modal.classList.remove("fade-out", "fade-in");
-      modal.style.pointerEvents = "none";
-    }, 1000);
-  }
-
-  if (smallImage) {
-    smallImage.addEventListener("click", openModal);
-  }
-
-  if (modal) {
-    modal.addEventListener("click", function (event) {
-      if (event.target === modal || event.target === modalImage) {
-        closeModal();
-      }
-    });
-  }
-
-  // Like button functionality (server-side likes)
-  let isLiked = false;
-  let likeCount = 0;
-
-  // Fetch current like state from the server
-  async function fetchLikeData() {
-    try {
-      const response = await fetch(`/api/likes/${pageId}`);
-      const data = await response.json();
-      isLiked = data.isLiked;
-      likeCount = data.likeCount;
-      updateLikeUI();
-    } catch (error) {
-      console.error("Error fetching like data:", error);
-    }
-  }
-
-  function updateLikeUI() {
-    if (likeButton) {
-      likeButton.textContent = isLiked ? "❤️ Liked" : "❤️ Like";
-      likeButton.style.backgroundColor = isLiked ? "red" : "green";
-    }
-    if (likeCounter) likeCounter.textContent = `Likes: ${likeCount}`;
-  }
-
-  likeButton.addEventListener("click", async () => {
-    isLiked = !isLiked;
-    likeCount += isLiked ? 1 : -1;
-
-    // Send like data to the server
-    await fetch(`/api/likes${pageId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ isLiked, likeCount }),
-    });
-
-    updateLikeUI();
-  });
-
-  // Fetch initial like data
-  fetchLikeData();
-
-  // Fetch and display comments from the server
-  async function loadComments() {
-    try {
-      const response = await fetch(`/api/comments${pageId}`);
-      const comments = await response.json();
-      commentList.innerHTML = "";  // Clear the list before adding new comments
-      comments.forEach((comment) => {
-        const commentElement = document.createElement("div");
-        commentElement.classList.add("comment");
-        commentElement.innerHTML = `
-          <p><strong>${comment.user}</strong>: ${comment.text}</p>
-        `;
-        commentList.appendChild(commentElement);
-      });
-    } catch (error) {
-      console.error("Error loading comments:", error);
-    }
-  }
-
-  // Post a new comment
-  addCommentButton.addEventListener("click", async () => {
-    const userName = userNameInput.value.trim();
-    const commentText = commentInput.value.trim();
-
-    if (userName && commentText) {
-      try {
-        const newComment = { user: userName, text: commentText };
-
-        // Send the new comment to the server
-        await fetch(`/api/comments${pageId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newComment),
-        });
-
-        // Clear input fields and reload comments
-        userNameInput.value = "";
-        commentInput.value = "";
+    document.addEventListener("DOMContentLoaded", function () {
+        const userNameInput = document.getElementById("userName");
+        const commentInput = document.getElementById("commentInput");
+        const commentList = document.getElementById("commentList");
+        const addCommentButton = document.getElementById("addCommentButton");
+        const likeButton = document.getElementById("like-button");
+        const likeCounter = document.getElementById("like-counter");
+        const modal = document.getElementById("myModal");
+        const modalImage = modal?.querySelector(".modal-image");
+        const smallImage = document.querySelector(".small-image");
+        const pageId = window.location.pathname.split('/').pop();
+        const BASE_URL = "http://localhost:8080/api"; // Base API URL for your Spring Boot backend
+// Ensure essential elements exist
+        if (!userNameInput || !commentInput || !commentList || !addCommentButton || !likeButton || !likeCounter) {
+            console.error("Required elements are missing from the page.");
+            return;
+        }
+        // Modal Functionality
+        if (smallImage && modal) {
+            smallImage.addEventListener("click", (event) => {
+                if (event.target.classList.contains("small-image") && modalImage) {
+                    modalImage.src = event.target.src;
+                    modal.style.display = "flex";
+                    modal.classList.add("fade-in");
+                }
+            });
+            modal.addEventListener("click", (event) => {
+                if (event.target === modal || event.target === modalImage) {
+                    modal.classList.add("fade-out");
+                    setTimeout(() => {
+                        modal.style.display = "none";
+                        modal.classList.remove("fade-in", "fade-out");
+                    }, 500);
+                }
+            });
+        }
+        // Like Button Functionality
+        let isLiked = false;
+        let likeCount = 0;
+        async function fetchLikeData() {
+            try {
+                const response = await fetch(`${BASE_URL}/likes/${pageId}`);
+                if (!response.ok) throw new Error("Failed to fetch like data");
+                const data = await response.json();
+                isLiked = data.isLiked;
+                likeCount = data.likeCount;
+                updateLikeUI();
+            } catch (error) {
+                console.error("Error fetching like data:", error);
+            }
+        }
+        // Update Like UI
+        function updateLikeUI() {
+            likeButton.textContent = isLiked ? "❤️ Liked" : "❤️ Like";
+            likeButton.style.backgroundColor = isLiked ? "red" : "green";
+            likeCounter.textContent = `Likes: ${likeCount}`;
+        }
+        // Event listener for the like button
+        if (likeButton) {
+            likeButton.addEventListener("click", async () => {
+                const updatedLikeState = !isLiked; // Toggle like state
+                const updatedLikeCount = likeCount + (updatedLikeState ? 1 : -1); // Increment or decrement like count
+                try {
+                    const response = await fetch(`${BASE_URL}/likes/${pageId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ isLiked: updatedLikeState, likeCount: updatedLikeCount }),
+                    });
+                    if (!response.ok) throw new Error("Failed to update like data");
+                    const data = await response.json();
+                    isLiked = data.isLiked;
+                    likeCount = data.likeCount;
+                    updateLikeUI();
+                } catch (error) {
+                    console.error("Error updating like data:", error);
+                }
+            });
+        }
+        // Comment Functionality
+        async function loadComments() {
+            try {
+                const response = await fetch(`${BASE_URL}/comments/${pageId}`);
+                if (!response.ok) throw new Error("Failed to load comments");
+                const comments = await response.json();
+                renderComments(comments);
+            } catch (error) {
+                console.error("Error loading comments:", error);
+            }
+        }
+        function renderComments(comments) {
+            commentList.innerHTML = "";
+            comments.forEach(({ user, text }) => {
+                const commentElement = document.createElement("div");
+                commentElement.classList.add("comment");
+                commentElement.innerHTML = `<p><strong>${user}</strong>: ${text}</p>`;
+                commentList.appendChild(commentElement);
+            });
+        }
+        // Adding a new comment
+        if (addCommentButton) {
+            addCommentButton.addEventListener("click", async () => {
+                const userName = userNameInput.value.trim();
+                const commentText = commentInput.value.trim();
+                if (!userName || !commentText) {
+                    alert("Please enter both name and comment.");
+                    return;
+                }
+                try {
+                    const response = await fetch(`${BASE_URL}/comments/${pageId}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ user: userName, text: commentText }),
+                    });
+                    if (!response.ok) throw new Error("Failed to post comment");
+                    userNameInput.value = "";
+                    commentInput.value = "";
+                    await loadComments();
+                } catch (error) {
+                    console.error("Error posting comment:", error);
+                }
+            });
+        }
+        // Initial Load
         loadComments();
-      } catch (error) {
-        console.error("Error posting comment:", error);
-      }
-    } else {
-      alert("Please enter a name and a comment.");
-    }
-  });
-
-  // Initial loading of comments
-  loadComments();
-});
-
-
+        fetchLikeData();
+    });
 </script>
