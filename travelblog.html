@@ -527,7 +527,7 @@ permalink: /travelblog.html/
         });
     
         // Spring Boot backend API URL for storing likes
-const API_URL = "http://localhost:8080/api/likes/data"; // Update with your server URL
+const API_URL = "http://localhost:8080/api/likes"; // Update with your server URL
 
 // Handle Like/Unlike functionality
 async function likeImage(imageId) {
@@ -615,7 +615,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchLikeCount(imageId);
     });
 });
-fetch('http://127.0.0.1:8080/api/likes/data')
+fetch('http://127.0.0.1:8080/api/likes')
   .then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
