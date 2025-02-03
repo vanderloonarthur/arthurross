@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 
 // Example 2: Allow only specific domains
-const allowedOrigins = ['http://127.0.0.1:4000', 'https://www.arthurross.nl'];
+const allowedOrigins = ['https://www.arthurross.nl'];
 
 app.use(cors({
   origin: (origin, callback) => {
