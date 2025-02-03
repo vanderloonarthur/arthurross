@@ -616,13 +616,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 fetch('http://127.0.0.1:8080/api/likes')
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(data => {
     console.log('Data from backend:', data);
   })
   .catch(error => {
     console.error('Error fetching data:', error);
   });
+
 
 
         document.addEventListener('DOMContentLoaded', function() {
