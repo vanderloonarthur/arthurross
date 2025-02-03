@@ -331,7 +331,7 @@ permalink: /posts/Edinburgh.md/
         Ook hier wilde niemand me een lift geven. Gelukkig belde Richard me na een paar uur via Instagram. Hij bood me aan de bus naar Edinburgh te betalen, waar ik blij op inging, dus Richard haalde me op in een Uber, we aten McDonalds en ik stapte op de bus naar Edinburgh.
       </p>
       <p>
-        Zaterdag 13 april, 2024
+        Zaterdag 13 april, 2024*
         Om 9 uur s’ ochtends kwam ik aan waarna ik naar Arthur’s Seat liep om het eind van de “parkrun” mee te maken.
       </p>
   <div id="like-container" style="text-align: center; margin-top: 20px;">
