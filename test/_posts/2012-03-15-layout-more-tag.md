@@ -10,7 +10,7 @@ tags:
   - layout
 ---
 
-This content is before the [excerpt separator tag](http://jekyllrb.com/docs/posts/#post-excerpts).
+This content is before the [excerpt separator tag](https://jekyllrb.com/docs/posts/#post-excerpts).
 
 Additional content before the more tag.
 

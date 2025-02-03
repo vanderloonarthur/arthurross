@@ -1,6 +1,6 @@
 package com.example.AI.controller;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.https.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;  // <-- Add this import
 

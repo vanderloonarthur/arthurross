@@ -67,5 +67,5 @@ app.post('/api/comments/:pageId', express.json(), (req, res) => {
 app.use(express.static('public'));
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on https://localhost:${port}`);
 });

@@ -40,7 +40,7 @@ minimal-mistakes
 
 ## Customizing
 
-To override the default [Sass](http://sass-lang.com/guide) (located in theme's
+To override the default [Sass](https://sass-lang.com/guide) (located in theme's
 `_sass` directory), do one of the following:
 
 1. Copy directly from the Minimal Mistakes theme gem
@@ -151,7 +151,7 @@ Change the mood of your site by altering a few color variables. `$body-color`, `
 
 #### Syntax highlighting
 
-To make customizing the colors used in code highlighted blocks, a base of sixteen colors ([Base16](http://chriskempson.com/projects/base16/)) have been used.
+To make customizing the colors used in code highlighted blocks, a base of sixteen colors ([Base16](https://chriskempson.com/projects/base16/)) have been used.
 
 Code block colors can easily be changed by overriding any of the following color variables:
 
@@ -374,9 +374,9 @@ $base0f: #a3685a;
 
 ### Breakpoints and grid stuff
 
-Probably won't need to touch these, but they're there if you need to. Width variables are used with the [`@include breakpoint()`](http://breakpoint-sass.com/) mixin to adapt the design of certain elements.
+Probably won't need to touch these, but they're there if you need to. Width variables are used with the [`@include breakpoint()`](https://breakpoint-sass.com/) mixin to adapt the design of certain elements.
 
-And `$susy` is used for setting [the grid](http://susy.oddbird.net/) the theme uses. Uncommenting the lines under `debug` can be useful if you want to show the columns when adjusting the layout.
+And `$susy` is used for setting [the grid](https://susy.oddbird.net/) the theme uses. Uncommenting the lines under `debug` can be useful if you want to show the columns when adjusting the layout.
 
 <figure>
   <img src="{{ '/assets/images/mm-susy-grid-overlay.jpg' | relative_url }}" alt="Susy grid overlay for debugging">

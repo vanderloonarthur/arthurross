@@ -323,7 +323,7 @@ toc: false
 ### Enhancements
 
 - Add [Dracula](https://draculatheme.com/) Base16 syntax highlighting theme Sass variables to [stylesheets documentation](https://mmistakes.github.io/minimal-mistakes/docs/stylesheets/#syntax-highlighting). [#2438](https://github.com/mmistakes/minimal-mistakes/pull/2438)
-- Update links to `HTTPS` and remove Google+ from configuration documentation. [#2432](https://github.com/mmistakes/minimal-mistakes/pull/2432)
+- Update links to `https` and remove Google+ from configuration documentation. [#2432](https://github.com/mmistakes/minimal-mistakes/pull/2432)
 - Use `first_page_path` from jekyll-paginate-v2 if available. [#2431](https://github.com/mmistakes/minimal-mistakes/pull/2431)
 - Update onchange and uglify-js dependencies.
 - Update smooth-scroll.js to `v16.1.2`. [#2430](https://github.com/mmistakes/minimal-mistakes/issues/2430)
@@ -422,7 +422,7 @@ toc: false
 
 - Remove extraneous space from Internet Explorer conditional statement. [#2273](https://github.com/mmistakes/minimal-mistakes/pull/2273)
 - Fix typo in `_config.yml`. [#2243](https://github.com/mmistakes/minimal-mistakes/pull/2243)
-- Replace `http` URLs with `https` where applicable in `_config.yml`. [#2244](https://github.com/mmistakes/minimal-mistakes/pull/2244)
+- Replace `https` URLs with `https` where applicable in `_config.yml`. [#2244](https://github.com/mmistakes/minimal-mistakes/pull/2244)
 
 ## [4.16.6](https://github.com/mmistakes/minimal-mistakes/releases/tag/4.16.6)
 
@@ -603,7 +603,7 @@ toc: false
 - Remove `type="text/css"` from Algolia script includes. [#1836](https://github.com/mmistakes/minimal-mistakes/pull/1836)
 - Remove unneeded `HandheldFriendly` and `MobileOptimized` meta tags. [#1837](https://github.com/mmistakes/minimal-mistakes/pull/1837)
 - Update Font Awesome to version `5.5.0` and add `integrity` hash. [#1922](https://github.com/mmistakes/minimal-mistakes/pull/1922)
-- Always load Google 404 Linkhelp script over HTTPS. [#1829](https://github.com/mmistakes/minimal-mistakes/pull/1829)
+- Always load Google 404 Linkhelp script over https. [#1829](https://github.com/mmistakes/minimal-mistakes/pull/1829)
 - Remove deprecated `base_path` include helper.
 
 ### Bug Fixes
@@ -826,8 +826,8 @@ toc: false
 
 ### Bug Fixes
 
-- Change `http` to `https` for Jekyll and Browserhappy links. [#1342](https://github.com/mmistakes/minimal-mistakes/pull/1342) [#1343](https://github.com/mmistakes/minimal-mistakes/pull/1343)
-- Change `http` author profile links to `https` when supported. [#1349](https://github.com/mmistakes/minimal-mistakes/pull/1349)
+- Change `https` to `https` for Jekyll and Browserhappy links. [#1342](https://github.com/mmistakes/minimal-mistakes/pull/1342) [#1343](https://github.com/mmistakes/minimal-mistakes/pull/1343)
+- Change `https` author profile links to `https` when supported. [#1349](https://github.com/mmistakes/minimal-mistakes/pull/1349)
 - Fix broken SCSS partial links in layouts documentation. [#1351](https://github.com/mmistakes/minimal-mistakes/issues/1351)
 
 ## [4.7.0](https://github.com/mmistakes/minimal-mistakes/releases/tag/4.7.0)
@@ -875,7 +875,7 @@ toc: false
 
 - Add `.page__comments-form` to "non-printing" selectors in print styles. [#1195](https://github.com/mmistakes/minimal-mistakes/pull/1195)
 - Add LinkedIn and Steam author sidebar examples to `_config.yml`. [#1203](https://github.com/mmistakes/minimal-mistakes/pull/1203) [#1204](https://github.com/mmistakes/minimal-mistakes/pull/1204)
-- Remove the http-equiv="cleartype" meta tag. [#1087](https://github.com/mmistakes/minimal-mistakes/pull/1087)
+- Remove the https-equiv="cleartype" meta tag. [#1087](https://github.com/mmistakes/minimal-mistakes/pull/1087)
 - Clarify documentation for `jekyll-archives` plugin and how to install. [#1206](https://github.com/mmistakes/minimal-mistakes/pull/1206)
 - Clarify documentation around taxonomy page and index generation. [#1207](https://github.com/mmistakes/minimal-mistakes/pull/1207)
 - Fix "Posts by tag" grammar in documentation. [#1209](https://github.com/mmistakes/minimal-mistakes/pull/1209)
@@ -919,7 +919,7 @@ toc: false
 - Adjust width of `.sidebar` to match `.sidebar__right`.
 - Add sample documents to ["portfolio" collection](https://mmistakes.github.io/minimal-mistakes/portfolio/) for testing grid view.
 - Fix typo in stylesheets documentation. [#1170](https://github.com/mmistakes/minimal-mistakes/pull/1170)
-- Add note about setting Discourse `server` as a scheme-less URL (eg. `meta.discourse.com` and not `http://meta.discourse.com`) in `_config.yml`. [#1182](https://github.com/mmistakes/minimal-mistakes/issues/1182)
+- Add note about setting Discourse `server` as a scheme-less URL (eg. `meta.discourse.com` and not `https://meta.discourse.com`) in `_config.yml`. [#1182](https://github.com/mmistakes/minimal-mistakes/issues/1182)
 
 ## [4.5.0](https://github.com/mmistakes/minimal-mistakes/releases/tag/4.5.0)
 
@@ -1263,7 +1263,7 @@ toc: false
 
 ### Maintenance
 
-- Add note to docs about using `url: http://localhost:4000` when working locally.
+- Add note to docs about using `url: https://localhost:4000` when working locally.
 
 ## [3.4.2](https://github.com/mmistakes/minimal-mistakes/releases/tag/3.4.2)
 
@@ -1585,7 +1585,7 @@ toc: false
 
 - Rebuilt the entire theme: layouts, includes, stylesheets, scripts, you name it.
 - Refreshed the look and feel while staying true to the original design of the theme (author sidebar/main content).
-- Replaced grid system with [Susy](http://susy.oddbird.net/).
+- Replaced grid system with [Susy](https://susy.oddbird.net/).
 - Replaced Grunt tasks with `npm` scripts.
 - Removed Google Fonts and replaced with system fonts to improve performance (they can be [added back](https://mmistakes.github.io/minimal-mistakes/docs/stylesheets/) if desired)
 - Greatly improved [theme documentation](https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/).
@@ -1641,7 +1641,7 @@ toc: false
 
 ### Bug Fixes
 
-- Remove http protocol from Google search form on sample 404 page
+- Remove https protocol from Google search form on sample 404 page
 - Only show related posts if there are one or more available
 - Fix alignment of email address link in author sidebar
 
@@ -1732,12 +1732,12 @@ toc: false
 
 ### Bug Fixes
 
-- Removed [Typeplate](http://typeplate.com/) styles. Was [causing issues with newer versions of Less](https://github.com/typeplate/typeplate.github.io/issues/108) and is no longer maintained.
+- Removed [Typeplate](https://typeplate.com/) styles. Was [causing issues with newer versions of Less](https://github.com/typeplate/typeplate.github.io/issues/108) and is no longer maintained.
 
 ### Enhancements
 
-- Added [image attribution](http://mmistakes.github.io/minimal-mistakes/theme-setup/#feature-images) for post and page feature images.
-- Added [404 page](http://mmistakes.github.io/minimal-mistakes/404.html).
+- Added [image attribution](https://mmistakes.github.io/minimal-mistakes/theme-setup/#feature-images) for post and page feature images.
+- Added [404 page](https://mmistakes.github.io/minimal-mistakes/404.html).
 - Cleaned up various Less variables to better align with naming conventions used in other MM Jekyll themes.
 - Removed Chrome Frame references.
 - Added global CSS3 transitions to text and block elements.

@@ -111,7 +111,7 @@ Used to assign a site author. Don't worry, you can override the site author with
 
 _Example:_ `name: "Michael Rose"`.
 
-**ProTip:** If you want to get crafty with your YAML you can use [anchors](http://www.yaml.org/spec/1.2/spec.html#id2785586) to reuse values. For example `foo: &var "My String"` allows you to reuse `"My String"` elsewhere in `_config.yml` like so... `bar: *var`. You'll see a few examples of this in the provided Jekyll config.
+**ProTip:** If you want to get crafty with your YAML you can use [anchors](https://www.yaml.org/spec/1.2/spec.html#id2785586) to reuse values. For example `foo: &var "My String"` allows you to reuse `"My String"` elsewhere in `_config.yml` like so... `bar: *var`. You'll see a few examples of this in the provided Jekyll config.
 {: .notice--info}
 
 ### Site description
@@ -126,7 +126,7 @@ The base hostname and protocol for your site. If you're hosting on GitHub Pages 
 
 GitHub Pages now [forces `https://` for new sites](https://help.github.com/articles/securing-your-github-pages-site-with-https/) so be mindful of that when setting your URL to avoid mixed-content warnings.
 
-**Note:** Jekyll 3.3 overrides this value with `url: http://localhost:4000` when running `jekyll serve` locally in development. If you want to avoid this behavior set `JEKYLL_ENV=production` to [force the environment](https://jekyllrb.com/docs/configuration/environments/) to production.
+**Note:** Jekyll 3.3 overrides this value with `url: https://localhost:4000` when running `jekyll serve` locally in development. If you want to avoid this behavior set `JEKYLL_ENV=production` to [force the environment](https://jekyllrb.com/docs/configuration/environments/) to production.
 {: .notice--warning}
 
 ### Site base URL
@@ -137,7 +137,7 @@ In the case of the Minimal Mistakes demo site it's hosted on GitHub at <https://
 
 For more information on how to properly use `site.url` and `site.baseurl` as intended by the Jekyll maintainers, check [Parker Moore's post on the subject](https://byparker.com/blog/2014/clearing-up-confusion-around-baseurl/).
 
-**Note:** When using `baseurl` remember to include it as part of your path when testing your site locally. Values of `url:` and `baseurl: "/blog"` would make your local site visible at `http://localhost:4000/blog` and not `http://localhost:4000`.
+**Note:** When using `baseurl` remember to include it as part of your path when testing your site locally. Values of `url:` and `baseurl: "/blog"` would make your local site visible at `https://localhost:4000/blog` and not `https://localhost:4000`.
 {: .notice--warning}
 
 ### Site repository
@@ -360,7 +360,7 @@ defaults:
 If you add `comments: false` to a post's YAML Front Matter it will override the default and disable comments for just that post.
 
 **Note:** Comments are disabled in `development`. To enable when testing/building locally be sure to set
-`JEKYLL_ENV=production` to [force the environment](http://jekyllrb.com/docs/configuration/#specifying-a-jekyll-environment-at-build-time) to production.
+`JEKYLL_ENV=production` to [force the environment](https://jekyllrb.com/docs/configuration/#specifying-a-jekyll-environment-at-build-time) to production.
 {: .notice--info}
 
 #### Disqus
@@ -385,7 +385,7 @@ comments:
     server: # meta.discourse.org
 ```
 
-**Note:** Do not include `http://` or `https://` when setting your Discourse `server`. The theme automatically prepends the URL `//`, following a scheme-less pattern.
+**Note:** Do not include `https://` or `https://` when setting your Discourse `server`. The theme automatically prepends the URL `//`, following a scheme-less pattern.
 {: .notice--info}
 
 #### Facebook comments
@@ -590,7 +590,7 @@ By default the theme links to `feed.xml` generated in the root of your site by t
 
 ```yaml
 atom_feed:
-  path: "http://feeds.feedburner.com/youFeedname"
+  path: "https://feeds.feedburner.com/youFeedname"
 ```
 
 **Note:** By default the site feed is linked in two locations: inside the [`<head>` element](https://github.com/mmistakes/minimal-mistakes/blob/master/_includes/head.html) and at the bottom of every page in the [site footer](https://github.com/mmistakes/minimal-mistakes/blob/master/_includes/footer.html).
@@ -731,7 +731,7 @@ bing_site_verification: "0FC3FD70512616B052E755A56F8952D"
 
 #### Naver Webmaster Tools
 
-To verify site ownership you will need to [create a Naver account](https://nid.naver.com/user2/joinGlobal.nhn?lang=en_US&m=init) and then **Add your site** via [Naver Webmaster Tools](http://webmastertool.naver.com/).
+To verify site ownership you will need to [create a Naver account](https://nid.naver.com/user2/joinGlobal.nhn?lang=en_US&m=init) and then **Add your site** via [Naver Webmaster Tools](https://webmastertool.naver.com/).
 
 Much like Google and Bing you'll be provided with a meta description:
 
@@ -882,7 +882,7 @@ analytics:
 To use another provider not included with the theme set `provider: "custom"` then add their embed code to `_includes/analytics-providers/custom.html`.
 
 **Note:** Analytics are disabled in `development`. To enable when testing/building locally be sure to set
-`JEKYLL_ENV=production` to [force the environment](http://jekyllrb.com/docs/configuration/#specifying-a-jekyll-environment-at-build-time) to production.
+`JEKYLL_ENV=production` to [force the environment](https://jekyllrb.com/docs/configuration/#specifying-a-jekyll-environment-at-build-time) to production.
 {: .notice--info}
 
 ## Site author
@@ -968,7 +968,7 @@ Nothing out of the ordinary here. `include` and `exclude` may be the only things
 
 ## Conversion and Markdown processing
 
-Again nothing out of the ordinary here as the theme adheres to the defaults used by GitHub Pages. [**Kramdown**](http://kramdown.gettalong.org/) for Markdown conversion, [**Rouge**](https://rouge.jneen.net/) syntax highlighting, and incremental building disabled. Change them if you need to.
+Again nothing out of the ordinary here as the theme adheres to the defaults used by GitHub Pages. [**Kramdown**](https://kramdown.gettalong.org/) for Markdown conversion, [**Rouge**](https://rouge.jneen.net/) syntax highlighting, and incremental building disabled. Change them if you need to.
 
 ## Front Matter Defaults
 
@@ -1232,7 +1232,7 @@ If you care at all about performance (and really who doesn't) compressing the HT
 
 If you're hosting with GitHub Pages there aren't many options afforded to you for optimizing the HTML Jekyll generates. Thankfully there is some Liquid wizardry you can use to strip whitespace and comments to reduce file size.
 
-There's a variety of configurations and caveats to using the `compress` layout, so be sure to read through the [documentation](http://jch.penibelst.de/) if you decide to make change the defaults set in the theme's `_config.yml`.
+There's a variety of configurations and caveats to using the `compress` layout, so be sure to read through the [documentation](https://jch.penibelst.de/) if you decide to make change the defaults set in the theme's `_config.yml`.
 
 ```yaml
 compress_html:

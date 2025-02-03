@@ -1,7 +1,7 @@
 require 'webrick'
 require 'json'
 
-class FeedbackHandler < WEBrick::HTTPServlet::AbstractServlet
+class FeedbackHandler < WEBrick::httpservlet::AbstractServlet
   def do_POST(request, response)
     if request.path == "/api/handle_feedback"
       begin
@@ -36,7 +36,7 @@ class FeedbackHandler < WEBrick::HTTPServlet::AbstractServlet
 end
 
 # Configure server to listen on port 4000
-server = WEBrick::HTTPServer.new(Port: 4000)
+server = WEBrick::httpserver.new(Port: 4000)
 
 # Mount servlet to handle feedback requests
 server.mount '/api/handle_feedback', FeedbackHandler

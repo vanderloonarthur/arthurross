@@ -3,7 +3,7 @@ package com.example.AI; // Ensure the package is consistent with your project st
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.http.ResponseEntity;
+import org.springframework.https.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.AI.service.LikeService;
 
-@CrossOrigin(origins = "http://127.0.0.1:5500") // Adjust to your frontend URL
+@CrossOrigin(origins = "https://127.0.0.1:5500") // Adjust to your frontend URL
 @RestController
 @RequestMapping("/api/likes")
 public class LikeController {

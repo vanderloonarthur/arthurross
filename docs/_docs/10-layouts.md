@@ -88,7 +88,7 @@ A Jekyll layout that compresses HTML in pure Liquid. To enable add `layout: comp
 **Note:** Has been known to mangle markup and break JavaScript... especially if inline `// comments` are present. For this reason it has been disabled by default.
 {: .notice--danger}
 
-* [Documentation](http://jch.penibelst.de/)
+* [Documentation](https://jch.penibelst.de/)
 
 ## Single layout
 
@@ -411,7 +411,7 @@ search: false
 
 To add some visual punch to a post or page, a large full-width header image can be included.
 
-Be sure to resize your header images. `~1280px` is a good width if you aren't [responsively serving up images](http://alistapart.com/article/responsive-images-in-practice). Through the magic of CSS they will scale up or down to fill the container. If you go with something too small it will look like garbage when upscaled, and something too large will hurt performance.
+Be sure to resize your header images. `~1280px` is a good width if you aren't [responsively serving up images](https://alistapart.com/article/responsive-images-in-practice). Through the magic of CSS they will scale up or down to fill the container. If you go with something too small it will look like garbage when upscaled, and something too large will hurt performance.
 
 **Please Note:** Paths for image headers, overlays, teasers, [galleries]({{ "/docs/helpers/#gallery" | relative_url }}), and [feature rows]({{ "/docs/helpers/#feature-row" | relative_url }}) have changed and require a full path. Instead of just `image: filename.jpg` you'll need to use the full path eg: `image: /assets/images/filename.jpg`. The preferred location is now `/assets/images/`, but can be placed elsewhere or external hosted. This all applies for image references in `_config.yml` and `author.yml` as well.
 {: .notice--danger}
@@ -429,7 +429,7 @@ For externally hosted images include the full image path instead of just the fil
 
 ```yaml
 header:
-  image: http://some-site.com/assets/images/image.jpg
+  image: https://some-site.com/assets/images/image.jpg
 ```
 
 To provide a custom alt tag for screen readers:
@@ -645,7 +645,7 @@ Multiple blocks can also be added by following the example below:
 ```yaml
 sidebar:
   - title: "Title"
-    image: http://placehold.it/350x250
+    image: https://placehold.it/350x250
     image_alt: "image"
     text: "Some text here."
   - title: "Another Title"
@@ -778,7 +778,7 @@ The important parts to change are:
 
 1. Share point URL *eg. `https://www.reddit.com/submit?url=`
 2. Link `title`
-3. [Font Awesome icon](http://fontawesome.io/icons/) (`fa-` class)
+3. [Font Awesome icon](https://fontawesome.io/icons/) (`fa-` class)
 4. Link label
 
 ![Reddit social share link button]({{ "/assets/images/mm-social-share-links-reddit-gs.png" | relative_url }})
@@ -795,7 +795,7 @@ $buttoncolors:
 (reddit, $reddit-color);
 ```
 
-**ProTip:** For bonus points you can modify the Sass variable `$reddit-color` that is set in `_variables.scss` [or use a different "brand" color](http://brandcolors.net/).
+**ProTip:** For bonus points you can modify the Sass variable `$reddit-color` that is set in `_variables.scss` [or use a different "brand" color](https://brandcolors.net/).
 {: .notice--info}
 
 Add the new `.btn--reddit` class to the `<a>` element from earlier, [compile `main.css`]({{ "/docs/stylesheets/" | relative_url }}) and away you go.

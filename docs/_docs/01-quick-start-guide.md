@@ -8,7 +8,7 @@ redirect_from:
 toc: true
 ---
 
-Minimal Mistakes has been developed as a [Gem-based theme](http://jekyllrb.com/docs/themes/) for easier use, and 100% compatible with GitHub Pages when used as a remote theme.
+Minimal Mistakes has been developed as a [Gem-based theme](https://jekyllrb.com/docs/themes/) for easier use, and 100% compatible with GitHub Pages when used as a remote theme.
 
 **If you enjoy this theme, please consider [sponsoring me](https://github.com/sponsors/mmistakes) to continue developing and maintaining it.**
 
@@ -87,7 +87,7 @@ You may also optionally specify a branch, [tag](https://github.com/mmistakes/min
 
 ---
 
-**Note:** Your Jekyll site should be viewable immediately at <http://USERNAME.github.io>. If it's not, you can force a rebuild by **Customizing Your Site** (see below for more details).
+**Note:** Your Jekyll site should be viewable immediately at <https://USERNAME.github.io>. If it's not, you can force a rebuild by **Customizing Your Site** (see below for more details).
 {: .notice--warning}
 
 If you're hosting several Jekyll based sites under the same GitHub username you will have to use Project Pages instead of User Pages. Essentially you rename the repo to something other than **USERNAME.github.io** and create a `gh-pages` branch off of `master`. For more details on how to set things up check [GitHub's documentation](https://help.github.com/articles/user-organization-and-project-pages/).

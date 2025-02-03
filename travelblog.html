@@ -615,10 +615,10 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchLikeCount(imageId);
     });
 });
-fetch('https://127.0.0.1:8443/api/likes')  // Update to use HTTPS
+fetch('https://127.0.0.1:8443/api/likes')  // Update to use https
   .then(response => {
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`https error! Status: ${response.status}`);
     }
     return response.json();
   })

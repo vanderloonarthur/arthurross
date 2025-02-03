@@ -378,7 +378,7 @@ permalink: /posts/Edinburgh.md/
         const modalImage = modal?.querySelector(".modal-image");
         const smallImage = document.querySelector(".small-image");
         const pageId = window.location.pathname.split('/').pop();
-        const BASE_URL = "http://localhost:8080/api"; // Base API URL for your Spring Boot backend
+        const BASE_URL = "https://localhost:8080/api"; // Base API URL for your Spring Boot backend
 // Ensure essential elements exist
         if (!userNameInput || !commentInput || !commentList || !addCommentButton || !likeButton || !likeCounter) {
             console.error("Required elements are missing from the page.");

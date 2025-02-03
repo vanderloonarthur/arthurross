@@ -20,7 +20,7 @@ function submitFeedback() {
     formData.append('selectedFeedback', selectedFeedback);
     formData.append('additionalComments', additionalComments);
 
-    fetch('http://127.0.0.1/api/handle_feedback.php', {
+    fetch('https://127.0.0.1/api/handle_feedback.php', {
         method: 'POST',
         body: formData
     })
