@@ -2,17 +2,24 @@ package com.example.AI.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
 
 @Entity
 public class Like {
-
+    
     @Id
     private String imageId;
-
-    @Column(nullable = false)
     private int likeCount;
 
+    // Default constructor (required for JPA)
+    public Like() {}
+
+    // Constructor with parameters
+    public Like(String imageId, int likeCount) {
+        this.imageId = imageId;
+        this.likeCount = likeCount;
+    }
+
+    // Getters and Setters
     public String getImageId() {
         return imageId;
     }
@@ -29,3 +36,4 @@ public class Like {
         this.likeCount = likeCount;
     }
 }
+

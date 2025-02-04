@@ -83,3 +83,47 @@ public class LikeController {
         }
     }
 }
+
+package com.example.AI.controller;
+
+import com.example.AI.service.LikeService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/likes")
+@CrossOrigin(origins = "https://www.arthurross.nl:8443") // Adjust this if needed
+public class LikeController {
+    
+    private final LikeService likeService;
+
+    public LikeController(LikeService likeService) {
+        this.likeService = likeService;
+    }
+
+    @PostMapping
+    public ResponseEntity<?> updateLikeCount(@RequestBody LikeRequest likeRequest) {
+        likeService.updateLikeCount(likeRequest.getImageId(), likeRequest.getLikes());
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{imageId}")
+    public ResponseEntity<Integer> getLikeCount(@PathVariable String imageId) {
+        return ResponseEntity.ok(likeService.getLikeCount(imageId));
+    }
+
+    @GetMapping("/global")
+    public ResponseEntity<Integer> getGlobalLikeCount() {
+        return ResponseEntity.ok(likeService.getGlobalLikes());
+    }
+
+    public static class LikeRequest {
+        private String imageId;
+        private int likes;
+
+        public String getImageId() { return imageId; }
+        public void setImageId(String imageId) { this.imageId = imageId; }
+        public int getLikes() { return likes; }
+        public void setLikes(int likes) { this.likes = likes; }
+    }
+}
