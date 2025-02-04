@@ -22,7 +22,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-const allowedOrigins = ['https://127.0.0.1:5500', 'https://localhost:4000']; // Your frontend URLs
+const allowedOrigins = ['https://127.0.0.1:5500', 'https://localhost:4000', 'https://www.arthurross.nl:8443', 'https://www.arthurross.nl/travelblog.html:8443']; // Your frontend URLs
 
 app.use(cors({  
   origin: (origin, callback) => {
@@ -38,6 +38,6 @@ app.get('/api/data', (req, res) => {
   res.json({ message: 'This is some data' });
 });
 
-app.listen(8080, () => {
-  console.log('Server is running on https://127.0.0.1:8080');
+app.listen(8443, () => {
+  console.log('Server is running on https://www.arthurross.nl:8443');
 });

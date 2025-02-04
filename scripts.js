@@ -20,7 +20,7 @@ function submitFeedback() {
     formData.append('selectedFeedback', selectedFeedback);
     formData.append('additionalComments', additionalComments);
 
-    fetch('https://127.0.0.1/api/handle_feedback.php', {
+    fetch('https://www.arthurross.nl/api/handle_feedback.php', {
         method: 'POST',
         body: formData
     })
