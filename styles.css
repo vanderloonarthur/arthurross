@@ -1,4 +1,4 @@
-/* General Styles */
+/* Base styles */
 body, html {
     height: 100%;
     margin: 0;
@@ -30,14 +30,18 @@ main {
 
 /* Image Gallery */
 .image-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 15px;
     padding: 20px;
     width: 100%;
 }
 
 .image-item {
+    flex: 1 1 300px;
+    margin: 10px;
+    box-sizing: border-box;
     position: relative;
     overflow: hidden;
     height: 300px;
@@ -331,6 +335,7 @@ footer {
 .thank-you-screen.hide {
     opacity: 0;
 }
+
 /* Basic styles for modal */
 #feedback-modal {
     display: none; /* Hidden by default */
