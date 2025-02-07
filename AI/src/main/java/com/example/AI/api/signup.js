@@ -25,10 +25,16 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ errors: [{ message: 'All fields are required' }] });
         }
 
-        // Check if the user already exists
-        const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
-        if (rows.length > 0) {
+        // Check if the email already exists
+        const [emailRows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+        if (emailRows.length > 0) {
             return res.status(400).json({ errors: [{ message: 'Email already in use' }] });
+        }
+
+        // Check if the username already exists
+        const [usernameRows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        if (usernameRows.length > 0) {
+            return res.status(400).json({ errors: [{ message: 'Username already in use' }] });
         }
 
         // Hash the password
