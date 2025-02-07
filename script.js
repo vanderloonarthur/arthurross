@@ -77,7 +77,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("thankYouScreen").classList.add("hidden");
     });
 
+    function isLoggedIn() {
+        // Placeholder function to check if the user is logged in
+        // Replace with actual login check logic
+        return !!localStorage.getItem('loggedIn');
+    }
+
     window.likeImage = async function(imageId) {
+        if (!isLoggedIn()) {
+            openLoginModal();
+            return;
+        }
         try {
             const likeCountElem = document.getElementById(`${imageId}-like-count`);
             if (!likeCountElem) {
@@ -231,32 +241,32 @@ function closeSignupModal() {
     document.getElementById('signup-modal').setAttribute('aria-hidden', 'true');
 }
 
-document.getElementById('signupForm').addEventListener('submit', function(event) {
+document.getElementById('signupForm').addEventListener('submit', async function(event) {
     event.preventDefault();
-    const username = document.getElementById('signup-username');
-    const email = document.getElementById('signup-email');
-    const password = document.getElementById('signup-password');
+    const username = document.getElementById('signup-username').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
     const usernameError = document.getElementById('signup-username-error');
     const emailError = document.getElementById('signup-email-error');
     const passwordError = document.getElementById('signup-password-error');
     const signupStatus = document.getElementById('signup-status');
     let valid = true;
 
-    if (username.value.trim() === '') {
+    if (username.trim() === '') {
         usernameError.textContent = 'Username is required.';
         valid = false;
     } else {
         usernameError.textContent = '';
     }
 
-    if (email.value.trim() === '') {
+    if (email.trim() === '') {
         emailError.textContent = 'Email is required.';
         valid = false;
     } else {
         emailError.textContent = '';
     }
 
-    if (password.value.trim() === '') {
+    if (password.trim() === '') {
         passwordError.textContent = 'Password is required.';
         valid = false;
     } else {
@@ -264,29 +274,28 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
     }
 
     if (valid) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', event.target.action, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('Accept', 'application/json');
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    signupStatus.textContent = 'Sign up successful!';
-                    event.target.reset();
-                    setTimeout(() => closeSignupModal(), 2000);
-                } else {
-                    const result = JSON.parse(xhr.responseText);
-                    signupStatus.textContent = result.errors ? result.errors.map(error => error.message).join(", ") : 
-                        'Oops! There was a problem with your sign up.';
-                }
+        try {
+            const response = await fetch(event.target.action, {
+                method: event.target.method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            if (response.ok) {
+                signupStatus.textContent = 'Sign up successful!';
+                event.target.reset();
+                setTimeout(() => closeSignupModal(), 2000);
+            } else {
+                const result = await response.json();
+                signupStatus.textContent = result.errors ? result.errors.map(error => error.message).join(", ") : 
+                    'Oops! There was a problem with your sign up.';
             }
-        };
-        const formData = {
-            username: username.value,
-            email: email.value,
-            password: password.value
-        };
-        xhr.send(JSON.stringify(formData));
+        } catch (error) {
+            signupStatus.textContent = 'Oops! There was a problem with your sign up.';
+        }
     }
 });
 

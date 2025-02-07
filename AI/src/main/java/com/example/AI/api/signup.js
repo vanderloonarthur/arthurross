@@ -12,8 +12,8 @@ const pool = mysql.createPool({
     database: 'arthurross' // Update with your MySQL database name
 });
 
-// Middleware to parse form data
-router.use(bodyParser.urlencoded({ extended: true }));
+// Middleware to parse JSON data
+router.use(bodyParser.json());
 
 // Sign-up endpoint
 router.post('/signup', async (req, res) => {

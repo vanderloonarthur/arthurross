@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Application",
+            "request": "launch",
+            "mainClass": "com.example.AI.Application",
+            "projectName": "AI"
+        },
+        {
+            "type": "java",
             "name": "SecureKeyGenerator",
             "request": "launch",
             "mainClass": "com.example.AI.security.SecureKeyGenerator",
