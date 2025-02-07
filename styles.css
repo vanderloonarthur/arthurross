@@ -30,21 +30,16 @@ main {
 
 /* Image Gallery */
 .image-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
     padding: 20px;
     width: 100%;
 }
 
 .image-item {
-    flex: 1 1 300px;
-    margin: 10px;
-    box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    height: 300px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     background-color: #2a2a2a;
