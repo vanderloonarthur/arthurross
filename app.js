@@ -1,8 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const signupRouter = require('./api/signup');
+const loginRouter = require('./api/login');
 
 const app = express();
-const port = 4000;
+const port = 8443;
 
 // Mock data storage
 let likesData = {};
@@ -10,6 +12,14 @@ let commentsData = {};
 
 app.use(bodyParser.json());
 app.use(express.static('public'));  // Assuming static files are in the 'public' folder
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Use the signup and login routes
+app.use('/api', signupRouter);
+app.use('/api', loginRouter);
 
 app.get('/api/likes/:pageId', (req, res) => {
   const { pageId } = req.params;
@@ -45,5 +55,5 @@ app.post('/api/comments/:pageId', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on https://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });

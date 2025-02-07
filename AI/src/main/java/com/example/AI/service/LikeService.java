@@ -4,34 +4,61 @@ import com.example.AI.model.Like;
 import com.example.AI.repository.LikeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import java.util.Optional;
+
+import com.example.AI.service.UserService; // Corrected package name
 
 @Service
 public class LikeService {
 
-    private final LikeRepository likeRepository;
+    @Autowired
+    private LikeRepository likeRepository;
 
     @Autowired
-    public LikeService(LikeRepository likeRepository) {
-        this.likeRepository = likeRepository;
-    }
-
-    public void updateLikeCount(String imageId, int likeCount) {
-        Like like = likeRepository.findById(imageId).orElse(new Like(imageId, 0));
-        like.setLikeCount(likeCount);
-        likeRepository.save(like);
-    }
-
-    public int getLikeCount(String imageId) {
-        return likeRepository.findById(imageId)
-                             .map(Like::getLikeCount)
-                             .orElse(0);
-    }
+    private UserService userService; // Assuming you have a UserService to manage user sessions
 
     public int getGlobalLikes() {
         return likeRepository.findAll()
                              .stream()
                              .mapToInt(Like::getLikeCount)
                              .sum();
+    }
+
+    public long countByPostId(Long postId) {
+        return likeRepository.countByPostId(postId);
+    }
+
+    public void updateLikeCount(Long postId, int count) {
+        Optional<Like> likeOptional = likeRepository.findByPostId(postId)
+                                                    .stream()
+                                                    .findFirst(); // Ensures we modify an existing Like
+
+        Like like = likeOptional.orElseGet(() -> {
+            Like newLike = new Like();
+            newLike.setPostId(postId);
+            newLike.setLikeCount(count);
+            return newLike;
+        }); // Create if not exists
+        like.setLikeCount(count);
+
+        likeRepository.save(like);
+    }
+
+    public void addLike(Long userId, Long postId) {
+        // Implement the logic to add a like
+    }
+
+    public void removeLike(Long userId, Long postId) {
+        // Implement the logic to remove a like
+    }
+
+    public int getLikeCount(Long postId) {
+        // Implement the logic to get the like count
+        return 0;
+    }
+
+    public boolean hasUserLiked(Long userId, Long postId) {
+        return likeRepository.existsByUserIdAndPostId(userId, postId);
     }
 }

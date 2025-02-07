@@ -1,31 +1,43 @@
 package com.example.AI.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Like {
-    
+
     @Id
-    private String imageId;
-    private int likeCount;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Long userId;
+    private Long postId;
+    private int likeCount; // Add this field
 
-    // Default constructor (required for JPA)
-    public Like() {}
-
-    // Constructor with parameters
-    public Like(String imageId, int likeCount) {
-        this.imageId = imageId;
-        this.likeCount = likeCount;
+    // Getters and setters
+    public Long getId() {
+        return id;
     }
 
-    // Getters and Setters
-    public String getImageId() {
-        return imageId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setImageId(String imageId) {
-        this.imageId = imageId;
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public int getLikeCount() {
@@ -36,4 +48,3 @@ public class Like {
         this.likeCount = likeCount;
     }
 }
-
