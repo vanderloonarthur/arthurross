@@ -408,3 +408,40 @@ footer {
         width: 95%; /* Max width for very small screens */
     }
 }
+
+/* Responsive styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+header nav h1 {
+    font-size: 1.5em;
+    text-align: center;
+}
+.image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.image-item {
+    flex: 1 1 300px;
+    margin: 10px;
+    box-sizing: border-box;
+}
+.image-item img {
+    max-width: 100%;
+    height: auto;
+}
+.centered-button {
+    text-align: center;
+    margin: 20px 0;
+}
+.modal-content {
+    max-width: 500px;
+    margin: auto;
+}
+@media (max-width: 600px) {
+    .image-item {
+        flex: 1 1 100%;
+    }
+}
