@@ -18,9 +18,8 @@ permalink: /travelblog.html/
     <meta name="twitter:description" content="Ontdek de schoonheid van Europa met deze boeiende reisverhalen van Arthur Ross.">
     <meta name="twitter:image" content="https://www.arthurross.nl/assets/images/madride.png">
     <title>Travel Blog</title>
-    <!-- Favicon -->
     <link rel="icon" href="/assets/images/europa.png" type="image/x-icon">
-    <!-- Google Analytics -->
+    <link rel="stylesheet" href="/styles.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-25QWYDWGEP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -28,128 +27,34 @@ permalink: /travelblog.html/
         gtag('js', new Date());
         gtag('config', 'G-25QWYDWGEP');
     </script>
-    <!-- Link to the external CSS file -->
-    <link rel="stylesheet" href="/styles.css">
     <style>
-        /* Add responsive styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        nav h1 {
-            margin: 0;
-        }
-
-        .image-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .image-item {
-            margin: 1rem;
-            max-width: 300px;
-            flex: 1 1 calc(33.333% - 2rem);
-            box-sizing: border-box;
-        }
-
-        .image-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .image-caption {
-            text-align: center;
-            margin-top: 0.5rem;
-        }
-
-        .like-container {
-            text-align: center;
-            margin-top: 0.5rem;
-        }
-
-        .centered-button {
-            text-align: center;
-            margin: 2rem 0;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 2rem;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1rem;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        footer a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .image-item {
-                flex: 1 1 calc(50% - 2rem);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .image-item {
-                flex: 1 1 calc(100% - 2rem);
-            }
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        header { background-color: #333; color: #fff; padding: 1rem; text-align: center; }
+        .image-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; padding: 1rem; }
+        .image-item img { width: 100%; height: auto; display: block; }
+        .image-caption, .like-container, .centered-button { text-align: center; margin-top: 0.5rem; }
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
+        .modal-content { background-color: #fff; margin: 15% auto; padding: 2rem; width: 80%; max-width: 500px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+        .close:hover, .close:focus { color: black; cursor: pointer; }
+        footer { background-color: #333; color: #fff; text-align: center; padding: 1rem; position: fixed; bottom: 0; width: 100%; }
+        footer a { color: #fff; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
     </style>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({ appId: 'YOUR_FACEBOOK_APP_ID', cookie: true, xfbml: true, version: 'v10.0' });
+        };
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
 </head>
 <body>
     <header>
@@ -160,9 +65,10 @@ permalink: /travelblog.html/
 
     <main>
         <section class="image-gallery">
+            <!-- Blog Items -->
             <div class="image-item" id="milaan">
                 <a href="/posts/milaan.html" class="golden-link">
-                    <img src="/assets/images/skyline.jpg" alt="Milaan" data-image-id="milaan">
+                    <img src="/assets/images/skyline.jpg" alt="Milaan">
                     <div class="image-caption"><p>Bedevaart naar Milaan [mei/ juni 2016]</p></div>
                 </a>
                 <div class="like-container">
@@ -170,259 +76,129 @@ permalink: /travelblog.html/
                     <span id="milaan-like-count">0 Likes</span>
                 </div>
             </div>
-            <div
-  class="fb-like"
-  data-share="true"
-  data-width="450"
-  data-show-faces="true">
-</div>
-            <div class="image-item" id="madrid">
-                <a href="/posts/madrid.html" class="golden-link">
-                    <img src="/assets/images/bear-1.jpg" alt="Madrid" data-image-id="madrid">
-                    <div class="image-caption"><p>Van Gogh achterna [juni/ juli 2020]</p></div>
-                </a>
-                <div class="like-container">
-                    <button class="like-button" onclick="likeImage('madrid')">❤️ Like</button>
-                    <span id="madrid-like-count">0 Likes</span>
-                </div>
-            </div>
-            <div class="image-item" id="stuttgart">
-                <a href="/posts/stuttgart.html" class="golden-link">
-                    <img src="/assets/images/stag3.jpeg" alt="Stuttgart" data-image-id="stuttgart">
-                    <div class="image-caption"><p>Marshall Stuttgart</p></div>
-                </a>
-                <div class="like-container">
-                    <button class="like-button" onclick="likeImage('stuttgart')">❤️ Like</button>
-                    <span id="stuttgart-like-count">0 Likes</span>
-                </div>
-            </div>
-            <div class="image-item" id="edinburgh">
-                <a href="/posts/Edinburgh.html" class="golden-link">
-                    <img src="/assets/images/2lions.jpg" alt="Edinburgh" data-image-id="edinburgh">
-                    <div class="image-caption"><p>D'Arthur is coming home</p></div>
-                </a>
-                <div class="like-container">
-                    <button class="like-button" onclick="likeImage('edinburgh')">❤️ Like</button>
-                    <span id="edinburgh-like-count">0 Likes</span>
-                </div>
-            </div>
         </section>
-        <fb:login-button
-        scope="public_profile,email"
-        onlogin="checkLoginState();">
-      </fb:login-button>
-      
+
+        <!-- Google Sign-Up Button -->
+        <div class="centered-button">
+            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-login_uri="YOUR_SERVER_ENDPOINT_HERE" data-callback="handleCredentialResponse"></div>
+            <div class="g_id_signin" data-type="standard" data-theme="outline" data-text="Sign up with Google" data-shape="rectangular" data-size="large"></div>
+        </div>
+
+        <!-- Facebook Login Button -->
+        <div class="centered-button">
+            <button id="facebook-login-btn" class="facebook-login-btn" onclick="loginWithFacebook()">Login with Facebook</button>
+        </div>
+
         <!-- Feedback Button -->
         <div class="centered-button">
-            <button id="openFeedbackBtn" class="feedback-btn" onclick="openModal()" aria-label="Open feedback modal">
-                Geef Feedback
-            </button>
+            <button id="openFeedbackBtn" class="feedback-btn" onclick="openModal()">Geef Feedback</button>
         </div>
 
         <!-- Feedback Modal -->
-        <div id="feedback-modal" class="modal" aria-hidden="true">
+        <div id="feedback-modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <h2>Hoe blij bent u met de website?</h2>
                 <form id="feedbackForm" action="https://formspree.io/f/xblrooaq" method="POST">
-                    <div>
-                        <label for="selectedFeedback">Selecteer Feedback:</label>
-                        <select id="selectedFeedback" name="selectedFeedback" required>
-                            <option value="Zeer gelukkig">😀 Zeer gelukkig</option>
-                            <option value="Gelukkig">🙂 Gelukkig</option>
-                            <option value="Neutraal">😐 Neutraal</option>
-                            <option value="Ongelukkig">🙁 Ongelukkig</option>
-                            <option value="Zeer ongelukkig">😠 Zeer ongelukkig</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="message">Bericht:</label>
-                        <textarea id="message" name="message" placeholder="Voer uw bericht in" required></textarea>
-                    </div>
-                    <div>
-                        <label for="name">Naam:</label>
-                        <input type="text" id="name" name="name" placeholder="Voer uw naam in" required>
-                    </div>
-                    <div>
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" placeholder="Voer uw e-mail in" required>
-                    </div>
+                    <label for="selectedFeedback">Selecteer Feedback:</label>
+                    <select id="selectedFeedback" name="selectedFeedback" required>
+                        <option value="Zeer gelukkig">😀 Zeer gelukkig</option>
+                        <option value="Gelukkig">🙂 Gelukkig</option>
+                        <option value="Neutraal">😐 Neutraal</option>
+                        <option value="Ongelukkig">🙁 Ongelukkig</option>
+                        <option value="Zeer ongelukkig">😠 Zeer ongelukkig</option>
+                    </select>
+                    <label for="message">Bericht:</label>
+                    <textarea id="message" name="message" required></textarea>
+                    <label for="name">Naam:</label>
+                    <input type="text" id="name" name="name" required>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
                     <button type="submit">Verstuur Feedback</button>
-                    <p id="feedback-status"></p>
                 </form>
-                
-                <!-- Thank You Message -->
-                <div id="thankYouScreen" class="hidden">
-                    <h2>Thank You!</h2>
-                    <p>Your feedback has been submitted successfully.</p>
-                    <button id="closeThankYouBtn" onclick="closeThankYouScreen()">Close</button>
-                </div>
             </div>
         </div>
 
-        <button id="scrollUpBtn" onclick="scrollToTop()" aria-label="Scroll naar boven">Scroll naar boven</button>
-    </main>
+        <!-- Signup and Login Modals -->
+        <div class="centered-button">
+            <button id="openSignupBtn" class="signup-btn" onclick="openSignupModal()">Sign Up</button>
+        </div>
 
-    <!-- Sign Up Button -->
-    <div class="centered-button">
-        <button id="openSignupBtn" class="signup-btn" onclick="openSignupModal()" aria-label="Open sign-up modal">
-            Sign Up
-        </button>
-    </div>
-
-    <!-- Sign Up Modal -->
-    <div id="signup-modal" class="modal" aria-hidden="true">
-        <div class="modal-content">
-            <span class="close" onclick="closeSignupModal()">&times;</span>
-            <h2>Sign Up</h2>
-            <form id="signupForm" action="signup.php" method="POST">
-                <div>
+        <div id="signup-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeSignupModal()">&times;</span>
+                <h2>Sign Up</h2>
+                <form id="signupForm" action="signup.php" method="POST">
                     <label for="signup-username">Username:</label>
                     <input type="text" id="signup-username" name="username" required>
-                </div>
-                <div>
                     <label for="signup-email">Email:</label>
                     <input type="email" id="signup-email" name="email" required>
-                </div>
-                <div>
                     <label for="signup-password">Password:</label>
                     <input type="password" id="signup-password" name="password" required>
-                </div>
-                <button type="submit">Sign Up</button>
-            </form>
-            
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- Login Button -->
-    <div class="centered-button">
-        <button id="openLoginBtn" class="login-btn" onclick="openLoginModal()" aria-label="Open login modal">
-            Login
-        </button>
-    </div>
-    <button onclick="loginWithFacebook()">Login with Facebook</button>
+        <div class="centered-button">
+            <button id="openLoginBtn" class="login-btn" onclick="openLoginModal()">Login</button>
+        </div>
 
-    <script>
-      function loginWithFacebook() {
-        FB.login(function(response) {
-          if (response.authResponse) {
-            console.log('User logged in:', response);
-            getUserInfo();
-          } else {
-            console.log('User cancelled login or did not fully authorize.');
-          }
-        }, {scope: 'email,public_profile'});
-      }
-    
-      function getUserInfo() {
-        FB.api('/me', {fields: 'name,email,picture'}, function(response) {
-          console.log('User Info:', response);
-          alert('Welcome, ' + response.name);
-        });
-      }
-    </script>
-    
-    <!-- Login Modal -->
-    <div id="login-modal" class="modal" aria-hidden="true">
-        <div class="modal-content">
-            <span class="close" onclick="closeLoginModal()">&times;</span>
-            <h2>Login</h2>
-            <form id="loginForm" action="https://www.arthurross.nl/login" method="POST">
-                <div>
+        <div id="login-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeLoginModal()">&times;</span>
+                <h2>Login</h2>
+                <form id="loginForm" action="https://www.arthurross.nl/login" method="POST">
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
-                    <span class="error" id="username-error" aria-live="polite"></span>
-                </div>
-                <div>
+                    <input type="text" id="username" name="username" required>
                     <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                    <span class="error" id="password-error" aria-live="polite"></span>
-                </div>
-                <button type="submit">Login</button>
-                <p id="login-status" aria-live="polite"></p>
-            </form>
+                    <input type="password" id="password" name="password" required>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
         </div>
-    </div>
+    </main>
 
     <footer>
         <p>&copy; 2024 Arthur Ross. Alle rechten voorbehouden.</p>
         <p><a href="/privacy_policy.md">Privacy Policy</a></p>
     </footer>
 
-    <script src="/script.js"></script>
     <script>
-        // Add the Facebook SDK for Javascript
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-        // Facebook SDK initialization
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId      : '626159790032742',
-                xfbml      : true,
-                version    : 'v22.0'
-            });
-            FB.AppEvents.logPageView();
-
-            // Check login status
-            FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
-            });
-        };
-
-        function statusChangeCallback(response) {
-            if (response.status === 'connected') {
-                console.log('Welcome! Fetching your information.... ');
-                FB.api('/me', {fields: 'name, email'}, function(response) {
-                    document.getElementById("profile").innerHTML = "Good to see you, " + response.name + ". I see your email address is " + response.email;
-                });
-            } else {
-                console.log('User cancelled login or did not fully authorize.');
-            }
+        function handleCredentialResponse(response) {
+            console.log("Google sign-in successful: ", response);
+            fetch('YOUR_SERVER_ENDPOINT_HERE', {
+                method: 'POST',
+                body: JSON.stringify({ credential: response.credential }),
+                headers: { 'Content-Type': 'application/json' },
+            }).then(response => response.json())
+              .then(data => { console.log('User authenticated:', data); })
+              .catch((error) => { console.error('Error during authentication:', error); });
         }
+
+        function loginWithFacebook() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    console.log('User logged in with Facebook:', response);
+                    fetch('YOUR_SERVER_ENDPOINT_HERE', {
+                        method: 'POST',
+                        body: JSON.stringify({ accessToken: response.authResponse.accessToken }),
+                        headers: { 'Content-Type': 'application/json' },
+                    }).then(response => response.json())
+                      .then(data => { console.log('User authenticated:', data); })
+                      .catch((error) => { console.error('Error during authentication:', error); });
+                }
+            }, {scope: 'email,public_profile'});
+        }
+
+        function openModal() { document.getElementById("feedback-modal").style.display = "block"; }
+        function closeModal() { document.getElementById("feedback-modal").style.display = "none"; }
+
+        function openSignupModal() { document.getElementById("signup-modal").style.display = "block"; }
+        function closeSignupModal() { document.getElementById("signup-modal").style.display = "none"; }
+
+        function openLoginModal() { document.getElementById("login-modal").style.display = "block"; }
+        function closeLoginModal() { document.getElementById("login-modal").style.display = "none"; }
     </script>
-    <script>
-        // Load the Facebook SDK asynchronously
-        window.fbAsyncInit = function() {
-          FB.init({
-            appId      : '626159790032742', // Replace with your Facebook App ID
-            cookie     : true,
-            xfbml      : true,
-            version    : 'v12.0' // Make sure you use the latest version of the Graph API
-          });
-        };
-      
-        // Load the SDK asynchronously
-        (function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = 'https://connect.facebook.net/en_US/sdk.js';
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-      </script>
-      <script>
-        function checkLoginState() {
-          FB.getLoginStatus(function(response) {
-            if (response.status === 'connected') {
-              // Logged into your app
-              console.log('Successfully connected to Facebook');
-              // You can now get the user's information
-              FB.api('/me', function(response) {
-                console.log('Good to go! User:', response);
-              });
-            } else {
-              // Not logged into Facebook or the app
-              console.log('User not logged in');
-            }
-          });
-        }
-      </script>
-      
 </body>
 </html>
