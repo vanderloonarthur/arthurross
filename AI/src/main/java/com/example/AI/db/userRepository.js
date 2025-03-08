@@ -1,29 +1,37 @@
-const mysql = require('mysql2/promise');
+const db = require('./db'); // Assuming you have a db module to handle database connections
 
-// Create a MySQL connection pool
-const pool = mysql.createPool({
-    host: 'localhost', // Update with your MySQL host
-    user: 'root', // Update with your MySQL user
-    password: 'password', // Update with your MySQL password
-    database: 'arthurross' // Update with your MySQL database name
-});
+const findUserByEmail = async (email) => {
+    const query = 'SELECT * FROM users WHERE email = ?';
+    const [results] = await db.execute(query, [email]);
+    return results;
+};
 
-async function findUserByEmail(email) {
-    const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
-    return rows;
-}
+const findUserByUsername = async (username) => {
+    const query = 'SELECT * FROM users WHERE username = ?';
+    const [results] = await db.execute(query, [username]);
+    return results;
+};
 
-async function findUserByUsername(username) {
-    const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
-    return rows;
-}
+const createUser = async (username, email, hashedPassword, verificationToken) => {
+    const query = 'INSERT INTO users (username, email, password, verification_token) VALUES (?, ?, ?, ?)';
+    await db.execute(query, [username, email, hashedPassword, verificationToken]);
+};
 
-async function createUser(username, email, hashedPassword) {
-    await pool.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPassword]);
-}
+const findUserByVerificationToken = async (token) => {
+    const query = 'SELECT * FROM users WHERE verification_token = ?';
+    const [results] = await db.execute(query, [token]);
+    return results[0];
+};
+
+const verifyUser = async (userId) => {
+    const query = 'UPDATE users SET verified = 1, verification_token = NULL WHERE id = ?';
+    await db.execute(query, [userId]);
+};
 
 module.exports = {
     findUserByEmail,
     findUserByUsername,
-    createUser
+    createUser,
+    findUserByVerificationToken,
+    verifyUser
 };

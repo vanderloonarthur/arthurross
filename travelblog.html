@@ -37,29 +37,30 @@ permalink: /travelblog.html/
             <h1>Reis door Europa met Arthur Ross!</h1>
         </nav>
     </header>
+
     <main>
         <section class="image-gallery">
             <div class="image-item" id="milaan">
                 <a href="/posts/milaan.html" class="golden-link">
                     <img src="/assets/images/skyline.jpg" alt="Milaan" data-image-id="milaan">
-                    <div class="image-caption">
-                        <p>Bedevaart naar Milaan [mei/ juni 2016]</p>
-                    </div>
+                    <div class="image-caption"><p>Bedevaart naar Milaan [mei/ juni 2016]</p></div>
                 </a>
-                <div class="blog-post"></div>
                 <div class="like-container">
                     <button class="like-button" onclick="likeImage('milaan')">❤️ Like</button>
                     <span id="milaan-like-count">0 Likes</span>
                 </div>
             </div>
+            <div
+  class="fb-like"
+  data-share="true"
+  data-width="450"
+  data-show-faces="true">
+</div>
             <div class="image-item" id="madrid">
                 <a href="/posts/madrid.html" class="golden-link">
                     <img src="/assets/images/bear-1.jpg" alt="Madrid" data-image-id="madrid">
-                    <div class="image-caption">
-                        <p>Van Gogh achterna [juni/ juli 2020]</p>
-                    </div>
+                    <div class="image-caption"><p>Van Gogh achterna [juni/ juli 2020]</p></div>
                 </a>
-                <div class="blog-post"></div>
                 <div class="like-container">
                     <button class="like-button" onclick="likeImage('madrid')">❤️ Like</button>
                     <span id="madrid-like-count">0 Likes</span>
@@ -68,11 +69,8 @@ permalink: /travelblog.html/
             <div class="image-item" id="stuttgart">
                 <a href="/posts/stuttgart.html" class="golden-link">
                     <img src="/assets/images/stag3.jpeg" alt="Stuttgart" data-image-id="stuttgart">
-                    <div class="image-caption">
-                        <p>Marshall Stuttgart</p>
-                    </div>
+                    <div class="image-caption"><p>Marshall Stuttgart</p></div>
                 </a>
-                <div class="blog-post"></div>
                 <div class="like-container">
                     <button class="like-button" onclick="likeImage('stuttgart')">❤️ Like</button>
                     <span id="stuttgart-like-count">0 Likes</span>
@@ -81,17 +79,13 @@ permalink: /travelblog.html/
             <div class="image-item" id="edinburgh">
                 <a href="/posts/Edinburgh.html" class="golden-link">
                     <img src="/assets/images/2lions.jpg" alt="Edinburgh" data-image-id="edinburgh">
-                    <div class="image-caption">
-                        <p>D'Arthur is coming home</p>
-                    </div>
+                    <div class="image-caption"><p>D'Arthur is coming home</p></div>
                 </a>
-                <div class="blog-post"></div>
                 <div class="like-container">
                     <button class="like-button" onclick="likeImage('edinburgh')">❤️ Like</button>
                     <span id="edinburgh-like-count">0 Likes</span>
                 </div>
             </div>
-            <!-- Add more image items as needed -->
         </section>
 
         <!-- Feedback Button -->
@@ -100,7 +94,7 @@ permalink: /travelblog.html/
                 Geef Feedback
             </button>
         </div>
-        
+
         <!-- Feedback Modal -->
         <div id="feedback-modal" class="modal" aria-hidden="true">
             <div class="modal-content">
@@ -137,13 +131,14 @@ permalink: /travelblog.html/
                 <div id="thankYouScreen" class="hidden">
                     <h2>Thank You!</h2>
                     <p>Your feedback has been submitted successfully.</p>
-                    <button id="closeThankYouBtn">Close</button>
+                    <button id="closeThankYouBtn" onclick="closeThankYouScreen()">Close</button>
                 </div>
             </div>
         </div>
 
         <button id="scrollUpBtn" onclick="scrollToTop()" aria-label="Scroll naar boven">Scroll naar boven</button>
     </main>
+
     <!-- Sign Up Button -->
     <div class="centered-button">
         <button id="openSignupBtn" class="signup-btn" onclick="openSignupModal()" aria-label="Open sign-up modal">
@@ -156,25 +151,22 @@ permalink: /travelblog.html/
         <div class="modal-content">
             <span class="close" onclick="closeSignupModal()">&times;</span>
             <h2>Sign Up</h2>
-            <form id="signupForm" action="https://www.arthurross.nl/signup" method="POST" novalidate>
+            <form id="signupForm" action="signup.php" method="POST">
                 <div>
-                    <label for="username">Username:</label>
-                    <input type="text" id="signup-username" name="username" placeholder="Enter your username" required aria-required="true">
-                    <span class="error" id="signup-username-error" aria-live="polite"></span>
+                    <label for="signup-username">Username:</label>
+                    <input type="text" id="signup-username" name="username" required>
                 </div>
                 <div>
-                    <label for="email">Email:</label>
-                    <input type="email" id="signup-email" name="email" placeholder="Enter your email" required aria-required="true">
-                    <span class="error" id="signup-email-error" aria-live="polite"></span>
+                    <label for="signup-email">Email:</label>
+                    <input type="email" id="signup-email" name="email" required>
                 </div>
                 <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="signup-password" name="password" placeholder="Enter your password" required aria-required="true">
-                    <span class="error" id="signup-password-error" aria-live="polite"></span>
+                    <label for="signup-password">Password:</label>
+                    <input type="password" id="signup-password" name="password" required>
                 </div>
                 <button type="submit">Sign Up</button>
-                <p id="signup-status" aria-live="polite"></p>
             </form>
+            
         </div>
     </div>
 
@@ -184,7 +176,28 @@ permalink: /travelblog.html/
             Login
         </button>
     </div>
+    <button onclick="loginWithFacebook()">Login with Facebook</button>
 
+    <script>
+      function loginWithFacebook() {
+        FB.login(function(response) {
+          if (response.authResponse) {
+            console.log('User logged in:', response);
+            getUserInfo();
+          } else {
+            console.log('User cancelled login or did not fully authorize.');
+          }
+        }, {scope: 'email,public_profile'});
+      }
+    
+      function getUserInfo() {
+        FB.api('/me', {fields: 'name,email,picture'}, function(response) {
+          console.log('User Info:', response);
+          alert('Welcome, ' + response.name);
+        });
+      }
+    </script>
+    
     <!-- Login Modal -->
     <div id="login-modal" class="modal" aria-hidden="true">
         <div class="modal-content">
@@ -206,9 +219,48 @@ permalink: /travelblog.html/
             </form>
         </div>
     </div>
+
     <footer>
         <p>&copy; 2024 Arthur Ross. Alle rechten voorbehouden.</p>
+        <p><a href="/privacy_policy.md">Privacy Policy</a></p>
     </footer>
+
     <script src="/script.js"></script>
+    <script>
+        // Add the Facebook SDK for Javascript
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        // Facebook SDK initialization
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '626159790032742',
+                xfbml      : true,
+                version    : 'v22.0'
+            });
+            FB.AppEvents.logPageView();
+
+            // Check login status
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+        };
+
+        function statusChangeCallback(response) {
+            if (response.status === 'connected') {
+                console.log('Welcome! Fetching your information.... ');
+                FB.api('/me', {fields: 'name, email'}, function(response) {
+                    document.getElementById("profile").innerHTML = "Good to see you, " + response.name + ". I see your email address is " + response.email;
+                });
+            } else {
+                console.log('User cancelled login or did not fully authorize.');
+            }
+        }
+    </script>
 </body>
 </html>

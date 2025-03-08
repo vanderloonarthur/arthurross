@@ -1,6 +1,16 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
+const signupRouter = require('./signup');
+const verifyEmailRouter = require('./verifyEmail');
+const authRoutes = require('./routes/auth'); // Ensure correct path
 const port = 4000;
+
+// Allow all origins (for development)
+app.use(cors());
+
+// Handle preflight requests for all routes
+app.options('*', cors());
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
@@ -38,6 +48,16 @@ app.post('/api/comments/:pageId', (req, res) => {
   res.status(200).json({ message: 'Comment added successfully' });
 });
 
-app.listen(port, () => {
-  console.log(`Server running on https://localhost:${port}`);
+app.use('/api', signupRouter);
+app.use('/api', verifyEmailRouter);
+app.use('/auth', authRoutes); // Include auth routes
+
+// Handle 404 errors for undefined routes
+app.use((req, res, next) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

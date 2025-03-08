@@ -10,3 +10,26 @@
 <LimitExcept GET POST>
     Require all denied
 </LimitExcept>
+
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
+
+# Enable detailed error reporting for development
+php_flag display_errors on
+php_value error_reporting -1
+
+# Allow access from localhost for development
+<RequireAll>
+    Require local
+    Require ip 127.0.0.1
+    Require ip ::1
+</RequireAll>
+
+<Directory "/var/www/html/.well-known/acme-challenge">
+    Options None
+    AllowOverride None
+    Require all granted
+</Directory>

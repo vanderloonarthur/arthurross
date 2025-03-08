@@ -1,66 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <h1>Login to Arthur Ross Travel Blog</h1>
-        </nav>
-    </header>
-    <main>
-        <div class="login-container">
-            <h2>Login</h2>
-            <form id="loginForm" action="/login" method="POST" novalidate>
-                <div>
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required aria-required="true">
-                    <span class="error" id="username-error" aria-live="polite"></span>
-                </div>
-                <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required aria-required="true">
-                    <span class="error" id="password-error" aria-live="polite"></span>
-                </div>
-                <button type="submit">Login</button>
-                <p id="login-status" aria-live="polite"></p>
-            </form>
-        </div>
-    </main>
-    <footer>
-        <p>&copy; 2024 Arthur Ross. Alle rechten voorbehouden.</p>
-    </footer>
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const username = document.getElementById('username');
-            const password = document.getElementById('password');
-            const usernameError = document.getElementById('username-error');
-            const passwordError = document.getElementById('password-error');
-            let valid = true;
-
-            if (username.value.trim() === '') {
-                usernameError.textContent = 'Username is required.';
-                valid = false;
-            } else {
-                usernameError.textContent = '';
-            }
-
-            if (password.value.trim() === '') {
-                passwordError.textContent = 'Password is required.';
-                valid = false;
-            } else {
-                passwordError.textContent = '';
-            }
-
-            if (valid) {
-                this.submit();
-            }
-        });
-    </script>
+    <h2>Login</h2>
+    <form action="login.php" method="POST">
+        <input type="email" name="email" placeholder="Enter Email" required><br>
+        <input type="password" name="password" placeholder="Enter Password" required><br>
+        <button type="submit">Login</button>
+    </form>
 </body>
 </html>

@@ -118,12 +118,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                const response = await fetch(API_URL, {
+                const response = await fetch(`${API_URL}/${imageId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ imageId: imageId, likes: currentLikes }),
+                    body: JSON.stringify({ isLiked: localStorage.getItem(`${imageId}-liked`) === 'true', likeCount: currentLikes }),
                 });
 
                 if (!response.ok) {
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const likes = await response.json();
                 const likeCountElem = document.getElementById(`${imageId}-like-count`);
                 if (likeCountElem) {
-                    likeCountElem.innerText = `${likes} Likes`;
+                    likeCountElem.innerText = `${likes.likeCount} Likes`;
                 } else {
                     console.error(`Element with ID ${imageId}-like-count not found`);
                 }
@@ -246,10 +246,41 @@ document.getElementById('signupForm').addEventListener('submit', async function(
     const username = document.getElementById('signup-username').value;
     const email = document.getElementById('signup-email').value;
     const password = document.getElementById('signup-password').value;
-    const usernameError = document.getElementById('signup-username-error');
-    const emailError = document.getElementById('signup-email-error');
-    const passwordError = document.getElementById('signup-password-error');
     const signupStatus = document.getElementById('signup-status');
+
+    try {
+        const response = await fetch("https://www.arthurross.nl/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            credentials: "include", // Important for cookies/auth headers
+            body: JSON.stringify({ username, email, password }),
+        });
+
+        if (response.ok) {
+            signupStatus.textContent = "Sign up successful!";
+            event.target.reset();
+            setTimeout(() => closeSignupModal(), 2000);
+        } else {
+            const result = await response.json();
+            signupStatus.textContent = result.errors ? 
+                result.errors.map(error => error.message).join(", ") : 
+                "Oops! There was a problem with your sign up.";
+        }
+    } catch (error) {
+        signupStatus.textContent = "Oops! There was a problem with your sign up.";
+    }
+});
+
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const usernameError = document.getElementById('username-error');
+    const passwordError = document.getElementById('password-error');
+    const loginStatus = document.getElementById('login-status');
     let valid = true;
 
     if (username.trim() === '') {
@@ -259,63 +290,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
         usernameError.textContent = '';
     }
 
-    if (email.trim() === '') {
-        emailError.textContent = 'Email is required.';
-        valid = false;
-    } else {
-        emailError.textContent = '';
-    }
-
     if (password.trim() === '') {
-        passwordError.textContent = 'Password is required.';
-        valid = false;
-    } else {
-        passwordError.textContent = '';
-    }
-
-    if (valid) {
-        try {
-            const response = await fetch(event.target.action, {
-                method: event.target.method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ username, email, password })
-            });
-
-            if (response.ok) {
-                signupStatus.textContent = 'Sign up successful!';
-                event.target.reset();
-                setTimeout(() => closeSignupModal(), 2000);
-            } else {
-                const result = await response.json();
-                signupStatus.textContent = result.errors ? result.errors.map(error => error.message).join(", ") : 
-                    'Oops! There was a problem with your sign up.';
-            }
-        } catch (error) {
-            signupStatus.textContent = 'Oops! There was a problem with your sign up.';
-        }
-    }
-});
-
-document.getElementById('loginForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const username = document.getElementById('username');
-    const password = document.getElementById('password');
-    const usernameError = document.getElementById('username-error');
-    const passwordError = document.getElementById('password-error');
-    const loginStatus = document.getElementById('login-status');
-    let valid = true;
-
-    if (username.value.trim() === '') {
-        usernameError.textContent = 'Username is required.';
-        valid = false;
-    } else {
-        usernameError.textContent = '';
-    }
-
-    if (password.value.trim() === '') {
         passwordError.textContent = 'Password is required.';
         valid = false;
     } else {
@@ -346,3 +321,21 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         }
     }
 });
+
+// Facebook SDK initialization
+window.fbAsyncInit = function() {
+    FB.init({
+        appId      : '626159790032742',
+        xfbml      : true,
+        version    : 'v22.0'
+    });
+    FB.AppEvents.logPageView();
+};
+
+(function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));

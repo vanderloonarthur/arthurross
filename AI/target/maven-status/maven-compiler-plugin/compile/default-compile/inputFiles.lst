@@ -12,6 +12,7 @@
 /Users/arthurross/Documents/arthurross/AI/src/main/java/com/example/AI/controller/HelloController.java
 /Users/arthurross/Documents/arthurross/AI/src/main/java/com/example/AI/WebConfig.java
 /Users/arthurross/Documents/arthurross/AI/src/main/java/com/example/AI/model/LikeEntity.java
+/Users/arthurross/Documents/arthurross/AI/src/main/java/com/example/AI/security/JwtService.java
 /Users/arthurross/Documents/arthurross/AI/src/main/java/com/example/AI/controller/TestController.java
 /Users/arthurross/Documents/arthurross/AI/src/main/java/com/example/AI/controller/AIController.java
 /Users/arthurross/Documents/arthurross/AI/src/main/java/com/example/AI/repository/UserRepository.java

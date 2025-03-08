@@ -1,80 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <h1>Sign Up for Arthur Ross Travel Blog</h1>
-        </nav>
-    </header>
-    <main>
-        <div class="signup-container">
-            <h2>Sign Up</h2>
-            <form id="signupForm" action="/signup" method="POST" novalidate>
-                <div>
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required aria-required="true">
-                    <span class="error" id="username-error" aria-live="polite"></span>
-                </div>
-                <div>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required aria-required="true">
-                    <span class="error" id="email-error" aria-live="polite"></span>
-                </div>
-                <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required aria-required="true">
-                    <span class="error" id="password-error" aria-live="polite"></span>
-                </div>
-                <button type="submit">Sign Up</button>
-                <p id="signup-status" aria-live="polite"></p>
-            </form>
-        </div>
-    </main>
-    <footer>
-        <p>&copy; 2024 Arthur Ross. Alle rechten voorbehouden.</p>
-    </footer>
-    <script>
-        document.getElementById('signupForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const username = document.getElementById('username');
-            const email = document.getElementById('email');
-            const password = document.getElementById('password');
-            const usernameError = document.getElementById('username-error');
-            const emailError = document.getElementById('email-error');
-            const passwordError = document.getElementById('password-error');
-            let valid = true;
+<!-- HTML part -->
+<form id="signupForm">
+    <div>
+        <label for="signup-username">Username:</label>
+        <input type="text" id="signup-username" name="username" required>
+    </div>
+    <div>
+        <label for="signup-email">Email:</label>
+        <input type="email" id="signup-email" name="email" required>
+    </div>
+    <div>
+        <label for="signup-password">Password:</label>
+        <input type="password" id="signup-password" name="password" required>
+    </div>
+    <button type="submit">Sign Up</button>
+</form>
 
-            if (username.value.trim() === '') {
-                usernameError.textContent = 'Username is required.';
-                valid = false;
+<p id="signup-status"></p>
+
+<script>
+// JavaScript part
+document.addEventListener('DOMContentLoaded', function () {
+    const signupForm = document.getElementById('signupForm');
+    const signupStatus = document.getElementById('signup-status');
+
+    signupForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(signupForm);
+
+        fetch('https://www.arthurross.nl/signup', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                signupStatus.textContent = 'Signup successful!';
             } else {
-                usernameError.textContent = '';
+                signupStatus.textContent = 'Oops! There was a problem with your sign up.';
             }
-
-            if (email.value.trim() === '') {
-                emailError.textContent = 'Email is required.';
-                valid = false;
-            } else {
-                emailError.textContent = '';
-            }
-
-            if (password.value.trim() === '') {
-                passwordError.textContent = 'Password is required.';
-                valid = false;
-            } else {
-                passwordError.textContent = '';
-            }
-
-            if (valid) {
-                this.submit();
-            }
+        })
+        .catch(error => {
+            console.error('Error during signup:', error);
+            signupStatus.textContent = 'Oops! There was a problem with your sign up.';
         });
-    </script>
-</body>
-</html>
+    });
+});
+</script>

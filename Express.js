@@ -1,7 +1,20 @@
-// Assuming you're using Express.js
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
 const port = 4000;
+
+// Allow all origins (for development)
+app.use(cors());
+
+// Or restrict it:
+// app.use(cors({
+//     origin: 'http://your-frontend-url.com',
+//     methods: ['GET', 'POST'],
+//     allowedHeaders: ['Content-Type', 'Authorization']
+// }));
+
+app.use(express.json());
 
 // Simulated in-memory data for likes (You could replace this with a database)
 let likesData = {
@@ -20,7 +33,7 @@ app.get('/api/likes/:pageId', (req, res) => {
   res.status(404).json({ error: 'Page not found' });
 });
 
-app.post('/api/likes/:pageId', express.json(), (req, res) => {
+app.post('/api/likes/:pageId', (req, res) => {
   const { pageId } = req.params;
   const { isLiked, likeCount } = req.body;
 
@@ -46,7 +59,7 @@ app.get('/api/comments/:pageId', (req, res) => {
   res.status(404).json({ error: 'Page not found' });
 });
 
-app.post('/api/comments/:pageId', express.json(), (req, res) => {
+app.post('/api/comments/:pageId', (req, res) => {
   const { pageId } = req.params;
   const { user, text } = req.body;
 

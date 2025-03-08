@@ -20,6 +20,7 @@ com/example/AI/controller/UserController.class
 com/example/AI/config/AppConfig.class
 com/example/AI/controller/AIController.class
 com/example/AI/model/LikeEntity.class
+com/example/AI/security/JwtService.class
 com/example/AI/WebConfig.class
 com/example/AI/controller/LikeController$LikeRequest.class
 com/example/AI/model/Like.class
