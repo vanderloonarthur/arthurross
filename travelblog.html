@@ -167,7 +167,7 @@ permalink: /travelblog.html/
     <script>
         function handleCredentialResponse(response) {
             console.log("Google sign-in successful: ", response);
-            fetch('YOUR_SERVER_ENDPOINT_HERE', {
+            fetch('746512195483-o2up2tlrnutnskfofadm152kcek9o8j5.apps.googleusercontent.com', {
                 method: 'POST',
                 body: JSON.stringify({ credential: response.credential }),
                 headers: { 'Content-Type': 'application/json' },
@@ -180,7 +180,7 @@ permalink: /travelblog.html/
             FB.login(function(response) {
                 if (response.authResponse) {
                     console.log('User logged in with Facebook:', response);
-                    fetch('YOUR_SERVER_ENDPOINT_HERE', {
+                    fetch('746512195483-o2up2tlrnutnskfofadm152kcek9o8j5.apps.googleusercontent.com', {
                         method: 'POST',
                         body: JSON.stringify({ accessToken: response.authResponse.accessToken }),
                         headers: { 'Content-Type': 'application/json' },

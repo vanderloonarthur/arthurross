@@ -38,6 +38,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "google-auth-library": "^9.15.1",
     "javascript": "^1.0.0",
     "mongoose": "^8.8.3",
     "nodemailer": "^6.10.0",
