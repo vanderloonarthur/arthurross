@@ -30,6 +30,126 @@ permalink: /travelblog.html/
     </script>
     <!-- Link to the external CSS file -->
     <link rel="stylesheet" href="/styles.css">
+    <style>
+        /* Add responsive styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav h1 {
+            margin: 0;
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .image-item {
+            margin: 1rem;
+            max-width: 300px;
+            flex: 1 1 calc(33.333% - 2rem);
+            box-sizing: border-box;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-caption {
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .like-container {
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .centered-button {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .image-item {
+                flex: 1 1 calc(50% - 2rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .image-item {
+                flex: 1 1 calc(100% - 2rem);
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -43,7 +163,7 @@ permalink: /travelblog.html/
             <div class="image-item" id="milaan">
                 <a href="/posts/milaan.html" class="golden-link">
                     <img src="/assets/images/skyline.jpg" alt="Milaan" data-image-id="milaan">
-                    <div class="image-caption"><p>Bedevaart naar Milaan2 [mei/ juni 2016]</p></div>
+                    <div class="image-caption"><p>Bedevaart naar Milaan [mei/ juni 2016]</p></div>
                 </a>
                 <div class="like-container">
                     <button class="like-button" onclick="likeImage('milaan')">❤️ Like</button>
