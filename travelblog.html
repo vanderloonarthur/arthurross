@@ -87,7 +87,11 @@ permalink: /travelblog.html/
                 </div>
             </div>
         </section>
-
+        <fb:login-button
+        scope="public_profile,email"
+        onlogin="checkLoginState();">
+      </fb:login-button>
+      
         <!-- Feedback Button -->
         <div class="centered-button">
             <button id="openFeedbackBtn" class="feedback-btn" onclick="openModal()" aria-label="Open feedback modal">
@@ -262,5 +266,43 @@ permalink: /travelblog.html/
             }
         }
     </script>
+    <script>
+        // Load the Facebook SDK asynchronously
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '626159790032742', // Replace with your Facebook App ID
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v12.0' // Make sure you use the latest version of the Graph API
+          });
+        };
+      
+        // Load the SDK asynchronously
+        (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = 'https://connect.facebook.net/en_US/sdk.js';
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+      </script>
+      <script>
+        function checkLoginState() {
+          FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+              // Logged into your app
+              console.log('Successfully connected to Facebook');
+              // You can now get the user's information
+              FB.api('/me', function(response) {
+                console.log('Good to go! User:', response);
+              });
+            } else {
+              // Not logged into Facebook or the app
+              console.log('User not logged in');
+            }
+          });
+        }
+      </script>
+      
 </body>
 </html>
