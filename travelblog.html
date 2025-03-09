@@ -81,6 +81,7 @@ permalink: /travelblog.html/
                     <span id="milaan-like-count">0 Likes</span>
                 </div>
             </div>
+            
         </section>
 
         <!-- Google Sign-Up Button -->
@@ -168,6 +169,63 @@ permalink: /travelblog.html/
         <p>&copy; 2024 Arthur Ross. Alle rechten voorbehouden.</p>
         <p><a href="/privacy_policy.md">Privacy Policy</a></p>
     </footer>
+    <script>
+        let loggedInUserId = null; // This should be populated after successful login
+    
+        // Example function for liking an image
+        function likeImage(imageId) {
+            if (loggedInUserId === null) {
+                alert("You must be logged in to like images.");
+                return;
+            }
+    
+            // Make an API call to store the like (you'll need to implement this in your backend)
+            fetch('/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: loggedInUserId, imageId: imageId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateLikeCount(imageId, data.newLikeCount);
+                } else {
+                    alert("Error liking the image. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("There was an error processing your like.");
+            });
+        }
+    
+        // Update the like count displayed on the page
+        function updateLikeCount(imageId, newLikeCount) {
+            const likeCountElement = document.getElementById(`${imageId}-like-count`);
+            likeCountElement.innerText = `${newLikeCount} Likes`;
+        }
+    
+        // Example Facebook login handling
+        function loginWithFacebook() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    loggedInUserId = response.authResponse.userID; // Get the user ID after login
+                    alert("Logged in with Facebook");
+                } else {
+                    alert("User cancelled login or did not fully authorize.");
+                }
+            });
+        }
+    
+        // Example Google login callback
+        function handleCredentialResponse(response) {
+            loggedInUserId = response.credential; // Use the credential for logged-in user
+            alert("Logged in with Google");
+        }
+    
+    </script>    
 
     <script>
         function handleCredentialResponse(response) {
