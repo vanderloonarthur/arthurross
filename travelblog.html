@@ -69,8 +69,15 @@ permalink: /travelblog.html/
             </div>
         </section>
 
-        <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
-
+        <div class="fb-like" 
+        data-href="https://www.yourwebsite.com" 
+        data-width="" 
+        data-layout="standard" 
+        data-action="like" 
+        data-size="small" 
+        data-share="true">
+   </div>
+   
         <!-- Google Sign-Up Button -->
         <div class="centered-button">
             <div id="g_id_onload" data-client_id="your-client-id" data-login_uri="https://arthurross.nl/auth/google" data-callback="handleCredentialResponse"></div>
@@ -109,5 +116,11 @@ permalink: /travelblog.html/
     </footer>
 
     <script src="/script.js"></script>  <!-- Place the script at the end of the body -->
+       
+   <!-- Load Facebook SDK -->
+   <script async defer crossorigin="anonymous" 
+   src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0" 
+   nonce="yourNonceValue">
+</script>
 </body>
 </html>
