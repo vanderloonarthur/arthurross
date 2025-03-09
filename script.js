@@ -4,6 +4,7 @@ let loggedInUserId = null; // This should be populated after successful login
 async function likeImage(imageId) {
     if (loggedInUserId === null) {
         alert("You must be logged in to like images.");
+        openLoginModal();
         return;
     }
 
