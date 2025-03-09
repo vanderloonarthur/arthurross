@@ -58,6 +58,21 @@ permalink: /travelblog.html/
             js.src = 'https://connect.facebook.net/en_US/sdk.js';
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+        
+        // JavaScript for Like functionality
+        function likeImage(postId) {
+            // Get the like count element
+            var likeCountElement = document.getElementById(postId + '-like-count');
+            
+            // Get the current like count
+            var currentLikeCount = parseInt(likeCountElement.innerText);
+            
+            // Increment the like count
+            currentLikeCount++;
+            
+            // Update the like count on the page
+            likeCountElement.innerText = currentLikeCount + ' Likes';
+        }
     </script>
 </head>
 <body>
@@ -80,7 +95,6 @@ permalink: /travelblog.html/
                     <span id="milaan-like-count">0 Likes</span>
                 </div>
             </div>
-            
         </section>
 
         <!-- Google Sign-Up Button -->
@@ -168,6 +182,9 @@ permalink: /travelblog.html/
         <p>&copy; 2024 Arthur Ross. Alle rechten voorbehouden.</p>
         <p><a href="/privacy_policy.md">Privacy Policy</a></p>
     </footer>
+</body>
+</html>
+
     <script>
         let loggedInUserId = null; // This should be populated after successful login
     
