@@ -1,20 +1,4 @@
-<html lang="en"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Reis door Europa met Arthur Ross! Ontdek de schoonheid van Europa met deze boeiende reisverhalen.">
-    <meta name="keywords" content="Europa, reizen, Arthur Ross, reisverhalen, Milaan, Madrid, Stuttgart, Edinburgh">
-    <meta property="og:title" content="Gallery - Reis door Europa met Arthur Ross!">
-    <meta property="og:description" content="Ontdek de schoonheid van Europa met deze boeiende reisverhalen van Arthur Ross.">
-    <meta property="og:image" content="https://www.arthurross.nl/assets/images/madride.png">
-    <meta property="og:url" content="https://www.arthurross.nl/travelblog.html">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Gallery - Reis door Europa met Arthur Ross!">
-    <meta name="twitter:description" content="Ontdek de schoonheid van Europa met deze boeiende reisverhalen van Arthur Ross.">
-    <meta name="twitter:image" content="https://www.arthurross.nl/assets/images/madride.png">
-    <title>Travel Blog</title>
-    <link rel="icon" href="/assets/images/europa.png" type="image/x-icon">
-    <script>
+
         let loggedInUserId = null; // This should be populated after successful login
 
         // Example function for liking an image
@@ -485,21 +469,7 @@
                 document.getElementById(`${imageId}-like-count`).textContent = `${data.likes} Likes`;
             });
         }
-    </script>    
-</head>
-<body>
-    <header>
-        <nav>
-            <h1>Reis door Europa met Arthur Ross!</h1>
-        </nav>
-    </header>
-    <main>
-        <section class="image-gallery">
-            <!-- Blog Items -->
-            <div class="image-item" id="milaan">
-                <a href="/posts/milaan.html" class="golden-link">
-                    <img src="/assets/images/skyline.jpg" alt="Milaan">
-                    <div class="image-caption"><p>Bedevaart naar Milaan [mei/ juni 2016]</p></div>
+                        <div class="image-caption"><p>Bedevaart naar Milaan [mei/ juni 2016]</p></div>
                 </a>
                 <div class="like-container">
                     <button class="like-button" onclick="likeImage('milaan')">❤️ Like</button>
@@ -593,9 +563,4 @@
                 </form>
                 <div id="login-status"></div>
             </div>
-        </div>
-    </main>
-    <footer>
-    </footer>        <p>&copy; 2023 Arthur Ross. All rights reserved. <a href="/privacy.html">Privacy Policy</a></p>
-</body>    </footer>
-</html></body>
+
