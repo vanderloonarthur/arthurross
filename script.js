@@ -15,7 +15,7 @@ async function likeImage(imageId) {
         return;
     }
 
-    let currentLikes = parseInt(likeCountElem.innerText) || 0;
+    let currentLikes = parseInt(likeCountElem.innerText.replace(" Likes", "")) || 0;
     const isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
 
     if (isLiked) {
@@ -54,7 +54,7 @@ async function likeImage(imageId) {
     }
 }
 
-// Function to fetch like counts
+// Function to fetch like counts from the API
 async function fetchLikeCount(imageId) {
     try {
         const response = await fetch(`${API_URL}/${imageId}`);
