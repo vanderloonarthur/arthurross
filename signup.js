@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const { body, validationResult } = require('express-validator');
-const userRepository = require('../db/userRepository');
+const userRepository = require('./db/userRepository');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 

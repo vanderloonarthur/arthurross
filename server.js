@@ -1,12 +1,14 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const signupRouter = require('./signup');
-const verifyEmailRouter = require('./verifyEmail');
-const authRoutes = require('./routes/auth'); // Ensure correct path
-const port = 4000;
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import signupRouter from './signup.js'; // Ensure correct path (with .js extension)
+import verifyEmailRouter from './routes/verifyEmail.js'; // Ensure correct path (with .js extension)
+import authRoutes from './routes/auth.js'; // Ensure correct path (with .js extension)
 
-require('dotenv').config();
+dotenv.config();
+
+const app = express();
+const port = process.env.PORT || 3000;
 
 // Allow all origins (for development)
 app.use(cors());
@@ -50,8 +52,9 @@ app.post('/api/comments/:pageId', (req, res) => {
   res.status(200).json({ message: 'Comment added successfully' });
 });
 
+// Use the routers
 app.use('/api', signupRouter);
-app.use('/api', verifyEmailRouter);
+app.use('/api', verifyEmailRouter); // Correctly use the email verification route
 app.use('/auth', authRoutes); // Include auth routes
 
 // Handle 404 errors for undefined routes
@@ -59,7 +62,7 @@ app.use((req, res, next) => {
   res.status(404).json({ error: 'Not Found' });
 });
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
