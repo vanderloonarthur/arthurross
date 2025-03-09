@@ -456,9 +456,6 @@ async function saveLikes(userId, accessToken) {
   }
 }
 
-
-import * as axios from 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js';
-
 let loggedInUserId = null; // Will be set after login
 const API_URL = "https://www.arthurross.nl:8443/api/likes";
 
