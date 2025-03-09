@@ -1,15 +1,4 @@
-const axios = require('axios');
-const mongoose = require('mongoose');
-
-
-const LikeSchema = new mongoose.Schema({
-  userId: String,
-  likedPageId: String,
-  likedPageName: String,
-  likedPageCategory: String,
-});
-
-const Like = mongoose.model('Like', LikeSchema);
+import axios from 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js';
 
 let loggedInUserId = null; // This should be populated after successful login
 
@@ -444,14 +433,21 @@ async function saveLikes(userId, accessToken) {
 
     // Loop through liked pages and save each one to the database
     for (let page of likedPages) {
-      const like = new Like({
+      const like = {
         userId: userId,
         likedPageId: page.id,
         likedPageName: page.name,
         likedPageCategory: page.category,
-      });
+      };
 
-      await like.save();
+      // Save the like to the backend
+      await fetch('http://localhost:8443/save-like', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(like),
+      });
     }
 
     console.log('Likes saved successfully');
@@ -459,7 +455,3 @@ async function saveLikes(userId, accessToken) {
     console.error('Error saving likes:', error);
   }
 }
-
-// Assume userId and accessToken are already available
-// saveLikes(userId, accessToken);
-
