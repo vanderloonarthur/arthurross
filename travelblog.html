@@ -83,66 +83,15 @@ permalink: /travelblog.html/
             <button id="facebook-login-btn" class="facebook-login-btn" onclick="loginWithFacebook()">Login with Facebook</button>
         </div>
 
-        <!-- Feedback Button -->
-        <div class="centered-button">
-            <button id="openFeedbackBtn" class="feedback-btn" onclick="openModal()">Geef Feedback</button>
-        </div>
-
-        <!-- Feedback Modal -->
-        <div id="feedback-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <h2>Hoe blij bent u met de website?</h2>
-                <form id="feedbackForm" action="https://formspree.io/f/xblrooaq" method="POST">
-                    <label for="selectedFeedback">Selecteer Feedback:</label>
-                    <select id="selectedFeedback" name="selectedFeedback" required>
-                        <option value="Zeer gelukkig">😀 Zeer gelukkig</option>
-                        <option value="Gelukkig">🙂 Gelukkig</option>
-                        <option value="Neutraal">😐 Neutraal</option>
-                        <option value="Ongelukkig">🙁 Ongelukkig</option>
-                        <option value="Zeer ongelukkig">😠 Zeer ongelukkig</option>
-                    </select>
-                    <label for="message">Bericht:</label>
-                    <textarea id="message" name="message" required></textarea>
-                    <label for="name">Naam:</label>
-                    <input type="text" id="name" name="name" required>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                    <button type="submit">Verstuur Feedback</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Signup and Login Modals -->
-        <div class="centered-button">
-            <button id="openSignupBtn" class="signup-btn" onclick="openSignupModal()">Sign Up</button>
-        </div>
-
-        <div id="signup-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeSignupModal()">&times;</span>
-                <h2>Sign Up</h2>
-                <form id="signupForm" action="signup.php" method="POST">
-                    <label for="signup-username">Username:</label>
-                    <input type="text" id="signup-username" name="username" required>
-                    <label for="signup-email">Email:</label>
-                    <input type="email" id="signup-email" name="email" required>
-                    <label for="signup-password">Password:</label>
-                    <input type="password" id="signup-password" name="password" required>
-                    <button type="submit">Sign Up</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Login Button and Modal -->
+        <!-- Login Button -->
         <div class="centered-button">
             <button id="openLoginBtn" class="login-btn" onclick="openLoginModal()">Login</button>
         </div>
 
+        <!-- Login Modal -->
         <div id="login-modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeLoginModal()">&times;</span>
-                <h2>Login</h2>
                 <form id="loginForm" action="https://www.arthurross.nl/login" method="POST">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
@@ -150,6 +99,7 @@ permalink: /travelblog.html/
                     <input type="password" id="password" name="password" required>
                     <button type="submit">Login</button>
                 </form>
+                <div id="login-status"></div>
             </div>
         </div>
     </main>
