@@ -65,7 +65,15 @@ function updateLikeCount(imageId, newLikeCount) {
     const likeCountElement = document.getElementById(`${imageId}-like-count`);
     likeCountElement.innerText = `${newLikeCount} Likes`;
 }
-
+FB.api('/me', { fields: 'id,name,email', access_token: 'A_Rybg17-IJ1h8z4njhA80l' }, function(response) {
+    if (response && !response.error) {
+      console.log(response);
+    } else {
+      console.error('Error: ', response.error);
+    }
+  });
+  
+  
 // Example Facebook login handling
 function loginWithFacebook() {
     FB.login(function(response) {
