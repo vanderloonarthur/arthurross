@@ -1,5 +1,5 @@
-import axios from 'https://cdn.skypack.dev/axios';
-import mongoose from 'https://cdn.skypack.dev/mongoose';
+const axios = require('axios');
+const mongoose = require('mongoose');
 
 const LikeSchema = new mongoose.Schema({
   userId: String,
