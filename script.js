@@ -1,5 +1,3 @@
-import axios from 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js';
-
 let loggedInUserId = null; // This should be populated after successful login
 const API_URL = "https://www.arthurross.nl:8443/api/likes";
 
