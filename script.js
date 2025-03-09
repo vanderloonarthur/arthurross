@@ -1,5 +1,5 @@
 let loggedInUserId = null; // This should be populated after successful login
-const API_URL = "https://www.arthurross.nl:8443/api/likes";  // Ensure it's declared once!
+const API_URL = "A_Rybg17-IJ1h8z4njhA80l";  // Ensure it's declared once!
 
 // Function to like/unlike an image
 async function likeImage(imageId) {
@@ -75,13 +75,38 @@ function loginWithFacebook() {
             if (response.authResponse) {
                 loggedInUserId = response.authResponse.userID;
                 alert("Logged in with Facebook");
-                saveLikes(loggedInUserId, response.authResponse.accessToken);
+                fetchFacebookLikes(loggedInUserId);  // Fetch Facebook likes after login
             } else {
                 alert("User cancelled login.");
             }
         }, { scope: 'public_profile,email' });
     } else {
         console.error('Facebook SDK not loaded');
+    }
+}
+
+// Function to fetch and sync Facebook likes
+async function fetchFacebookLikes(userId) {
+    if (!userId) return;
+
+    try {
+        // Fetch Facebook likes
+        const response = await fetch(`https://graph.facebook.com/${userId}/likes?access_token=${FB.getAuthResponse().accessToken}`);
+        const data = await response.json();
+
+        if (data.data && data.data.length > 0) {
+            console.log('Facebook Likes:', data.data);
+
+            // Update like counts for images based on Facebook likes (if applicable)
+            for (let page of data.data) {
+                const imageId = page.id; // Assuming the image ID is the same as the Facebook page ID
+                await fetchLikeCount(imageId); // Update like count from API
+            }
+        } else {
+            console.log('No Facebook likes found.');
+        }
+    } catch (error) {
+        console.error('Error fetching Facebook likes:', error);
     }
 }
 
@@ -221,24 +246,3 @@ window.fbAsyncInit = function () {
     js.src = "https://connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
-
-function loginWithFacebook() {
-    if (typeof FB !== 'undefined') {
-        FB.login(response => {
-            if (response.authResponse) {
-                loggedInUserId = response.authResponse.userID;  // Geen 'let' hier!
-                alert("Logged in with Facebook");
-                saveLikes(loggedInUserId, response.authResponse.accessToken);
-            } else {
-                alert("User cancelled login.");
-            }
-        }, { scope: 'public_profile,email' });
-    } else {
-        console.error('Facebook SDK not loaded');
-    }
-}
-
-function handleCredentialResponse(response) {
-    loggedInUserId = response.credential;  // Geen 'let' hier!
-    alert("Logged in with Google");
-}
