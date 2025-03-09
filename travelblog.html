@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+---
+permalink
+---
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -84,17 +86,6 @@
             </div>
         </section>
 
-        <!-- Facebook Like Button -->
-        <div class="fb-like" 
-            data-href="https://www.arthurross.nl/travelblog.html" 
-            data-width="" 
-            data-layout="button_count" 
-            data-action="like" 
-            data-size="small" 
-            data-share="true">
-        </div>
-        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0" nonce="XYZ"></script>
-
         <!-- Facebook Login Button -->
         <div class="centered-button">
             <button id="facebook-login-btn" class="facebook-login-btn" onclick="loginWithFacebook()">Login with Facebook</button>
@@ -111,10 +102,10 @@
         let loggedInUserId = null; // This will be populated after Facebook login
         const API_URL = "https://www.arthurross.nl:8443/api/likes";
 
-        // Function to like/unlike an image and retain the count
+        // Function to like/unlike an image
         async function likeImage(imageId) {
             if (!loggedInUserId) {
-                alert("You need to log in first.");
+                alert("You need to log in with Facebook first.");
                 return;
             }
 
@@ -127,6 +118,7 @@
             let currentLikes = parseInt(likeCountElem.innerText) || 0;
             const isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
 
+            // Toggle the like/unlike
             if (isLiked) {
                 currentLikes--;
                 localStorage.removeItem(`${imageId}-liked`);
@@ -145,6 +137,7 @@
             }
 
             try {
+                // Send updated like count to the backend API
                 const response = await fetch(`${API_URL}/${imageId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -163,7 +156,7 @@
             }
         }
 
-        // Function to fetch like counts and display
+        // Function to fetch like counts from backend
         async function fetchLikeCount(imageId) {
             try {
                 const response = await fetch(`${API_URL}/${imageId}`);
@@ -194,6 +187,7 @@
             }
         }
 
+        // Fetch the initial like count when the page loads
         document.addEventListener('DOMContentLoaded', function () {
             console.log("JavaScript loaded successfully!");
 
