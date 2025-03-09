@@ -18,6 +18,7 @@ async function likeImage(imageId) {
     let currentLikes = parseInt(likeCountElem.innerText.replace(" Likes", "")) || 0;
     const isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
 
+    // Toggle like/unlike
     if (isLiked) {
         currentLikes--;
         localStorage.removeItem(`${imageId}-liked`);
@@ -90,7 +91,6 @@ async function fetchFacebookLikes(userId) {
     if (!userId) return;
 
     try {
-        // Fetch Facebook likes
         const response = await fetch(`https://graph.facebook.com/${userId}/likes?access_token=${FB.getAuthResponse().accessToken}`);
         const data = await response.json();
 
@@ -114,31 +114,6 @@ async function fetchFacebookLikes(userId) {
 function handleCredentialResponse(response) {
     loggedInUserId = response.credential; // Simply assign the new user ID
     alert("Logged in with Google");
-}
-
-// Function to save Facebook likes
-async function saveLikes(userId, accessToken) {
-    try {
-        const response = await axios.get(`https://graph.facebook.com/me/likes?access_token=${accessToken}`);
-        if (!response.data || !response.data.data) throw new Error("Invalid response from Facebook API");
-
-        for (let page of response.data.data) {
-            await fetch('http://localhost:8443/save-like', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId,
-                    likedPageId: page.id,
-                    likedPageName: page.name,
-                    likedPageCategory: page.category,
-                }),
-            });
-        }
-
-        console.log('Facebook likes saved successfully');
-    } catch (error) {
-        console.error('Error saving likes:', error);
-    }
 }
 
 // Modal functions
