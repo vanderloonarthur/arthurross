@@ -97,7 +97,7 @@ function loginWithFacebook() {
             } else {
                 alert("User cancelled login or did not fully authorize.");
             }
-        }, {scope: 'public_profile,user_likes'});
+        }, {scope: 'public_profile,pages_read_engagement'});
     } else {
         console.error('Facebook SDK not loaded');
     }
