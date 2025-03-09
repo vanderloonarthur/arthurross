@@ -1,84 +1,47 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const app = express();
-const port = 4000;
-
-// Allow all origins (for development)
 app.use(cors());
+app.use(bodyParser.json());
 
-// Or restrict it:
-// app.use(cors({
-//     origin: 'http://your-frontend-url.com',
-//     methods: ['GET', 'POST'],
-//     allowedHeaders: ['Content-Type', 'Authorization']
-// }));
-
-app.use(express.json());
-
-// Simulated in-memory data for likes (You could replace this with a database)
-let likesData = {
-  pageId: {
-    isLiked: false,
-    likeCount: 0,
-  },
-};
-
-// Endpoint for getting and updating likes
-app.get('/api/likes/:pageId', (req, res) => {
-  const { pageId } = req.params;
-  if (likesData[pageId]) {
-    return res.json(likesData[pageId]);
-  }
-  res.status(404).json({ error: 'Page not found' });
+mongoose.connect("mongodb://localhost:27017/travel_blog", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 
-app.post('/api/likes/:pageId', (req, res) => {
-  const { pageId } = req.params;
-  const { isLiked, likeCount } = req.body;
+const likeSchema = new mongoose.Schema({
+    imageId: String,
+    userId: String
+});
+const Like = mongoose.model("Like", likeSchema);
 
-  if (likesData[pageId]) {
-    likesData[pageId] = { isLiked, likeCount };
-    return res.status(200).json(likesData[pageId]);
-  }
+// Route to like an image
+app.post("/api/likes", async (req, res) => {
+    const { imageId, userId } = req.body;
 
-  res.status(404).json({ error: 'Page not found' });
+    if (!imageId || !userId) {
+        return res.status(400).json({ error: "Missing parameters" });
+    }
+
+    const existingLike = await Like.findOne({ imageId, userId });
+
+    if (existingLike) {
+        await Like.deleteOne({ _id: existingLike._id });
+        res.json({ message: "Like removed" });
+    } else {
+        const newLike = new Like({ imageId, userId });
+        await newLike.save();
+        res.json({ message: "Like added" });
+    }
 });
 
-// Simulated in-memory data for comments
-let commentsData = {
-  pageId: [],
-};
-
-// Endpoint for getting and posting comments
-app.get('/api/comments/:pageId', (req, res) => {
-  const { pageId } = req.params;
-  if (commentsData[pageId]) {
-    return res.json(commentsData[pageId]);
-  }
-  res.status(404).json({ error: 'Page not found' });
+// Get total likes for an image
+app.get("/api/likes/:imageId", async (req, res) => {
+    const count = await Like.countDocuments({ imageId: req.params.imageId });
+    res.json({ likeCount: count });
 });
 
-app.post('/api/comments/:pageId', (req, res) => {
-  const { pageId } = req.params;
-  const { user, text } = req.body;
-
-  if (!user || !text) {
-    return res.status(400).json({ error: 'User and text are required' });
-  }
-
-  if (!commentsData[pageId]) {
-    commentsData[pageId] = [];
-  }
-
-  const newComment = { user, text };
-  commentsData[pageId].push(newComment);
-  return res.status(201).json(newComment);
-});
-
-// Serve static files if needed
-app.use(express.static('public'));
-
-app.listen(port, () => {
-  console.log(`Server is running on https://localhost:${port}`);
-});
+app.listen(8443, () => console.log("Server running on port 8443"));
