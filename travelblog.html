@@ -42,39 +42,6 @@ permalink: /travelblog.html/
         footer a:hover { text-decoration: underline; }
     </style>
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script>
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId: '626159790032742',  // Replace with your Facebook App ID
-                cookie: true,
-                xfbml: true,
-                version: 'v10.0'  // Set the Facebook SDK version
-            });
-        };
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/en_US/sdk.js';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-        
-        // JavaScript for Like functionality
-        function likeImage(postId) {
-            // Get the like count element
-            var likeCountElement = document.getElementById(postId + '-like-count');
-            
-            // Get the current like count
-            var currentLikeCount = parseInt(likeCountElement.innerText);
-            
-            // Increment the like count
-            currentLikeCount++;
-            
-            // Update the like count on the page
-            likeCountElement.innerText = currentLikeCount + ' Likes';
-        }
-    </script>
 </head>
 <body>
     <header>
@@ -166,6 +133,11 @@ permalink: /travelblog.html/
             </div>
         </div>
 
+        <fb:login-button 
+        scope="public_profile,email"
+        onlogin="checkLoginState();">
+      </fb:login-button>
+      
         <div class="centered-button">
             <button id="openLoginBtn" class="login-btn" onclick="openLoginModal()">Login</button>
         </div>
@@ -677,6 +649,26 @@ permalink: /travelblog.html/
            js.src = "https://connect.facebook.net/en_US/sdk.js";
            fjs.parentNode.insertBefore(js, fjs);
          }(document, 'script', 'facebook-jssdk'));
-      </script>
+
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '{your-app-id}',
+        cookie     : true,
+        xfbml      : true,
+        version    : '{api-version}'
+      });
+        
+      FB.AppEvents.logPageView();   
+        
+    };
+  
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
 </body>
 </html>
