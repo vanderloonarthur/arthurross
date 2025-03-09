@@ -101,7 +101,7 @@ permalink: /travelblog.html
     <!-- Like Button Script -->
     <script>
         let loggedInUserId = null; // This will be populated after Facebook login
-        const API_URL = "https://www.arthurross.nl"; // Fixed the extraneous quotation mark
+        const API_URL = "https://www.arthurross.nl/posts"; // Fixed the extraneous quotation mark
 
         // Function to like/unlike an image
         async function likeImage(imageId) {
@@ -160,7 +160,7 @@ permalink: /travelblog.html
         // Function to fetch like counts from backend
         async function fetchLikeCount(imageId) {
             try {
-                const response = await fetch(`${API_URL}./posts/${imageId}`);
+                const response = await fetch(`${API_URL}/${imageId}`);
                 if (!response.ok) throw new Error('Failed to fetch like count');
 
                 const likes = await response.json();
