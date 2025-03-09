@@ -1,5 +1,5 @@
 let loggedInUserId = null; // This should be populated after successful login
-const API_URL = "A_Rybg17-IJ1h8z4njhA80l";  // Ensure it's declared once!
+const API_URL = "https://www.arthurross.nl:8443/api/likes";  // Ensure it's declared once!
 
 // Function to like/unlike an image
 async function likeImage(imageId) {
@@ -64,6 +64,15 @@ async function fetchLikeCount(imageId) {
         const likes = await response.json();
         const likeCountElem = document.getElementById(`${imageId}-like-count`);
         if (likeCountElem) likeCountElem.innerText = `${likes.likeCount} Likes`;
+
+        // Check if the user has already liked this image
+        if (localStorage.getItem(`${imageId}-liked`) === 'true') {
+            const likeButton = document.querySelector(`#${imageId} .like-button`);
+            if (likeButton) {
+                likeButton.innerText = 'Unlike';
+                likeCountElem.style.color = '#ffeb3b';
+            }
+        }
     } catch (error) {
         console.error(`Error fetching like count for ${imageId}:`, error);
     }

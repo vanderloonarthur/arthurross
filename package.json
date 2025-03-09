@@ -41,6 +41,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-validator": "^7.2.1",
+    "fb": "^2.0.0",
     "google-auth-library": "^9.15.1",
     "javascript": "^1.0.0",
     "module-name": "^0.0.1-security",

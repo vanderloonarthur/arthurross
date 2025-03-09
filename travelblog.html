@@ -1,6 +1,7 @@
 ---
 permalink: /travelblog.html
 ---
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -165,6 +166,15 @@ permalink: /travelblog.html
                 const likes = await response.json();
                 const likeCountElem = document.getElementById(`${imageId}-like-count`);
                 if (likeCountElem) likeCountElem.innerText = `${likes.likeCount} Likes`;
+
+                // Check if the user has already liked this image
+                if (localStorage.getItem(`${imageId}-liked`) === 'true') {
+                    const likeButton = document.querySelector(`#${imageId} .like-button`);
+                    if (likeButton) {
+                        likeButton.innerText = 'Unlike';
+                        likeCountElem.style.color = '#ffeb3b';
+                    }
+                }
             } catch (error) {
                 console.error(`Error fetching like count for ${imageId}:`, error);
             }
