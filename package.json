@@ -31,7 +31,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node script.js"
+    "start": "node server.js"  // Change this to server.js
   },
   "dependencies": {
     "axios": "^1.8.2",
@@ -49,8 +49,6 @@
     "nodemailer": "^6.10.0",
     "openai": "^4.77.3",
     "sqlite3": "^5.1.7"
-  }
-}
-{
-  "type": "module"
+  },
+  "type": "module"  // This line is correct and ensures ES Modules are enabled
 }
