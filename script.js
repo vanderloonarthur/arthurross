@@ -91,7 +91,7 @@
                 } else {
                     alert("User cancelled login or did not fully authorize.");
                 }
-            });
+            }, {scope: 'public_profile,email'});
         }
 
         // Example Google login callback
