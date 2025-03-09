@@ -1,11 +1,12 @@
 // signup.js
 import express from 'express';
+
 const router = express.Router();
 
-// Define your routes for signup here
-router.post('/', (req, res) => {
+// Your routes here
+router.post('/signup', (req, res) => {
   res.send('Signup route');
 });
 
-// Export the router
+// Export the router as default
 export default router;

@@ -1,9 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import signupRouter from './signup.js'; // Ensure correct path (with .js extension)
+import signupRouter from './routes/signup.js'; // Ensure correct path (with .js extension)
 import verifyEmailRouter from './routes/verifyEmail.js'; // Ensure correct path (with .js extension)
 import authRoutes from './routes/auth.js'; // Ensure correct path (with .js extension)
+
 
 dotenv.config();
 
