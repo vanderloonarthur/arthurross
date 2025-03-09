@@ -175,18 +175,15 @@ permalink: /travelblog.html/
         function loginWithFacebook() {
             if (typeof FB !== 'undefined') {
                 FB.login(response => {
-                    if (response.authResponse) {
-                        loggedInUserId = response.authResponse.userID;
-                        alert("Logged in with Facebook");
-                        // Optionally, fetch or update user data from your backend
-                    } else {
-                        alert("User cancelled login.");
-                    }
-                }, { scope: 'public_profile,email' });
-            } else {
-                console.error('Facebook SDK not loaded');
-            }
-        }
+    if (response.authResponse) {
+        loggedInUserId = response.authResponse.userID;
+        alert("Logged in with Facebook");
+        // Optionally, fetch or update user data from your backend
+    } else {
+        alert("User cancelled login.");
+    }
+}, { scope: 'public_profile' });  // Remove 'email' permission
+
 
         document.addEventListener('DOMContentLoaded', function () {
             console.log("JavaScript loaded successfully!");
