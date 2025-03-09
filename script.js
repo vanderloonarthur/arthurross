@@ -1,5 +1,5 @@
 let loggedInUserId = null; // This should be populated after successful login
-const API_URL = "https://www.arthurross.nl:8443/api/likes";  // Ensure it's declared once!
+const API_URL = "A_Rybg17-IJ1h8z4njhA80l";  // Ensure it's declared once!
 
 // Function to like/unlike an image
 async function likeImage(imageId) {
