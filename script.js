@@ -1,5 +1,5 @@
 let loggedInUserId = null; // This should be populated after successful login
-const API_URL = "A_Rybg17-IJ1h8z4njhA80l";  // Ensure it's declared once!
+const API_URL = "https://www.arthurross.nl:8443/api/likes";  // Ensure it's declared once!
 
 // Function to like/unlike an image
 async function likeImage(imageId) {
@@ -221,3 +221,24 @@ window.fbAsyncInit = function () {
     js.src = "https://connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
+
+function loginWithFacebook() {
+    if (typeof FB !== 'undefined') {
+        FB.login(response => {
+            if (response.authResponse) {
+                loggedInUserId = response.authResponse.userID;  // Geen 'let' hier!
+                alert("Logged in with Facebook");
+                saveLikes(loggedInUserId, response.authResponse.accessToken);
+            } else {
+                alert("User cancelled login.");
+            }
+        }, { scope: 'public_profile,email' });
+    } else {
+        console.error('Facebook SDK not loaded');
+    }
+}
+
+function handleCredentialResponse(response) {
+    loggedInUserId = response.credential;  // Geen 'let' hier!
+    alert("Logged in with Google");
+}
