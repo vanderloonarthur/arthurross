@@ -7,22 +7,29 @@ permalink: /travelblog.html/
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Reis door Europa met Arthur Ross! Ontdek de schoonheid van Europa met deze boeiende reisverhalen.">
     <meta name="keywords" content="Europa, reizen, Arthur Ross, reisverhalen, Milaan, Madrid, Stuttgart, Edinburgh">
+    
+    <!-- Open Graph (Facebook) -->
     <meta property="og:title" content="Gallery - Reis door Europa met Arthur Ross!">
     <meta property="og:description" content="Ontdek de schoonheid van Europa met deze boeiende reisverhalen van Arthur Ross.">
     <meta property="og:image" content="https://www.arthurross.nl/assets/images/madride.png">
     <meta property="og:url" content="https://www.arthurross.nl/travelblog.html">
     <meta property="og:type" content="website">
+    
+    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Gallery - Reis door Europa met Arthur Ross!">
     <meta name="twitter:description" content="Ontdek de schoonheid van Europa met deze boeiende reisverhalen van Arthur Ross.">
     <meta name="twitter:image" content="https://www.arthurross.nl/assets/images/madride.png">
+    
     <title>Travel Blog</title>
     <link rel="icon" href="/assets/images/europa.png" type="image/x-icon">
     <link rel="stylesheet" href="/styles.css">
+    
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-25QWYDWGEP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag(){ dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-25QWYDWGEP');
     </script>
@@ -31,7 +38,7 @@ permalink: /travelblog.html/
     <script>
         window.fbAsyncInit = function() {
             FB.init({
-                appId      : '626159790032742',  // Replace with your app ID
+                appId      : '626159790032742',
                 cookie     : true,
                 xfbml      : true,
                 version    : 'v13.0'
@@ -39,10 +46,10 @@ permalink: /travelblog.html/
             FB.AppEvents.logPageView();
         };
         (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
+            var js = d.createElement(s); js.id = id;
             js.src = "https://connect.facebook.net/en_US/sdk.js";
+            var fjs = d.getElementsByTagName(s)[0];
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
     </script>
@@ -51,6 +58,11 @@ permalink: /travelblog.html/
     <header>
         <nav>
             <h1>Reis door Europa met Arthur Ross!</h1>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/posts/milaan.html">Milaan</a></li>
+                <li><a href="/privacy_policy.md">Privacy Policy</a></li>
+            </ul>
         </nav>
     </header>
 
@@ -69,20 +81,26 @@ permalink: /travelblog.html/
             </div>
         </section>
 
+        <!-- Facebook Like Button -->
         <div class="fb-like" 
-        data-href="https://www.arthurross.nl/travelblog.html" 
-        data-width="" 
-        data-layout="standard" 
-        data-action="like" 
-        data-size="small" 
-        data-share="true">
-    </div>
-    
-   
+            data-href="https://www.arthurross.nl/travelblog.html" 
+            data-width="" 
+            data-layout="standard" 
+            data-action="like" 
+            data-size="small" 
+            data-share="true">
+        </div>
+
         <!-- Google Sign-Up Button -->
         <div class="centered-button">
-            <div id="g_id_onload" data-client_id="1066413110213-5qld3jtgiaarh31havq0l2372gdlt9l4.apps.googleusercontent.com" data-login_uri="https://arthurross.nl/auth/google" data-callback="handleCredentialResponse"></div>
-            <div class="g_id_signin" data-type="standard" data-theme="outline" data-text="Sign up with Google" data-shape="rectangular" data-size="large"></div>
+            <div id="g_id_onload" 
+                 data-client_id="1066413110213-5qld3jtgiaarh31havq0l2372gdlt9l4.apps.googleusercontent.com" 
+                 data-login_uri="https://arthurross.nl/auth/google" 
+                 data-callback="handleCredentialResponse">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-theme="outline" 
+                 data-text="Sign up with Google" data-shape="rectangular" data-size="large">
+            </div>
         </div>
 
         <!-- Facebook Login Button -->
@@ -116,12 +134,15 @@ permalink: /travelblog.html/
         <p><a href="/privacy_policy.md">Privacy Policy</a></p>
     </footer>
 
-    <script type="module" src="script.js"></script>
-       
-   <!-- Load Facebook SDK -->
-   <script async defer crossorigin="anonymous" 
-   src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0" 
-   nonce="yourNonceValue">
-</script>
+    <!-- Like Button Script -->
+    <script>
+        function likeImage(id) {
+            let likeCountSpan = document.getElementById(id + "-like-count");
+            let currentLikes = parseInt(likeCountSpan.innerText) || 0;
+            likeCountSpan.innerText = (currentLikes + 1) + " Likes";
+        }
+    </script>
+
+    <script src="script.js"></script>
 </body>
 </html>
