@@ -29,7 +29,9 @@ permalink: /travelblog.html/
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-25QWYDWGEP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
+        function gtag() {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
         gtag('config', 'G-25QWYDWGEP');
     </script>
@@ -54,39 +56,27 @@ permalink: /travelblog.html/
         }(document, 'script', 'facebook-jssdk'));
     </script>
 
-<!-- Add this script tag in the <head> or before your custom JS code -->
+    <!-- Axios for API requests -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-        // Your custom JavaScript code goes here
-    
-        // Make an Axios GET request
-        axios.get('https://api.arthurross.nl') // Replace with your actual API URL
+        // Example API request using Axios
+        axios.get('https://jsonplaceholder.typicode.com/posts') // Use a valid API URL
             .then(response => {
-                // Log the successful response
                 console.log(response);
             })
             .catch(error => {
-                // Handle errors
                 console.error("There was an error with the request:", error);
-    
                 if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
                     console.error("Response data:", error.response.data);
                     console.error("Response status:", error.response.status);
-                    console.error("Response headers:", error.response.headers);
                 } else if (error.request) {
-                    // The request was made but no response was received
                     console.error("Request data:", error.request);
                 } else {
-                    // Something else triggered the error
                     console.error("Error message:", error.message);
                 }
             });
     </script>
-    
-
 </head>
 <body>
     <header>
