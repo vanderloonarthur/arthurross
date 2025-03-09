@@ -6,6 +6,8 @@ const verifyEmailRouter = require('./verifyEmail');
 const authRoutes = require('./routes/auth'); // Ensure correct path
 const port = 4000;
 
+require('dotenv').config();
+
 // Allow all origins (for development)
 app.use(cors());
 

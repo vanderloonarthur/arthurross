@@ -14,8 +14,8 @@ let loggedInUserId = null; // This should be populated after successful login
 
 // Example function for liking an image
 async function likeImage(imageId) {
-    if (loggedInUserId === null) {
-        alert("You must be logged in to like images.");
+    if (!loggedInUserId) {
+        alert("You need to log in first.");
         openLoginModal();
         return;
     }
@@ -27,49 +27,43 @@ async function likeImage(imageId) {
     }
 
     let currentLikes = parseInt(likeCountElem.innerText) || 0;
+    const isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
 
-    if (localStorage.getItem(`${imageId}-liked`)) {
+    // Toggle like/unlike
+    if (isLiked) {
         currentLikes--;
         localStorage.removeItem(`${imageId}-liked`);
-        alert('You unliked this image.');
-        likeCountElem.innerText = `${currentLikes} Likes`;
-        const likeButton = document.querySelector(`#${imageId} .like-button`);
-        likeButton.innerText = '❤️ Like';
-        likeCountElem.style.color = '#e0e0e0';
     } else {
         currentLikes++;
         localStorage.setItem(`${imageId}-liked`, 'true');
-        alert('You liked this image.');
-        likeCountElem.innerText = `${currentLikes} Likes`;
-        const likeButton = document.querySelector(`#${imageId} .like-button`);
-        likeButton.innerText = 'Unlike';
-        likeCountElem.style.color = '#ffeb3b';
     }
 
-    // Make API call to sync like with backend
+    // Update the UI
+    likeCountElem.innerText = `${currentLikes} Likes`;
+
+    // Send the like data to the back-end
     try {
-        const response = await fetch(`/like`, {
+        const response = await fetch('http://localhost:8443/like', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userId: loggedInUserId, // assuming loggedInUserId is available
+                userId: loggedInUserId,
                 imageId: imageId,
-                isLiked: localStorage.getItem(`${imageId}-liked`) === 'true',
-                likeCount: currentLikes
+                isLiked: !isLiked, // Pass the updated like state
+                likeCount: currentLikes,
             }),
         });
 
         if (!response.ok) {
-            throw new Error('Failed to update like count');
+            throw new Error('Error updating like status.');
         }
-        console.log(`Like/unlike for ${imageId} updated successfully`);
-    } catch (error) {
-        console.error('Error updating like count:', error);
-    }
 
-    localStorage.setItem(imageId, currentLikes);
+        console.log('Like status saved successfully');
+    } catch (error) {
+        console.error('Error saving like:', error);
+    }
 }
 
 // Update the like count displayed on the page
@@ -89,7 +83,7 @@ function loginWithFacebook() {
             } else {
                 alert("User cancelled login or did not fully authorize.");
             }
-        }, {scope: 'public_profile,user_likes'});
+        }, {scope: 'public_profile'});
     } else {
         console.error('Facebook SDK not loaded');
     }
@@ -138,19 +132,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById("feedback-modal");
         if (event.target === modal) closeModal();
     };
-
-    const scrollUpBtn = document.getElementById("scrollUpBtn");
-    window.onscroll = function() {
-        scrollUpBtn.style.display = (window.scrollY > 100) ? "block" : "none";
-    };
-
-    scrollUpBtn.addEventListener("click", () => {
-        try {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
 
     document.getElementById("feedbackForm")?.addEventListener("submit", async function(event) {
         event.preventDefault();
@@ -480,3 +461,4 @@ async function saveLikes(userId, accessToken) {
 
 // Assume userId and accessToken are already available
 // saveLikes(userId, accessToken);
+
