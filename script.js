@@ -1,5 +1,5 @@
 let loggedInUserId = null; // This should be populated after successful login
-const API_URL = "https://www.arthurross.nl:8443/api/likes";
+const API_URL = "https://www.arthurross.nl:8443/api/likes";  // Ensure it's declared once!
 
 // Function to like/unlike an image
 async function likeImage(imageId) {
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const imageIds = ['milaan', 'madrid', 'stuttgart', 'edinburgh'];
     imageIds.forEach(imageId => {
-        fetchLikeCount(imageId);
+        fetchLikeCount(imageId);  // Fetch the like count for each image
     });
 
     const loginForm = document.getElementById('loginForm');
