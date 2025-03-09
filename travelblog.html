@@ -85,7 +85,8 @@ permalink: /travelblog.html/
 
         <!-- Google Sign-Up Button -->
         <div class="centered-button">
-            <div id="g_id_onload" data-client_id="1066413110213-5qld3jtgiaarh31havq0l2372gdlt9l4.apps.googleusercontent.com" data-login_uri="YOUR_SERVER_ENDPOINT_HERE" data-callback="handleCredentialResponse"></div>
+            <div id="g_id_onload" data-client_id="1066413110213-5qld3jtgiaarh31havq0l2372gdlt9l4.apps.googleusercontent.com" data-login_uri="https://arthurross.nl/auth/google
+            " data-callback="handleCredentialResponse"></div>
             <div class="g_id_signin" data-type="standard" data-theme="outline" data-text="Sign up with Google" data-shape="rectangular" data-size="large"></div>
         </div>
 
@@ -172,7 +173,7 @@ permalink: /travelblog.html/
     <script>
         function handleCredentialResponse(response) {
             console.log("Google sign-in successful: ", response);
-            fetch('YOUR_SERVER_ENDPOINT_HERE', {
+            fetch('https://arthurross.nl/auth/google', {
                 method: 'POST',
                 body: JSON.stringify({ credential: response.credential }),
                 headers: { 'Content-Type': 'application/json' },
@@ -185,7 +186,7 @@ permalink: /travelblog.html/
             FB.login(function(response) {
                 if (response.authResponse) {
                     console.log('User logged in with Facebook:', response);
-                    fetch('YOUR_SERVER_ENDPOINT_HERE', {
+                    fetch('https://arthurross.nl/auth/google', {
                         method: 'POST',
                         body: JSON.stringify({ accessToken: response.authResponse.accessToken }),
                         headers: { 'Content-Type': 'application/json' },
@@ -406,181 +407,180 @@ permalink: /travelblog.html/
                 const checkMark = image.nextElementSibling;
 
                 if (clickCount === 1) {
-            image.classList.add('pressed');
-        } else if (clickCount >= 2) {
-            image.classList.add('second-pressed');
-            checkMark.classList.remove('hidden');
-        }
+                    image.classList.add('pressed');
+                } else if (clickCount >= 2) {
+                    image.classList.add('second-pressed');
+                    checkMark.classList.remove('hidden');
+                }
 
-        image.addEventListener('click', function() {
-            clickCount++;
-            localStorage.setItem(`${imageId}-clicks`, clickCount);
+                image.addEventListener('click', function() {
+                    clickCount++;
+                    localStorage.setItem(`${imageId}-clicks`, clickCount);
 
-            if (clickCount === 1) {
-                image.classList.add('pressed');
-                checkMark.classList.add('hidden');
-            } else if (clickCount >= 2) {
-                image.classList.remove('pressed');
-                image.classList.add('second-pressed');
-                checkMark.classList.remove('hidden');
-            }
-        });
-    });
-});
-
-function openLoginModal() {
-    document.getElementById('login-modal').style.display = 'block';
-    document.getElementById('login-modal').setAttribute('aria-hidden', 'false');
-}
-
-function closeLoginModal() {
-    document.getElementById('login-modal').style.display = 'none';
-    document.getElementById('login-modal').setAttribute('aria-hidden', 'true');
-}
-
-function openSignupModal() {
-    document.getElementById('signup-modal').style.display = 'block';
-    document.getElementById('signup-modal').setAttribute('aria-hidden', 'false');
-}
-
-function closeSignupModal() {
-    document.getElementById('signup-modal').style.display = 'none';
-    document.getElementById('signup-modal').setAttribute('aria-hidden', 'true');
-}
-
-document.getElementById('signupForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const username = document.getElementById('signup-username').value;
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-    const signupStatus = document.getElementById('signup-status');
-
-    try {
-        const response = await fetch("https://www.arthurross.nl/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            },
-            credentials: "include", // Important for cookies/auth headers
-            body: JSON.stringify({ username, email, password }),
-        });
-
-        if (response.ok) {
-            signupStatus.textContent = "Sign up successful!";
-            event.target.reset();
-            setTimeout(() => closeSignupModal(), 2000);
-        } else {
-            const result = await response.json();
-            signupStatus.textContent = result.errors ? 
-                result.errors.map(error => error.message).join(", ") : 
-                "Oops! There was a problem with your sign up.";
-        }
-    } catch (error) {
-        signupStatus.textContent = "Oops! There was a problem with your sign up.";
-    }
-});
-
-document.getElementById('loginForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const usernameError = document.getElementById('username-error');
-    const passwordError = document.getElementById('password-error');
-    const loginStatus = document.getElementById('login-status');
-    let valid = true;
-
-    if (username.trim() === '') {
-        usernameError.textContent = 'Username is required.';
-        valid = false;
-    } else {
-        usernameError.textContent = '';
-    }
-
-    if (password.trim() === '') {
-        passwordError.textContent = 'Password is required.';
-        valid = false;
-    } else {
-        passwordError.textContent = '';
-    }
-
-    if (valid) {
-        try {
-            const response = await fetch(event.target.action, {
-                method: event.target.method,
-                body: new FormData(event.target),
-                headers: { 'Accept': 'application/json' }
+                    if (clickCount === 1) {
+                        image.classList.add('pressed');
+                        checkMark.classList.add('hidden');
+                    } else if (clickCount >= 2) {
+                        image.classList.remove('pressed');
+                        image.classList.add('second-pressed');
+                        checkMark.classList.remove('hidden');
+                    }
+                });
             });
+        });
 
-            if (response.ok) {
-                loginStatus.textContent = 'Login successful!';
-                event.target.reset();
-                alert('Login successful!');
-            } else {
-                const result = await response.json();
-                loginStatus.textContent = result.errors ? result.errors.map(error => error.message).join(", ") : 
-                    'Oops! There was a problem with your login.';
-                alert('Oops! There was a problem with your login.');
+        function openLoginModal() {
+            document.getElementById('login-modal').style.display = 'block';
+            document.getElementById('login-modal').setAttribute('aria-hidden', 'false');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('login-modal').setAttribute('aria-hidden', 'true');
+        }
+
+        function openSignupModal() {
+            document.getElementById('signup-modal').style.display = 'block';
+            document.getElementById('signup-modal').setAttribute('aria-hidden', 'false');
+        }
+
+        function closeSignupModal() {
+            document.getElementById('signup-modal').style.display = 'none';
+            document.getElementById('signup-modal').setAttribute('aria-hidden', 'true');
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const signupStatus = document.getElementById('signup-status');
+
+            try {
+                const response = await fetch("https://www.arthurross.nl/signup", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    },
+                    credentials: "include", // Important for cookies/auth headers
+                    body: JSON.stringify({ username, email, password }),
+                });
+
+                if (response.ok) {
+                    signupStatus.textContent = "Sign up successful!";
+                    event.target.reset();
+                    setTimeout(() => closeSignupModal(), 2000);
+                } else {
+                    const result = await response.json();
+                    signupStatus.textContent = result.errors ? 
+                        result.errors.map(error => error.message).join(", ") : 
+                        "Oops! There was a problem with your sign up.";
+                }
+            } catch (error) {
+                signupStatus.textContent = "Oops! There was a problem with your sign up.";
             }
-        } catch (error) {
-            loginStatus.textContent = 'Oops! There was a problem with your login.';
-            alert('Oops! There was a problem with your login.');
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const usernameError = document.getElementById('username-error');
+            const passwordError = document.getElementById('password-error');
+            const loginStatus = document.getElementById('login-status');
+            let valid = true;
+
+            if (username.trim() === '') {
+                usernameError.textContent = 'Username is required.';
+                valid = false;
+            } else {
+                usernameError.textContent = '';
+            }
+
+            if (password.trim() === '') {
+                passwordError.textContent = 'Password is required.';
+                valid = false;
+            } else {
+                passwordError.textContent = '';
+            }
+
+            if (valid) {
+                try {
+                    const response = await fetch(event.target.action, {
+                        method: event.target.method,
+                        body: new FormData(event.target),
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (response.ok) {
+                        loginStatus.textContent = 'Login successful!';
+                        event.target.reset();
+                        alert('Login successful!');
+                    } else {
+                        const result = await response.json();
+                        loginStatus.textContent = result.errors ? result.errors.map(error => error.message).join(", ") : 
+                            'Oops! There was a problem with your login.';
+                        alert('Oops! There was a problem with your login.');
+                    }
+                } catch (error) {
+                    loginStatus.textContent = 'Oops! There was a problem with your login.';
+                    alert('Oops! There was a problem with your login.');
+                }
+            }
+        });
+
+        // Facebook SDK initialization
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '626159790032742',
+                xfbml      : true,
+                version    : 'v22.0'
+            });
+            FB.AppEvents.logPageView();
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadLikes();
+        });
+
+        function loadLikes() {
+            const likedImages = JSON.parse(localStorage.getItem("likedImages")) || {};
+            for (const [id, count] of Object.entries(likedImages)) {
+                document.getElementById(`${id}-like-count`).textContent = `${count} Likes`;
+            }
         }
-    }
-});
 
-// Facebook SDK initialization
-window.fbAsyncInit = function() {
-    FB.init({
-        appId      : '626159790032742',
-        xfbml      : true,
-        version    : 'v22.0'
-    });
-    FB.AppEvents.logPageView();
-};
-
-(function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-        loadLikes();
-    });
-
-    function loadLikes() {
-        const likedImages = JSON.parse(localStorage.getItem("likedImages")) || {};
-        for (const [id, count] of Object.entries(likedImages)) {
-            document.getElementById(`${id}-like-count`).textContent = `${count} Likes`;
+        function likeImage(imageId) {
+            let likedImages = JSON.parse(localStorage.getItem("likedImages")) || {};
+            if (!likedImages[imageId]) {
+                likedImages[imageId] = 1;
+            } else {
+                likedImages[imageId] += 1;
+            }
+            localStorage.setItem("likedImages", JSON.stringify(likedImages));
+            document.getElementById(`${imageId}-like-count`).textContent = `${likedImages[imageId]} Likes`;
         }
-    }
-
-    function likeImage(imageId) {
-        let likedImages = JSON.parse(localStorage.getItem("likedImages")) || {};
-        if (!likedImages[imageId]) {
-            likedImages[imageId] = 1;
-        } else {
-            likedImages[imageId] += 1;
+        function likeImage(imageId) {
+            fetch("like.php", {
+                method: "POST",
+                body: new URLSearchParams({ imageId }),
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(`${imageId}-like-count`).textContent = `${data.likes} Likes`;
+            });
         }
-        localStorage.setItem("likedImages", JSON.stringify(likedImages));
-        document.getElementById(`${imageId}-like-count`).textContent = `${likedImages[imageId]} Likes`;
-    }
-    function likeImage(imageId) {
-    fetch("like.php", {
-        method: "POST",
-        body: new URLSearchParams({ imageId }),
-        headers: { "Content-Type": "application/x-www-form-urlencoded" }
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById(`${imageId}-like-count`).textContent = `${data.likes} Likes`;
-    });
-}
-
     </script>
 </body>
 </html>
