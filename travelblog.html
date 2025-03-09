@@ -1,6 +1,7 @@
 ---
 permalink: /travelblog.html/
 ---
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -86,7 +87,15 @@ permalink: /travelblog.html/
             </div>
         </section>
 
-        <div class="fb-like" data-href="https://www.arthurross.nl/travelblog.html" data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div>
+        <!-- Facebook Like Button -->
+        <div class="fb-like" 
+            data-href="https://www.arthurross.nl/travelblog.html" 
+            data-width="" 
+            data-layout="button_count" 
+            data-action="like" 
+            data-size="small" 
+            data-share="true">
+        </div>
         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0" nonce="XYZ"></script>
 
         <!-- Facebook Login Button -->
@@ -175,15 +184,18 @@ permalink: /travelblog.html/
         function loginWithFacebook() {
             if (typeof FB !== 'undefined') {
                 FB.login(response => {
-    if (response.authResponse) {
-        loggedInUserId = response.authResponse.userID;
-        alert("Logged in with Facebook");
-        // Optionally, fetch or update user data from your backend
-    } else {
-        alert("User cancelled login.");
-    }
-}, { scope: 'public_profile' });  // Remove 'email' permission
-
+                    if (response.authResponse) {
+                        loggedInUserId = response.authResponse.userID;
+                        alert("Logged in with Facebook");
+                        // Optionally, fetch or update user data from your backend
+                    } else {
+                        alert("User cancelled login.");
+                    }
+                }, { scope: 'public_profile' });  // Remove 'email' permission
+            } else {
+                console.error('Facebook SDK not loaded');
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             console.log("JavaScript loaded successfully!");
