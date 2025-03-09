@@ -74,7 +74,7 @@ function loginWithFacebook() {
         } else {
             alert("User cancelled login or did not fully authorize.");
         }
-    }, {scope: 'public_profile,email'});
+    }, {scope: 'public_profile'});
 }
 
 // Example Google login callback
@@ -309,86 +309,92 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    document.getElementById('signupForm')?.addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const username = document.getElementById('signup-username').value;
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        const signupStatus = document.getElementById('signup-status');
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+        signupForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const signupStatus = document.getElementById('signup-status');
 
-        try {
-            const response = await fetch("https://www.arthurross.nl/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                },
-                credentials: "include", // Important for cookies/auth headers
-                body: JSON.stringify({ username, email, password }),
-            });
-
-            if (response.ok) {
-                signupStatus.textContent = "Sign up successful!";
-                event.target.reset();
-                setTimeout(() => closeSignupModal(), 2000);
-            } else {
-                const result = await response.json();
-                signupStatus.textContent = result.errors ? 
-                    result.errors.map(error => error.message).join(", ") : 
-                    "Oops! There was a problem with your sign up.";
-            }
-        } catch (error) {
-            signupStatus.textContent = "Oops! There was a problem with your sign up.";
-        }
-    });
-
-    document.getElementById('loginForm')?.addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const usernameError = document.getElementById('username-error');
-        const passwordError = document.getElementById('password-error');
-        const loginStatus = document.getElementById('login-status');
-        let valid = true;
-
-        if (username.trim() === '') {
-            usernameError.textContent = 'Username is required.';
-            valid = false;
-        } else {
-            usernameError.textContent = '';
-        }
-
-        if (password.trim() === '') {
-            passwordError.textContent = 'Password is required.';
-            valid = false;
-        } else {
-            passwordError.textContent = '';
-        }
-
-        if (valid) {
             try {
-                const response = await fetch(event.target.action, {
-                    method: event.target.method,
-                    body: new FormData(event.target),
-                    headers: { 'Accept': 'application/json' }
+                const response = await fetch("https://www.arthurross.nl/signup", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    },
+                    credentials: "include", // Important for cookies/auth headers
+                    body: JSON.stringify({ username, email, password }),
                 });
 
                 if (response.ok) {
-                    loginStatus.textContent = 'Login successful!';
+                    signupStatus.textContent = "Sign up successful!";
                     event.target.reset();
-                    alert('Login successful!');
+                    setTimeout(() => closeSignupModal(), 2000);
                 } else {
                     const result = await response.json();
-                    loginStatus.textContent = result.errors ? result.errors.map(error => error.message).join(", ") : 
-                        'Oops! There was a problem with your login.';
-                    alert('Oops! There was a problem with your login.');
+                    signupStatus.textContent = result.errors ? 
+                        result.errors.map(error => error.message).join(", ") : 
+                        "Oops! There was a problem with your sign up.";
                 }
             } catch (error) {
-                loginStatus.textContent = 'Oops! There was a problem with your login.';
-                alert('Oops! There was a problem with your login.');
+                signupStatus.textContent = "Oops! There was a problem with your sign up.";
             }
-        }
-    });
+        });
+    }
+
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const usernameError = document.getElementById('username-error');
+            const passwordError = document.getElementById('password-error');
+            const loginStatus = document.getElementById('login-status');
+            let valid = true;
+
+            if (username.trim() === '') {
+                usernameError.textContent = 'Username is required.';
+                valid = false;
+            } else {
+                usernameError.textContent = '';
+            }
+
+            if (password.trim() === '') {
+                passwordError.textContent = 'Password is required.';
+                valid = false;
+            } else {
+                passwordError.textContent = '';
+            }
+
+            if (valid) {
+                try {
+                    const response = await fetch(event.target.action, {
+                        method: event.target.method,
+                        body: new FormData(event.target),
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (response.ok) {
+                        loginStatus.textContent = 'Login successful!';
+                        event.target.reset();
+                        alert('Login successful!');
+                    } else {
+                        const result = await response.json();
+                        loginStatus.textContent = result.errors ? result.errors.map(error => error.message).join(", ") : 
+                            'Oops! There was a problem with your login.';
+                        alert('Oops! There was a problem with your login.');
+                    }
+                } catch (error) {
+                    loginStatus.textContent = 'Oops! There was a problem with your login.';
+                    alert('Oops! There was a problem with your login.');
+                }
+            }
+        });
+    }
 
     // Facebook SDK initialization
     window.fbAsyncInit = function() {
