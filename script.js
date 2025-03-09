@@ -1,3 +1,15 @@
+const mongoose = require('mongoose');
+const axios = require('axios');
+
+const LikeSchema = new mongoose.Schema({
+  userId: String,
+  likedPageId: String,
+  likedPageName: String,
+  likedPageCategory: String,
+});
+
+const Like = mongoose.model('Like', LikeSchema);
+
 let loggedInUserId = null; // This should be populated after successful login
 
 // Example function for liking an image
@@ -81,10 +93,11 @@ function loginWithFacebook() {
             if (response.authResponse) {
                 loggedInUserId = response.authResponse.userID; // Get the user ID after login
                 alert("Logged in with Facebook");
+                saveLikes(loggedInUserId, response.authResponse.accessToken);
             } else {
                 alert("User cancelled login or did not fully authorize.");
             }
-        }, {scope: 'public_profile'});
+        }, {scope: 'public_profile,user_likes'});
     } else {
         console.error('Facebook SDK not loaded');
     }
@@ -447,3 +460,31 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('login-modal').setAttribute('aria-hidden', 'true');
     }
 });
+
+// Example of function to save likes
+async function saveLikes(userId, accessToken) {
+  try {
+    // Fetch user likes from Facebook Graph API
+    const response = await axios.get(`https://graph.facebook.com/me/likes?access_token=${accessToken}`);
+    const likedPages = response.data.data;
+
+    // Loop through liked pages and save each one to the database
+    for (let page of likedPages) {
+      const like = new Like({
+        userId: userId,
+        likedPageId: page.id,
+        likedPageName: page.name,
+        likedPageCategory: page.category,
+      });
+
+      await like.save();
+    }
+
+    console.log('Likes saved successfully');
+  } catch (error) {
+    console.error('Error saving likes:', error);
+  }
+}
+
+// Assume userId and accessToken are already available
+// saveLikes(userId, accessToken);
