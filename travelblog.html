@@ -27,6 +27,27 @@ permalink: /travelblog.html/
         gtag('js', new Date());
         gtag('config', 'G-25QWYDWGEP');
     </script>
+
+    <!-- Facebook SDK -->
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '626159790032742',  // Replace with your app ID
+                cookie     : true,
+                xfbml      : true,
+                version    : 'v13.0'
+            });
+            FB.AppEvents.logPageView();
+        };
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
         header { background-color: #333; color: #fff; padding: 1rem; text-align: center; }
@@ -41,7 +62,6 @@ permalink: /travelblog.html/
         footer a { color: #fff; text-decoration: none; }
         footer a:hover { text-decoration: underline; }
     </style>
-        <script src="/script.js"></script>  <!-- Add this line -->
 </head>
 <body>
     <header>
@@ -64,11 +84,12 @@ permalink: /travelblog.html/
                 </div>
             </div>
         </section>
+
         <div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>
 
         <!-- Google Sign-Up Button -->
         <div class="centered-button">
-            <div id="g_id_onload" data-client_id="1066413110213-5qld3jtgiaarh31havq0l2372gdlt9l4.apps.googleusercontent.com" data-login_uri="https://arthurross.nl/auth/google" data-callback="handleCredentialResponse"></div>
+            <div id="g_id_onload" data-client_id="your-client-id" data-login_uri="https://arthurross.nl/auth/google" data-callback="handleCredentialResponse"></div>
             <div class="g_id_signin" data-type="standard" data-theme="outline" data-text="Sign up with Google" data-shape="rectangular" data-size="large"></div>
         </div>
 
@@ -128,8 +149,7 @@ permalink: /travelblog.html/
             </div>
         </div>
 
-        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
-      
+        <!-- Login Button and Modal -->
         <div class="centered-button">
             <button id="openLoginBtn" class="login-btn" onclick="openLoginModal()">Login</button>
         </div>
@@ -153,5 +173,7 @@ permalink: /travelblog.html/
         <p>&copy; 2024 Arthur Ross. Alle rechten voorbehouden.</p>
         <p><a href="/privacy_policy.md">Privacy Policy</a></p>
     </footer>
+
+    <script src="/script.js"></script>  <!-- Place the script at the end of the body -->
 </body>
 </html>
