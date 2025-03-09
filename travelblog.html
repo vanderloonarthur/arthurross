@@ -1,6 +1,3 @@
----
-permalink: /travelblog.html/
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,7 +111,7 @@ permalink: /travelblog.html/
         let loggedInUserId = null; // This will be populated after Facebook login
         const API_URL = "https://www.arthurross.nl:8443/api/likes";
 
-        // Function to like/unlike an image
+        // Function to like/unlike an image and retain the count
         async function likeImage(imageId) {
             if (!loggedInUserId) {
                 alert("You need to log in first.");
@@ -166,7 +163,7 @@ permalink: /travelblog.html/
             }
         }
 
-        // Function to fetch like counts
+        // Function to fetch like counts and display
         async function fetchLikeCount(imageId) {
             try {
                 const response = await fetch(`${API_URL}/${imageId}`);
