@@ -80,7 +80,7 @@ function loginWithFacebook() {
             } else {
                 alert("User cancelled login.");
             }
-        }, { scope: 'public_profile,email' });
+        }, { scope: 'public_profile' });  // Removed email scope
     } else {
         console.error('Facebook SDK not loaded');
     }
