@@ -76,14 +76,18 @@ FB.api('/me', { fields: 'id,name,email', access_token: 'A_Rybg17-IJ1h8z4njhA80l'
   
 // Example Facebook login handling
 function loginWithFacebook() {
-    FB.login(function(response) {
-        if (response.authResponse) {
-            loggedInUserId = response.authResponse.userID; // Get the user ID after login
-            alert("Logged in with Facebook");
-        } else {
-            alert("User cancelled login or did not fully authorize.");
-        }
-    }, {scope: 'public_profile'});
+    if (typeof FB !== 'undefined') {
+        FB.login(function(response) {
+            if (response.authResponse) {
+                loggedInUserId = response.authResponse.userID; // Get the user ID after login
+                alert("Logged in with Facebook");
+            } else {
+                alert("User cancelled login or did not fully authorize.");
+            }
+        }, {scope: 'public_profile'});
+    } else {
+        console.error('Facebook SDK not loaded');
+    }
 }
 
 // Example Google login callback
