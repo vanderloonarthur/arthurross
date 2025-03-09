@@ -1,5 +1,6 @@
-const axios = require('axios');
-const mongoose = require('mongoose');
+import axios from 'axios';
+import mongoose from 'mongoose';
+
 
 const LikeSchema = new mongoose.Schema({
   userId: String,
