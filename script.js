@@ -87,7 +87,7 @@ function loginWithFacebook() {
 
 // Function to handle Google login
 function handleCredentialResponse(response) {
-    loggedInUserId = response.credential;
+    loggedInUserId = response.credential; // Simply assign the new user ID
     alert("Logged in with Google");
 }
 
