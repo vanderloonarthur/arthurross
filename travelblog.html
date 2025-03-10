@@ -241,15 +241,6 @@ permalink: /travelblog.html
                 fetchLikeCount(imageId);
             });
         });
-
-        document.addEventListener("DOMContentLoaded", function () {
-    const imageItems = document.querySelectorAll(".image-item");
-    imageItems.forEach(item => {
-        const imageId = item.id; // Gets the unique image ID (e.g., 'milaan')
-        fetchLikeCount(imageId); // Calls API to get the like count for each image
-    });
-});
-
     </script>
 </body>
 </html>
