@@ -94,16 +94,16 @@ permalink: /travelblog.html
         <div class="centered-button">
             <button id="facebook-login-btn" class="facebook-login-btn" onclick="loginWithFacebook()">Login with Facebook</button>
         </div>
-<!-- Google Sign-In Button -->
-<div class="centered-button">
-    <div id="g_id_onload"
-         data-client_id="1066413110213-5qld3jtgiaarh31havq0l2372gdlt9l4.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse"
-         data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin" data-type="standard" data-size="large"></div>
-</div>
 
+        <!-- Google Sign-In Button -->
+        <div class="centered-button">
+            <div id="g_id_onload"
+                 data-client_id="1066413110213-5qld3jtgiaarh31havq0l2372gdlt9l4.apps.googleusercontent.com"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-size="large"></div>
+        </div>
     </main>
 
     <footer>
@@ -113,13 +113,13 @@ permalink: /travelblog.html
 
     <!-- Like Button Script -->
     <script>
-        let loggedInUserId = null; // This will be populated after Facebook login
-        const API_URL = "https://www.arthurross.nl/posts"; // Fixed the extraneous quotation mark
+        let loggedInUserId = null; // This will be populated after login
+        const API_URL = "https://www.arthurross.nl/posts";
 
         // Function to like/unlike an image
         async function likeImage(imageId) {
             if (!loggedInUserId) {
-                alert("You need to log in with Facebook first.");
+                alert("You need to log in first.");
                 return;
             }
 
@@ -212,9 +212,24 @@ permalink: /travelblog.html
 
         // Google Login Function
         function handleCredentialResponse(response) {
-            loggedInUserId = response.credential;
-            alert("Logged in with Google");
-            // Optionally, fetch or update user data from your backend
+            if (response.credential) {
+                const decodedCredential = parseJwt(response.credential);
+                loggedInUserId = decodedCredential.sub; // Google user ID
+                alert(`Logged in as ${decodedCredential.name}`);
+            } else {
+                alert("Google login failed");
+            }
+        }
+    
+        // Helper function to decode JWT (Google credential)
+        function parseJwt(token) {
+            let base64Url = token.split('.')[1];
+            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            let jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+                '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            ).join(''));
+        
+            return JSON.parse(jsonPayload);
         }
 
         // Fetch the initial like count when the page loads
@@ -226,28 +241,7 @@ permalink: /travelblog.html
                 fetchLikeCount(imageId);
             });
         });
-
-    // Google Login Function
-    function handleCredentialResponse(response) {
-        if (response.credential) {
-            const decodedCredential = parseJwt(response.credential);
-            loggedInUserId = decodedCredential.sub; // Google user ID
-            alert(`Logged in as ${decodedCredential.name}`);
-        } else {
-            alert("Google login failed");
-        }
-    }
-    
-    // Helper function to decode JWT (Google credential)
-    function parseJwt(token) {
-        let base64Url = token.split('.')[1];
-        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        let jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
-            '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-        ).join(''));
-    
-        return JSON.parse(jsonPayload);
-    }
-</script>
+    </script>
 </body>
 </html>
+
