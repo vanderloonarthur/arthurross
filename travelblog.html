@@ -134,7 +134,7 @@ permalink: /travelblog.html
 
             // Toggle the like/unlike
             if (isLiked) {
-                currentLikes--;
+                currentLikes = Math.max(0, currentLikes - 1); // Prevent going below zero
                 localStorage.removeItem(`${imageId}-liked`);
             } else {
                 currentLikes++;
@@ -244,4 +244,3 @@ permalink: /travelblog.html
     </script>
 </body>
 </html>
-
