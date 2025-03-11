@@ -27,7 +27,7 @@ db.connect(err => {
     console.log('Connected to MySQL');
 });
 
-// Route to handle adding likes
+// Route to handle adding a like
 app.post('/like', (req, res) => {
     const { userId, imageId } = req.body;
 
@@ -35,7 +35,8 @@ app.post('/like', (req, res) => {
         return res.status(400).json({ error: 'userId and imageId are required' });
     }
 
-    const query = `INSERT INTO likes (userId, imageId) VALUES (?, ?)`;
+    const query = `INSERT INTO likes (userId, imageId, isLiked, likeCount) VALUES (?, ?, true, 1)
+                   ON DUPLICATE KEY UPDATE isLiked = true, likeCount = likeCount + 1`;
     db.query(query, [userId, imageId], (err, result) => {
         if (err) {
             console.error('Error inserting like:', err);
@@ -45,26 +46,43 @@ app.post('/like', (req, res) => {
     });
 });
 
-// Route to handle updating likes
-app.post('/likes/:imageId', (req, res) => {
-    const { userId, isLiked, likeCount } = req.body;
-    const { imageId } = req.params;
+// Route to handle unliking an image
+app.post('/unlike', (req, res) => {
+    const { userId, imageId } = req.body;
 
-    // Check if userId and imageId are provided
     if (!userId || !imageId) {
         return res.status(400).json({ error: 'userId and imageId are required' });
     }
 
-    // Update or insert the like status in the database
-    const query = `INSERT INTO likes (userId, imageId, isLiked, likeCount) VALUES (?, ?, ?, ?)
-                   ON DUPLICATE KEY UPDATE likeCount = ?, isLiked = ?`;
+    const query = `UPDATE likes SET isLiked = false, likeCount = GREATEST(likeCount - 1, 0) 
+                   WHERE userId = ? AND imageId = ?`;
+    db.query(query, [userId, imageId], (err, result) => {
+        if (err) {
+            console.error('Error updating like:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.json({ message: 'Like removed successfully' });
+    });
+});
 
-    db.query(query, [userId, imageId, isLiked, likeCount, likeCount, isLiked], (err, result) => {
+// Route to handle updating likes (toggles like status)
+app.post('/likes/:imageId', (req, res) => {
+    const { userId, isLiked } = req.body;
+    const { imageId } = req.params;
+
+    if (!userId || !imageId || isLiked === undefined) {
+        return res.status(400).json({ error: 'userId, imageId, and isLiked are required' });
+    }
+
+    const query = `INSERT INTO likes (userId, imageId, isLiked, likeCount) 
+                   VALUES (?, ?, ?, 1) 
+                   ON DUPLICATE KEY UPDATE isLiked = ?, likeCount = CASE WHEN isLiked = ? THEN likeCount ELSE likeCount + 1 END`;
+    db.query(query, [userId, imageId, isLiked, isLiked, !isLiked], (err, result) => {
         if (err) {
             console.error('Error inserting or updating like:', err);
             return res.status(500).json({ error: 'Database error' });
         }
-        res.json({ message: 'Like updated successfully' });
+        res.json({ message: 'Like status updated successfully' });
     });
 });
 
@@ -72,7 +90,7 @@ app.post('/likes/:imageId', (req, res) => {
 app.get('/likes/:imageId', (req, res) => {
     const { imageId } = req.params;
 
-    const query = `SELECT COUNT(*) AS likeCount FROM likes WHERE imageId = ?`;
+    const query = `SELECT COUNT(*) AS likeCount FROM likes WHERE imageId = ? AND isLiked = true`;
     db.query(query, [imageId], (err, results) => {
         if (err) {
             console.error('Error fetching likes:', err);
