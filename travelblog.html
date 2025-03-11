@@ -151,25 +151,30 @@ async function fetchLikeCount(imageId) {
 
     try {
         const response = await fetch(`${API_URL}${imageId}`);
-        
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
         const data = await response.json();
         console.log("Response Data:", data);
 
         const likeCountElem = document.getElementById(`${imageId}-like-count`);
         if (likeCountElem) {
             likeCountElem.innerText = `${data.likeCount} Likes`;
+        } else {
+            console.error(`Element #${imageId}-like-count not found`);
         }
     } catch (error) {
         console.error(`Error fetching like count for ${imageId}:`, error);
     }
 }
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    ['milaan'].forEach(fetchLikeCount);
+// Run this when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+    fetchLikeCount("milaan");
 });
+
 
 // Ensure Facebook SDK is loaded before using it
 function loginWithFacebook() {
