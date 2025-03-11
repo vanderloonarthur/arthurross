@@ -46,6 +46,7 @@
     "javascript": "^1.0.0",
     "module-name": "^0.0.1-security",
     "mongoose": "^8.12.1",
+    "mysql2": "^3.13.0",
     "nodemailer": "^6.10.0",
     "openai": "^4.77.3",
     "sqlite3": "^5.1.7"
