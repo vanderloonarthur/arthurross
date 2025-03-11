@@ -1,7 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
@@ -9,8 +8,9 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // Replaced bodyParser with express.json()
 
+// Create MySQL connection
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -18,6 +18,7 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
+// Connect to the database
 db.connect(err => {
     if (err) {
         console.error('Database connection failed:', err);
@@ -26,7 +27,7 @@ db.connect(err => {
     console.log('Connected to MySQL');
 });
 
-// 🛠️ Fix: Add the missing `/like` route
+// Route to handle adding likes
 app.post('/like', (req, res) => {
     const { userId, imageId } = req.body;
 
@@ -44,7 +45,30 @@ app.post('/like', (req, res) => {
     });
 });
 
-// ✅ Get like count for an image
+// Route to handle updating likes
+app.post('/likes/:imageId', (req, res) => {
+    const { userId, isLiked, likeCount } = req.body;
+    const { imageId } = req.params;
+
+    // Check if userId and imageId are provided
+    if (!userId || !imageId) {
+        return res.status(400).json({ error: 'userId and imageId are required' });
+    }
+
+    // Update or insert the like status in the database
+    const query = `INSERT INTO likes (userId, imageId, isLiked, likeCount) VALUES (?, ?, ?, ?)
+                   ON DUPLICATE KEY UPDATE likeCount = ?, isLiked = ?`;
+
+    db.query(query, [userId, imageId, isLiked, likeCount, likeCount, isLiked], (err, result) => {
+        if (err) {
+            console.error('Error inserting or updating like:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.json({ message: 'Like updated successfully' });
+    });
+});
+
+// Get like count for an image
 app.get('/likes/:imageId', (req, res) => {
     const { imageId } = req.params;
 
