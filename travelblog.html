@@ -147,22 +147,25 @@ async function likeImage(imageId) {
 }
 
 async function fetchLikeCount(imageId) {
+    console.log(`Fetching like count for: ${imageId}`);
+
     try {
         const response = await fetch(`${API_URL}${imageId}`);
-        if (!response.ok) throw new Error('Failed to fetch like count');
+        
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        
+        const data = await response.json();
+        console.log("Response Data:", data);
 
-        const { likeCount } = await response.json();
         const likeCountElem = document.getElementById(`${imageId}-like-count`);
-        if (likeCountElem) likeCountElem.innerText = `${likeCount} Likes`;
-
-        // Update UI if user has liked this before
-        if (localStorage.getItem(`${imageId}-liked`) === 'true') {
-            document.querySelector(`#${imageId} .like-button`).innerText = 'Unlike';
+        if (likeCountElem) {
+            likeCountElem.innerText = `${data.likeCount} Likes`;
         }
     } catch (error) {
         console.error(`Error fetching like count for ${imageId}:`, error);
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     ['milaan'].forEach(fetchLikeCount);
