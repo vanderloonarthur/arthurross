@@ -113,133 +113,94 @@ permalink: /travelblog.html
     <!-- Like Button Script -->
     <script>
         let loggedInUserId = null; // This will be populated after login
-        const API_URL = "https://www.arthurross.nl/comment_like_server";
+        const API_URL = "http://localhost:5001/likes/"; 
 
-        // Function to like/unlike an image
-        async function likeImage(imageId) {
-            if (!loggedInUserId) {
-                alert("You need to log in first.");
-                return;
-            }
+async function likeImage(imageId) {
+    if (!loggedInUserId) {
+        alert("You need to log in first.");
+        return;
+    }
 
-            const likeCountElem = document.getElementById(`${imageId}-like-count`);
-            if (!likeCountElem) {
-                console.error(`Element with ID ${imageId}-like-count not found`);
-                return;
-            }
+    const likeCountElem = document.getElementById(`${imageId}-like-count`);
+    if (!likeCountElem) return console.error(`Element ${imageId}-like-count not found`);
 
-            let currentLikes = parseInt(likeCountElem.innerText) || 0;
-            const isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
+    let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
+    let newLikeStatus = !isLiked;
 
-            // Toggle the like/unlike
-            if (isLiked) {
-                currentLikes = Math.max(0, currentLikes - 1); // Prevent going below zero
-                localStorage.removeItem(`${imageId}-liked`);
-            } else {
-                currentLikes++;
-                localStorage.setItem(`${imageId}-liked`, 'true');
-            }
+    // Update UI before API request
+    localStorage.setItem(`${imageId}-liked`, newLikeStatus);
+    likeCountElem.innerText = newLikeStatus ? `${parseInt(likeCountElem.innerText) + 1} Likes` : `${Math.max(0, parseInt(likeCountElem.innerText) - 1)} Likes`;
 
-            likeCountElem.innerText = `${currentLikes} Likes`;
+    document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? 'Unlike' : '❤️ Like';
 
-            // Update button UI
-            const likeButton = document.querySelector(`#${imageId} .like-button`);
-            if (likeButton) {
-                likeButton.innerText = isLiked ? '❤️ Like' : 'Unlike';
-                likeCountElem.style.color = isLiked ? '#e0e0e0' : '#ffeb3b';
-            }
-
-            try {
-                // Send updated like count to the backend API
-                const response = await fetch(`${API_URL}/likes/${imageId}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        userId: loggedInUserId,
-                        imageId: imageId,
-                        isLiked: !isLiked,
-                        likeCount: currentLikes
-                    }),
-                });
-
-                if (!response.ok) throw new Error('Failed to update like status');
-                console.log(`Like status updated for ${imageId}`);
-            } catch (error) {
-                console.error('Error updating like:', error);
-            }
-        }
-
-        // Function to fetch like counts from backend
-        async function fetchLikeCount(imageId) {
-            try {
-                const response = await fetch(`${API_URL}/likes/${imageId}`);
-                if (!response.ok) throw new Error('Failed to fetch like count');
-
-                const likes = await response.json();
-                const likeCountElem = document.getElementById(`${imageId}-like-count`);
-                if (likeCountElem) likeCountElem.innerText = `${likes.likeCount} Likes`;
-
-                // Check if the user has already liked this image
-                if (localStorage.getItem(`${imageId}-liked`) === 'true') {
-                    const likeButton = document.querySelector(`#${imageId} .like-button`);
-                    if (likeButton) {
-                        likeButton.innerText = 'Unlike';
-                        likeCountElem.style.color = '#ffeb3b'; // Highlight in yellow for "liked" state
-                    }
-                }
-            } catch (error) {
-                console.error(`Error fetching like count for ${imageId}:`, error);
-            }
-        }
-
-        // Fetch the initial like count when the page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log("JavaScript loaded successfully!");
-
-            const imageIds = ['milaan'];
-            imageIds.forEach(imageId => {
-                fetchLikeCount(imageId);
-            });
+    try {
+        const response = await fetch(`${API_URL}${imageId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus }),
         });
 
-        // Facebook Login Function
-        function loginWithFacebook() {
-            if (typeof FB !== 'undefined') {
-                FB.login(response => {
-                    if (response.authResponse) {
-                        loggedInUserId = response.authResponse.userID;
-                        alert("Logged in with Facebook");
-                        // Optionally, fetch or update user data from your backend
-                    } else {
-                        alert("User cancelled login.");
-                    }
-                }, { scope: 'public_profile' });
-            } else {
-                console.error('Facebook SDK not loaded');
-            }
-        }
+        if (!response.ok) throw new Error('Failed to update like status');
+    } catch (error) {
+        console.error('Error updating like:', error);
+    }
+}
 
-        // Google Login Function
-        function handleCredentialResponse(response) {
-            if (response.credential) {
-                const decodedCredential = parseJwt(response.credential);
-                loggedInUserId = decodedCredential.sub; // Google user ID
-                alert(`Logged in as ${decodedCredential.name}`);
-            } else {
-                alert("Google login failed");
-            }
-        }
+async function fetchLikeCount(imageId) {
+    try {
+        const response = await fetch(`${API_URL}${imageId}`);
+        if (!response.ok) throw new Error('Failed to fetch like count');
 
-        // Helper function to decode JWT (Google credential)
-        function parseJwt(token) {
-            let base64Url = token.split('.')[1];
-            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            let jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
-                '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-            ).join(''));
-        
-            return JSON.parse(jsonPayload);
+        const { likeCount } = await response.json();
+        const likeCountElem = document.getElementById(`${imageId}-like-count`);
+        if (likeCountElem) likeCountElem.innerText = `${likeCount} Likes`;
+
+        // Update UI if user has liked this before
+        if (localStorage.getItem(`${imageId}-liked`) === 'true') {
+            document.querySelector(`#${imageId} .like-button`).innerText = 'Unlike';
         }
+    } catch (error) {
+        console.error(`Error fetching like count for ${imageId}:`, error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    ['milaan'].forEach(fetchLikeCount);
+});
+
+// Ensure Facebook SDK is loaded before using it
+function loginWithFacebook() {
+    if (typeof FB !== 'undefined' && FB) {
+        FB.login(response => {
+            if (response.authResponse) {
+                loggedInUserId = response.authResponse.userID;
+                alert("Logged in with Facebook");
+            } else {
+                alert("User cancelled login.");
+            }
+        }, { scope: 'public_profile' });
+    } else {
+        console.error('Facebook SDK not loaded');
+    }
+}
+
+// Google Sign-In Handling
+window.handleCredentialResponse = function (response) {
+    if (response.credential) {
+        const decodedCredential = parseJwt(response.credential);
+        loggedInUserId = decodedCredential.sub;
+        alert(`Logged in as ${decodedCredential.name}`);
+    }
+};
+
+// Helper function to decode JWT
+function parseJwt(token) {
+    let base64Url = token.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+    return JSON.parse(jsonPayload);
+}
+
     </script>
 </body>
 </html>
