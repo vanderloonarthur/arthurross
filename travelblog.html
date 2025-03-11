@@ -151,7 +151,7 @@ permalink: /travelblog.html
 
             try {
                 // Send updated like count to the backend API
-                const response = await fetch(`${API_URL}/${imageId}`, {
+                const response = await fetch(`${API_URL}/likes/${imageId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -172,7 +172,7 @@ permalink: /travelblog.html
         // Function to fetch like counts from backend
         async function fetchLikeCount(imageId) {
             try {
-                const response = await fetch(`${API_URL}/${imageId}`);
+                const response = await fetch(`${API_URL}/likes/${imageId}`);
                 if (!response.ok) throw new Error('Failed to fetch like count');
 
                 const likes = await response.json();
@@ -184,13 +184,23 @@ permalink: /travelblog.html
                     const likeButton = document.querySelector(`#${imageId} .like-button`);
                     if (likeButton) {
                         likeButton.innerText = 'Unlike';
-                        likeCountElem.style.color = '#ffeb3b';
+                        likeCountElem.style.color = '#ffeb3b'; // Highlight in yellow for "liked" state
                     }
                 }
             } catch (error) {
                 console.error(`Error fetching like count for ${imageId}:`, error);
             }
         }
+
+        // Fetch the initial like count when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("JavaScript loaded successfully!");
+
+            const imageIds = ['milaan'];
+            imageIds.forEach(imageId => {
+                fetchLikeCount(imageId);
+            });
+        });
 
         // Facebook Login Function
         function loginWithFacebook() {
@@ -219,7 +229,7 @@ permalink: /travelblog.html
                 alert("Google login failed");
             }
         }
-    
+
         // Helper function to decode JWT (Google credential)
         function parseJwt(token) {
             let base64Url = token.split('.')[1];
@@ -230,16 +240,6 @@ permalink: /travelblog.html
         
             return JSON.parse(jsonPayload);
         }
-
-        // Fetch the initial like count when the page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log("JavaScript loaded successfully!");
-
-            const imageIds = ['milaan'];
-            imageIds.forEach(imageId => {
-                fetchLikeCount(imageId);
-            });
-        });
     </script>
 </body>
 </html>
