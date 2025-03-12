@@ -115,12 +115,40 @@ permalink: /travelblog.html
         let loggedInUserId = null; // This will be populated after login
     
         // Dynamically set API URL based on environment (localhost vs. production)
-        const API_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'  
-            ? 'http://localhost:5001/api/likes/'  
-            : 'https://c32b-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app/api/likes/'; // Update with your production API URL
-    
-        console.log("Using API URL:", API_URL); // Debugging: Ensure the correct API is being used
-    
+        <script>
+    let loggedInUserId = null; // This will be populated after login
+
+    // Dynamically set API URL based on environment (localhost vs. production)
+    const API_URL = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')  
+        ? 'http://localhost:5001/api/likes/'  
+        : 'https://c32b-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app/api/likes/'; // Update with your production API URL
+
+    console.log("Using API URL:", API_URL); // Debugging: Ensure the correct API is being used
+
+    async function fetchLikes(imageId) {
+        try {
+            const response = await fetch(`${API_URL}${imageId}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log("Fetched like data:", data);
+            
+            // Update UI
+            const likeCountElem = document.getElementById(`${imageId}-like-count`);
+            if (likeCountElem) {
+                likeCountElem.innerText = `${data.likeCount} Likes`;
+            }
+        } catch (error) {
+            console.error("Error fetching likes:", error);
+        }
+    }
+
+    // Fetch like count when the page loads
+    // document.addEventListener("DOMContentLoaded", () => {
+        fetchLikes("milaan");
+    });
+</script>
 
 async function fetchLikeCount(imageId) {
     try {
