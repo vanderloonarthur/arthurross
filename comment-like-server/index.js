@@ -8,10 +8,11 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors({
-    origin: 'http://127.0.0.1:4000',
-    methods: ['GET', 'POST'], // Specify the allowed methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers if needed
+    origin: ['http://127.0.0.1:4000', 'https://www.arthurross.nl'], // Add the production URL
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 app.use(express.json()); // Replaced bodyParser with express.json()
 
 // Create MySQL connection
