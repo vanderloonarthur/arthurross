@@ -7,11 +7,22 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Middleware
+const cors = require('cors');
+
+// Middleware
 app.use(cors({
-    origin: 'https://05a1-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app',  // Allow ngrok URL during local testing
+    origin: function(origin, callback) {
+        // Allow localhost or the ngrok URL (dynamic check)
+        if (origin === 'http://127.0.0.1:4000' || origin === 'http://localhost:4000' || origin === 'https://c32b-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app') {
+            callback(null, true);  // Allow the origin
+        } else {
+            callback(new Error('Not allowed by CORS'), false);  // Block other origins
+        }
+    },
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 
 
 app.use(express.json()); // Replaced bodyParser with express.json()
