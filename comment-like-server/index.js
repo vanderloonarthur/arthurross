@@ -9,11 +9,19 @@ const PORT = process.env.PORT || 5001;
 // Middleware
 const cors = require('cors');
 
+const cors = require('cors');
+
 // Middleware
 app.use(cors({
     origin: function(origin, callback) {
-        // Allow localhost or the ngrok URL (dynamic check)
-        if (origin === 'http://127.0.0.1:4000' || origin === 'http://localhost:4000' || origin === 'https://c32b-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app') {
+        const allowedOrigins = [
+            'http://127.0.0.1:4000', 
+            'http://localhost:4000', 
+            'https://c32b-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app', 
+            'https://www.arthurross.nl'  // Allow this origin
+        ];
+        
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);  // Allow the origin
         } else {
             callback(new Error('Not allowed by CORS'), false);  // Block other origins
