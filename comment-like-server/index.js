@@ -6,22 +6,13 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Middleware
-const cors = require('cors');
-
-const cors = require('cors');
-
-// Middleware
+// Middleware for CORS
 app.use(cors({
     origin: function(origin, callback) {
-        const allowedOrigins = [
-            'http://127.0.0.1:4000', 
-            'http://localhost:4000', 
-            'https://c32b-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app', 
-            'https://www.arthurross.nl'  // Allow this origin
+        const allowedOrigins = [*
         ];
         
-        if (allowedOrigins.includes(origin)) {
+        if (allowedOrigins.includes(origin) || !origin) {  // Allow requests without origin (e.g., from curl or Postman)
             callback(null, true);  // Allow the origin
         } else {
             callback(new Error('Not allowed by CORS'), false);  // Block other origins
@@ -31,8 +22,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-
-
+// Middleware to parse JSON
 app.use(express.json()); // Replaced bodyParser with express.json()
 
 // Create MySQL connection
