@@ -1,6 +1,7 @@
 ---
 permalink: /travelblog.html
 ---
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -113,85 +114,63 @@ permalink: /travelblog.html
     <!-- Like Button Script -->
     <script>
         let loggedInUserId = null; // This will be populated after login
-    
+
         // Dynamically set API URL based on environment (localhost vs. production)
-        <script>
-    let loggedInUserId = null; // This will be populated after login
+        const API_URL = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')  
+            ? 'http://localhost:5001/api/likes/'  
+            : 'https://c32b-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app/api/likes/'; // Update with your production API URL
 
-    // Dynamically set API URL based on environment (localhost vs. production)
-    const API_URL = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')  
-        ? 'http://localhost:5001/api/likes/'  
-        : 'https://c32b-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app/api/likes/'; // Update with your production API URL
+        console.log("Using API URL:", API_URL); // Debugging: Ensure the correct API is being used
 
-    console.log("Using API URL:", API_URL); // Debugging: Ensure the correct API is being used
+        async function fetchLikeCount(imageId) {
+            try {
+                const response = await fetch(`${API_URL}${imageId}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include' // Use this if cookies/auth required
+                });
 
-    async function fetchLikes(imageId) {
-        try {
-            const response = await fetch(`${API_URL}${imageId}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                const data = await response.json();
+                console.log("Response Data:", data);
+
+                const likeCountElem = document.getElementById(`${imageId}-like-count`);
+                if (likeCountElem) likeCountElem.innerText = `${data.likeCount} Likes`;
+            } catch (error) {
+                console.error(`Error fetching like count for ${imageId}:`, error);
             }
-            const data = await response.json();
-            console.log("Fetched like data:", data);
-            
-            // Update UI
-            const likeCountElem = document.getElementById(`${imageId}-like-count`);
-            if (likeCountElem) {
-                likeCountElem.innerText = `${data.likeCount} Likes`;
-            }
-        } catch (error) {
-            console.error("Error fetching likes:", error);
         }
-    }
 
-    // Fetch like count when the page loads
-    // document.addEventListener("DOMContentLoaded", () => {
-        fetchLikes("milaan");
-    });
-</script>
+        async function likeImage(imageId) {
+            if (!loggedInUserId) {
+                alert("You need to log in first.");
+                return;
+            }
 
-async function fetchLikeCount(imageId) {
-    try {
-        const response = await fetch(`${API_URL}${imageId}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include' // Use this if cookies/auth required
-        });
+            const likeCountElem = document.getElementById(`${imageId}-like-count`);
+            if (!likeCountElem) return console.error(`Element ${imageId}-like-count not found`);
 
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
-        const data = await response.json();
-        console.log("Response Data:", data);
-
-        const likeCountElem = document.getElementById(`${imageId}-like-count`);
-        if (likeCountElem) likeCountElem.innerText = `${data.likeCount} Likes`;
-    } catch (error) {
-        console.error(`Error fetching like count for ${imageId}:`, error);
-    }
-}
-
-    
             let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
             let newLikeStatus = !isLiked;
-    
+
             // Update UI before API request
             localStorage.setItem(`${imageId}-liked`, newLikeStatus);
             likeCountElem.innerText = newLikeStatus ? `${parseInt(likeCountElem.innerText) + 1} Likes` : `${Math.max(0, parseInt(likeCountElem.innerText) - 1)} Likes`;
-    
+
             document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? 'Unlike' : '❤️ Like';
-    
+
             try {
                 const response = await fetch(`${API_URL}${imageId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus }),
                 });
-    
+
                 if (!response.ok) throw new Error('Failed to update like status');
-    
+
                 // After successful update, fetch updated like count
                 fetchLikeCount(imageId);
-    
             } catch (error) {
                 console.error('Error updating like:', error);
                 // Revert the UI if the API request fails
@@ -200,37 +179,12 @@ async function fetchLikeCount(imageId) {
                 document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? '❤️ Like' : 'Unlike';
             }
         }
-    
-        // Fetch Like Count Function
-        async function fetchLikeCount(imageId) {
-            console.log(`Fetching like count for: ${imageId}`);
-    
-            try {
-                const response = await fetch(`${API_URL}${imageId}`);
-    
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-    
-                const data = await response.json();
-                console.log("Response Data:", data);
-    
-                const likeCountElem = document.getElementById(`${imageId}-like-count`);
-                if (likeCountElem) {
-                    likeCountElem.innerText = `${data.likeCount} Likes`;
-                } else {
-                    console.error(`Element #${imageId}-like-count not found`);
-                }
-            } catch (error) {
-                console.error(`Error fetching like count for ${imageId}:`, error);
-            }
-        }
-    
+
         // Run this when the page loads
         document.addEventListener("DOMContentLoaded", () => {
             fetchLikeCount("milaan");
         });
-    
+
         // Ensure Facebook SDK is loaded before using it
         function loginWithFacebook() {
             if (typeof FB !== 'undefined' && FB) {
@@ -246,7 +200,7 @@ async function fetchLikeCount(imageId) {
                 console.error('Facebook SDK not loaded');
             }
         }
-    
+
         // Google Sign-In Handling
         window.handleCredentialResponse = function (response) {
             if (response.credential) {
@@ -255,7 +209,7 @@ async function fetchLikeCount(imageId) {
                 alert(`Logged in as ${decodedCredential.name}`);
             }
         };
-    
+
         // Helper function to decode JWT
         function parseJwt(token) {
             let base64Url = token.split('.')[1];
@@ -264,6 +218,5 @@ async function fetchLikeCount(imageId) {
             return JSON.parse(jsonPayload);
         }
     </script>
-    
 </body>
 </html>
