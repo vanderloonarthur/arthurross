@@ -84,7 +84,7 @@ permalink: /travelblog.html
                 </a>
                 <div class="like-container">
                     <button class="like-button" id="milaan-like-btn" onclick="likeImage('milaan')">❤️ Like</button>
-                    <span id="milaan-like-count">0 Likes</span>
+                    <span id="milaan-like-count">0 Likes</span> <!-- Initial like count is 0 -->
                 </div>
             </div>
         </section>
@@ -113,102 +113,111 @@ permalink: /travelblog.html
     <!-- Like Button Script -->
     <script>
         let loggedInUserId = null; // This will be populated after login
-        const API_URL = "https://www.arthurross.nl/likes/"; 
-
-async function likeImage(imageId) {
-    if (!loggedInUserId) {
-        alert("You need to log in first.");
-        return;
-    }
-
-    const likeCountElem = document.getElementById(`${imageId}-like-count`);
-    if (!likeCountElem) return console.error(`Element ${imageId}-like-count not found`);
-
-    let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
-    let newLikeStatus = !isLiked;
-
-    // Update UI before API request
-    localStorage.setItem(`${imageId}-liked`, newLikeStatus);
-    likeCountElem.innerText = newLikeStatus ? `${parseInt(likeCountElem.innerText) + 1} Likes` : `${Math.max(0, parseInt(likeCountElem.innerText) - 1)} Likes`;
-
-    document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? 'Unlike' : '❤️ Like';
-
-    try {
-        const response = await fetch(`${API_URL}${imageId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus }),
-        });
-
-        if (!response.ok) throw new Error('Failed to update like status');
-    } catch (error) {
-        console.error('Error updating like:', error);
-    }
-}
-
-async function fetchLikeCount(imageId) {
-    console.log(`Fetching like count for: ${imageId}`);
-
-    try {
-        const response = await fetch(`${API_URL}${imageId}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Response Data:", data);
-
-        const likeCountElem = document.getElementById(`${imageId}-like-count`);
-        if (likeCountElem) {
-            likeCountElem.innerText = `${data.likeCount} Likes`;
-        } else {
-            console.error(`Element #${imageId}-like-count not found`);
-        }
-    } catch (error) {
-        console.error(`Error fetching like count for ${imageId}:`, error);
-    }
-}
-
-// Run this when the page loads
-document.addEventListener("DOMContentLoaded", () => {
-    fetchLikeCount("milaan");
-});
-
-
-// Ensure Facebook SDK is loaded before using it
-function loginWithFacebook() {
-    if (typeof FB !== 'undefined' && FB) {
-        FB.login(response => {
-            if (response.authResponse) {
-                loggedInUserId = response.authResponse.userID;
-                alert("Logged in with Facebook");
-            } else {
-                alert("User cancelled login.");
+        const API_URL = "http://localhost:5001/api/likes/"; // Use local API for local testing
+    
+        // Like Image Function
+        async function likeImage(imageId) {
+            if (!loggedInUserId) {
+                alert("You need to log in first.");
+                return;
             }
-        }, { scope: 'public_profile' });
-    } else {
-        console.error('Facebook SDK not loaded');
-    }
-}
-
-// Google Sign-In Handling
-window.handleCredentialResponse = function (response) {
-    if (response.credential) {
-        const decodedCredential = parseJwt(response.credential);
-        loggedInUserId = decodedCredential.sub;
-        alert(`Logged in as ${decodedCredential.name}`);
-    }
-};
-
-// Helper function to decode JWT
-function parseJwt(token) {
-    let base64Url = token.split('.')[1];
-    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    let jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-    return JSON.parse(jsonPayload);
-}
-
+    
+            const likeCountElem = document.getElementById(`${imageId}-like-count`);
+            if (!likeCountElem) return console.error(`Element ${imageId}-like-count not found`);
+    
+            let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
+            let newLikeStatus = !isLiked;
+    
+            // Update UI before API request
+            localStorage.setItem(`${imageId}-liked`, newLikeStatus);
+            likeCountElem.innerText = newLikeStatus ? `${parseInt(likeCountElem.innerText) + 1} Likes` : `${Math.max(0, parseInt(likeCountElem.innerText) - 1)} Likes`;
+    
+            document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? 'Unlike' : '❤️ Like';
+    
+            try {
+                const response = await fetch(`${API_URL}${imageId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus }),
+                });
+    
+                if (!response.ok) throw new Error('Failed to update like status');
+    
+                // After successful update, fetch updated like count
+                fetchLikeCount(imageId);
+    
+            } catch (error) {
+                console.error('Error updating like:', error);
+                // Revert the UI if the API request fails
+                localStorage.setItem(`${imageId}-liked`, !newLikeStatus);
+                likeCountElem.innerText = newLikeStatus ? `${parseInt(likeCountElem.innerText) - 1} Likes` : `${parseInt(likeCountElem.innerText) + 1} Likes`;
+                document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? '❤️ Like' : 'Unlike';
+            }
+        }
+    
+        // Fetch Like Count Function
+        async function fetchLikeCount(imageId) {
+            console.log(`Fetching like count for: ${imageId}`);
+    
+            try {
+                const response = await fetch(`${API_URL}${imageId}`);
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+    
+                const data = await response.json();
+                console.log("Response Data:", data);
+    
+                const likeCountElem = document.getElementById(`${imageId}-like-count`);
+                if (likeCountElem) {
+                    likeCountElem.innerText = `${data.likeCount} Likes`;
+                } else {
+                    console.error(`Element #${imageId}-like-count not found`);
+                }
+            } catch (error) {
+                console.error(`Error fetching like count for ${imageId}:`, error);
+            }
+        }
+    
+        // Run this when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchLikeCount("milaan");
+        });
+    
+        // Ensure Facebook SDK is loaded before using it
+        function loginWithFacebook() {
+            if (typeof FB !== 'undefined' && FB) {
+                FB.login(response => {
+                    if (response.authResponse) {
+                        loggedInUserId = response.authResponse.userID;
+                        alert("Logged in with Facebook");
+                    } else {
+                        alert("User cancelled login.");
+                    }
+                }, { scope: 'public_profile' });
+            } else {
+                console.error('Facebook SDK not loaded');
+            }
+        }
+    
+        // Google Sign-In Handling
+        window.handleCredentialResponse = function (response) {
+            if (response.credential) {
+                const decodedCredential = parseJwt(response.credential);
+                loggedInUserId = decodedCredential.sub;
+                alert(`Logged in as ${decodedCredential.name}`);
+            }
+        };
+    
+        // Helper function to decode JWT
+        function parseJwt(token) {
+            let base64Url = token.split('.')[1];
+            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            let jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+            return JSON.parse(jsonPayload);
+        }
     </script>
+    
 </body>
 </html>

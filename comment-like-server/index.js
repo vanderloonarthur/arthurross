@@ -6,8 +6,13 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: 'http://127.0.0.1:4000',
+    methods: ['GET', 'POST'], // Specify the allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers if needed
+  }));
 app.use(express.json()); // Replaced bodyParser with express.json()
 
 // Create MySQL connection
@@ -90,13 +95,30 @@ app.post('/likes/:imageId', (req, res) => {
 app.get('/likes/:imageId', (req, res) => {
     const { imageId } = req.params;
 
-    const query = `SELECT COUNT(*) AS likeCount FROM likes WHERE imageId = ? AND isLiked = true`;
+    // Update the query to match the schema where 'isLiked' is stored as '1' for true
+    const query = `SELECT COUNT(*) AS likeCount FROM likes WHERE imageId = ? AND isLiked = 1`;
     db.query(query, [imageId], (err, results) => {
         if (err) {
             console.error('Error fetching likes:', err);
             return res.status(500).json({ error: 'Database error' });
         }
         res.json({ imageId, likeCount: results[0].likeCount });
+    });
+});
+
+
+// Route to handle fetching likes for a specific page
+app.get('/api/likes/:pageId', (req, res) => {
+    const { pageId } = req.params;
+    
+    const query = `SELECT COUNT(*) AS likeCount FROM likes WHERE imageId = ? AND isLiked = true`;
+    db.query(query, [pageId], (err, results) => {
+        if (err) {
+            console.error('❌ MySQL Error:', err.code, err.sqlMessage);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        
+        res.json({ pageId, likeCount: results[0].likeCount });
     });
 });
 
