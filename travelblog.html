@@ -113,17 +113,30 @@ permalink: /travelblog.html
     <!-- Like Button Script -->
     <script>
         let loggedInUserId = null; // This will be populated after login
-        const API_URL = "http://localhost:5001/api/likes/"; // Use local API for local testing
-    
-        // Like Image Function
-        async function likeImage(imageId) {
-            if (!loggedInUserId) {
-                alert("You need to log in first.");
-                return;
-            }
-    
-            const likeCountElem = document.getElementById(`${imageId}-like-count`);
-            if (!likeCountElem) return console.error(`Element ${imageId}-like-count not found`);
+        const API_URL = window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:5001/api/likes/' 
+    : 'https://api.arthurross.nl/api/likes/'; // Update with your production API URL
+
+async function fetchLikeCount(imageId) {
+    try {
+        const response = await fetch(`${API_URL}${imageId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include' // Use this if cookies/auth required
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+        const data = await response.json();
+        console.log("Response Data:", data);
+
+        const likeCountElem = document.getElementById(`${imageId}-like-count`);
+        if (likeCountElem) likeCountElem.innerText = `${data.likeCount} Likes`;
+    } catch (error) {
+        console.error(`Error fetching like count for ${imageId}:`, error);
+    }
+}
+
     
             let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
             let newLikeStatus = !isLiked;
