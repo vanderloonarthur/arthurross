@@ -8,10 +8,11 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors({
-    origin: ['http://127.0.0.1:4000', 'https://www.arthurross.nl'], // Add the production URL
+    origin: 'https://05a1-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app',  // Allow ngrok URL during local testing
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 
 app.use(express.json()); // Replaced bodyParser with express.json()
 
