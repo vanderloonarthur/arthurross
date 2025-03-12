@@ -8,7 +8,11 @@ const app = express();
 const port = 3000;
 
 // Middleware
-app.use(cors()); // For handling CORS (Cross-Origin Resource Sharing)
+app.use(cors({
+    origin: process.env.CORS_ORIGIN, // Get from environment variable
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(bodyParser.json()); // To parse incoming JSON requests
 
 // Simulated database for storing likes (In a real app, you'd use a database)
