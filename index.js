@@ -6,13 +6,27 @@ const FB = require('fb'); // Facebook SDK for Node.js
 
 const app = express();
 const port = 3000;
+const cors = require('cors');
 
-// Middleware
+const allowedOrigins = [
+    'http://127.0.0.1:4000',  // Local frontend for development
+    'https://www.arthurross.nl'  // Production frontend
+];
+
 app.use(cors({
-    origin: process.env.CORS_ORIGIN, // Get from environment variable
-    methods: ['GET', 'POST'],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // Allow cookies/auth headers
 }));
+
+
 app.use(bodyParser.json()); // To parse incoming JSON requests
 
 // Simulated database for storing likes (In a real app, you'd use a database)
