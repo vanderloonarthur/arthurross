@@ -1,40 +1,29 @@
 const express = require('express');
-const https = require('https');
-const fs = require('fs');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
+const fs = require('fs');
+const https = require('https');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// SSL certificates for HTTPS
-const privateKey = fs.readFileSync('path/to/private-key.pem', 'utf8');
-const certificate = fs.readFileSync('path/to/certificate.pem', 'utf8');
-const ca = fs.readFileSync('path/to/ca-cert.pem', 'utf8'); // Optional, if you have CA cert
-
-const credentials = {
-    key: privateKey,
-    cert: certificate,
-    ca: ca,  // Optional
-};
-
 // CORS configuration
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://www.arthurross.nl'],
+    origin: ['http://localhost:3000', 'https://www.arthurross.nl'], 
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
+    credentials: true
 }));
 
-app.use(express.json());
+app.use(express.json()); 
 
 // MySQL connection
 const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    database: process.env.DB_NAME
 });
 
 // ✅ Route: Like an image
@@ -48,7 +37,7 @@ app.post('/likes/:imageId', async (req, res) => {
 
     try {
         const [existingLikes] = await db.query(
-            `SELECT isLiked FROM likes WHERE userId = ? AND imageId = ?`,
+            `SELECT isLiked FROM likes WHERE userId = ? AND imageId = ?`, 
             [userId, imageId]
         );
 
@@ -70,6 +59,34 @@ app.post('/likes/:imageId', async (req, res) => {
         res.json({ message: 'Like status updated successfully' });
     } catch (err) {
         console.error('❌ Error updating like:', err);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+// ✅ Route: Unlike an image
+app.post('/unlike', async (req, res) => {
+    const { userId, imageId } = req.body;
+
+    if (!userId || !imageId) {
+        return res.status(400).json({ error: 'userId and imageId are required' });
+    }
+
+    try {
+        const [existingLikes] = await db.query(
+            `SELECT isLiked FROM likes WHERE userId = ? AND imageId = ?`, 
+            [userId, imageId]
+        );
+
+        if (existingLikes.length > 0 && existingLikes[0].isLiked) {
+            await db.query(
+                `UPDATE likes SET isLiked = false, likeCount = GREATEST(likeCount - 1, 0) WHERE userId = ? AND imageId = ?`,
+                [userId, imageId]
+            );
+        }
+
+        res.json({ message: 'Like removed successfully' });
+    } catch (err) {
+        console.error('❌ Error unliking:', err);
         res.status(500).json({ error: 'Database error' });
     }
 });
@@ -96,7 +113,14 @@ app.get('/', (req, res) => {
     res.send('Server is running!');
 });
 
-// ✅ Start the server
-https.createServer(credentials, app).listen(PORT, () => {
+// ✅ SSL certificates (make sure to replace with the correct path to your certificates)
+const options = {
+    key: fs.readFileSync('path/to/your/private-key.pem'),
+    cert: fs.readFileSync('path/to/your/certificate.pem'),
+    ca: fs.readFileSync('path/to/your/ca.pem') // Optional: Add this if you have a chain of trust
+};
+
+// ✅ Start the HTTPS server
+https.createServer(options, app).listen(PORT, () => {
     console.log(`🚀 Server running on https://localhost:${PORT}`);
 });
