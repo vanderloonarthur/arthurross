@@ -47,7 +47,7 @@ async function likeImage(imageId) {
                 likeCount: currentLikes
             }),
         });
-        
+
         if (!response.ok) {
             console.error('Failed to update like status');
             // Optionally revert UI update on failure
