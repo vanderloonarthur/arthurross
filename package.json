@@ -19,8 +19,9 @@
   },
   "homepage": "https://mmistakes.github.io/minimal-mistakes/",
   "engines": {
-    "node": "14.x"
-  },
+    "node": "18.x"
+  }
+
   "main": "script.js",
   "directories": {
     "doc": "docs",
