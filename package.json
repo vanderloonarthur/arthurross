@@ -20,7 +20,7 @@
   "homepage": "https://mmistakes.github.io/minimal-mistakes/",
   "engines": {
     "node": "18.x"
-  }
+  },
 
   "main": "script.js",
   "directories": {
