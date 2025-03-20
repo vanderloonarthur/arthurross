@@ -1,0 +1,10 @@
+{
+    "root": "public/",
+    "rewrites": [
+      {
+        "source": "/**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+  
