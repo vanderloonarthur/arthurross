@@ -51,7 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Optionally, if the user presses "Enter" or "Space", trigger the button click for accessibility
     button.addEventListener('keydown', function(event) {
         if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();  // Prevent spacebar from scrolling
             enterWebsite();
         }
     });
 });
+

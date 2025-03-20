@@ -1,11 +1,8 @@
----
-permalink: /
----
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-25QWYDWGEP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -15,13 +12,12 @@ permalink: /
     </script>
     <title>{{ page.title | default: site.title }}</title>
     <meta name="description" content="{{ page.description | default: site.description }}">
-    <!-- Favicon -->
     <link rel="icon" href="{{ site.baseurl }}/assets/images/europa.png" type="image/x-icon">
     <style>
         body, html {
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prevent scrollbars */
+            overflow: hidden;
             font-family: 'Arial', sans-serif;
         }
         h1 {
@@ -62,11 +58,11 @@ permalink: /
             text-align: center;
             color: white;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* Add background color with transparency */
-            border-radius: 10px; /* Add rounded corners */
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
             opacity: 0;
             transition: opacity 2s ease;
-            font-size: 1.2em; /* Enhance font size */
+            font-size: 1.2em;
         }
         .enter-button {
             position: absolute;
@@ -101,93 +97,66 @@ permalink: /
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TXS8FJVW" height="0" width="0" style="display: none; visibility: hidden;"></iframe>
     </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    
     <div class="fade-out-element">
         <div class="fullscreen-container">
-            <!-- Ensure image has alt text for accessibility -->
             <img src="{{ site.baseurl }}/assets/images/eiffeltore.jpg" alt="Eiffel Tower at sunset" class="fullscreen-image" id="fade-out-image" />
-            
-            <!-- Introductory Text Section -->
             <div class="intro-text">
                 <h1>Hij reist de wereld rond met 2 woorden in zijn broekzak:</h1>
                 <h3>Rugby</h3>
                 <h2>Kampioen</h2>
             </div>
-            <!-- End Introductory Text Section -->
-            
-            <!-- Enter Website Button -->
             <button class="enter-button" id="enter-button" aria-label="Get ready to enter the website">
                 Haal diep adem
             </button>
         </div>
     </div>
-    
-    <!-- Audio element to play the tune -->
     <audio id="intro-tune" src="{{ site.baseurl }}/assets/audio/intro_tune.wav" preload="auto"></audio>
-    
-    <!-- Include the client.js script -->
     <script src="{{ site.baseurl }}/client.js"></script>
 
-    <!-- Ensure that JS interacts only when the DOM is fully loaded -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Select the image, text, button, and audio elements
             var image = document.querySelector('.fullscreen-image');
             var introText = document.querySelector('.intro-text');
             var button = document.getElementById('enter-button');
             var audio = document.getElementById('intro-tune');
 
-            // Ensure the elements exist before proceeding
             if (!image || !introText || !button || !audio) {
                 console.error('Missing required DOM elements.');
                 return;
             }
 
-            // Function to handle the button click
             var enterWebsite = function () {
-                // Play the audio on click (handling autoplay issues)
                 audio.play().catch(function (error) {
                     console.log('Autoplay failed:', error);
                 });
 
-                // Fade out the image over 2 seconds
-                image.style.transition = 'opacity 2s'; // Add transition for smooth fade
+                image.style.transition = 'opacity 2s';
                 image.style.opacity = 0;
 
-                // Fade in the intro text after a 2-second delay to match image fade-out
                 setTimeout(function () {
-                    introText.style.transition = 'opacity 2s'; // Add transition for smooth fade
+                    introText.style.transition = 'opacity 2s';
                     introText.style.opacity = 1;
-                }, 2000); // Delay in milliseconds (2000ms = 2 seconds)
+                }, 2000);
 
-                // Hide the button after it is clicked
                 button.style.display = 'none';
             };
 
-            // Add event listener to the button
             button.addEventListener('click', enterWebsite);
 
-            // Function to handle the tune end event
             audio.addEventListener('ended', function () {
-                // Redirect to the travelblog URL after the audio finishes
                 window.location.href = '{{ site.baseurl }}/travelblog.html';
             });
 
-            // Ensure button is focusable and accessible
             button.focus();
-
-            // Add a more specific accessibility hint for screen readers
             button.setAttribute('aria-label', 'Start the experience');
-            button.setAttribute('role', 'button'); // Explicitly define role
+            button.setAttribute('role', 'button');
 
-            // Optionally, if the user presses "Enter" or "Space", trigger the button click for accessibility
             button.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
                     enterWebsite();
                 }
             });
