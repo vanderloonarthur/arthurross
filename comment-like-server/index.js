@@ -1,8 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
-const fs = require('fs');
-const https = require('https');
 require('dotenv').config();
 
 const app = express();
@@ -16,14 +14,15 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.json()); 
+app.use(express.json());
 
-// MySQL connection
+// MySQL connection from JawsDB URL
+const dbUrl = process.env.JAWSDB_URL;
 const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    host: dbUrl.match(/@(.+?):/)[1],
+    user: dbUrl.match(/:\/\/(.*?):/)[1],
+    password: dbUrl.match(/:(.*?)@/)[1],
+    database: dbUrl.match(/\/(.+)$/)[1],
 });
 
 // ✅ Route: Like an image
@@ -113,14 +112,17 @@ app.get('/', (req, res) => {
     res.send('Server is running!');
 });
 
-// ✅ SSL certificates (make sure to replace with the correct path to your certificates)
-const options = {
-    key: fs.readFileSync('path/to/your/private-key.pem'),
-    cert: fs.readFileSync('path/to/your/certificate.pem'),
-    ca: fs.readFileSync('path/to/your/ca.pem') // Optional: Add this if you have a chain of trust
-};
+// Redirect HTTP to HTTPS in production (for custom domain)
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        if (req.headers['x-forwarded-proto'] === 'http') {
+            return res.redirect(301, 'https://' + req.headers.host + req.url);
+        }
+        return next();
+    });
+}
 
-// ✅ Start the HTTPS server
-https.createServer(options, app).listen(PORT, () => {
-    console.log(`🚀 Server running on https://localhost:${PORT}`);
+// Start the server
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
