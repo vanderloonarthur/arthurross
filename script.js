@@ -47,11 +47,24 @@ async function likeImage(imageId) {
                 likeCount: currentLikes
             }),
         });
-
-        if (!response.ok) throw new Error('Failed to update like status');
-        console.log(`Like status updated for ${imageId}`);
+        
+        if (!response.ok) {
+            console.error('Failed to update like status');
+            // Optionally revert UI update on failure
+            currentLikes = isLiked ? currentLikes - 1 : currentLikes + 1;
+            likeCountElem.innerText = `${currentLikes} Likes`;
+            localStorage.setItem(`${imageId}-liked`, isLiked);
+            likeButton.innerText = isLiked ? 'Unlike' : '❤️ Like';
+        } else {
+            console.log(`Like status updated for ${imageId}`);
+        }
     } catch (error) {
         console.error('Error updating like:', error);
+        // Revert the UI if the API request fails
+        currentLikes = isLiked ? currentLikes - 1 : currentLikes + 1;
+        likeCountElem.innerText = `${currentLikes} Likes`;
+        localStorage.setItem(`${imageId}-liked`, isLiked);
+        likeButton.innerText = isLiked ? 'Unlike' : '❤️ Like';
     }
 }
 

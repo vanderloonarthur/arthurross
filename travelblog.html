@@ -1,6 +1,7 @@
 ---
 permalink: /travelblog.html
 ---
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -116,33 +117,30 @@ permalink: /travelblog.html
 
         // Dynamically set API URL based on environment (localhost vs. production)
         const API_URL = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')  
-    ? 'http://localhost:5001/api/likes/'  
-    : 'https://arthurross.nl/api/likes/';
-
+            ? 'http://localhost:5001/api/likes/'  
+            : 'https://arthurross.nl/api/likes/';
 
         console.log("Using API URL:", API_URL); // Debugging: Ensure the correct URL is used.
-        
+
         async function fetchLikeCount(imageId) {
-    try {
-        console.log(`Fetching likes for ${imageId}...`);
-        const response = await fetch(`${API_URL}${imageId}`);
+            try {
+                const response = await fetch(`${API_URL}${imageId}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include' // Use this if cookies/auth required
+                });
 
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-        const data = await response.json();
-        console.log("Received Data:", data);
+                const data = await response.json();
+                console.log("Response Data:", data);
 
-        const likeCountElem = document.getElementById(`${imageId}-like-count`);
-        if (likeCountElem && data.likeCount !== undefined) {
-            likeCountElem.innerText = `${data.likeCount} Likes`;
-        } else {
-            console.error(`Element ${imageId}-like-count not found or invalid response`);
+                const likeCountElem = document.getElementById(`${imageId}-like-count`);
+                if (likeCountElem) likeCountElem.innerText = `${data.likeCount} Likes`;
+            } catch (error) {
+                console.error(`Error fetching like count for ${imageId}:`, error);
+            }
         }
-    } catch (error) {
-        console.error(`Error fetching like count for ${imageId}:`, error);
-    }
-}
-
 
         async function likeImage(imageId) {
             if (!loggedInUserId) {
@@ -184,7 +182,10 @@ permalink: /travelblog.html
 
         // Run this when the page loads
         document.addEventListener("DOMContentLoaded", () => {
-            fetchLikeCount("milaan");
+            const imageIds = ['milaan']; // Add more image IDs as necessary
+            imageIds.forEach(imageId => {
+                fetchLikeCount(imageId);
+            });
         });
 
         // Ensure Facebook SDK is loaded before using it
