@@ -1,7 +1,6 @@
 ---
 permalink: /travelblog.html
 ---
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -117,8 +116,9 @@ permalink: /travelblog.html
 
         // Dynamically set API URL based on environment (localhost vs. production)
         const API_URL = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')  
-            ? 'http://localhost:5001/api/likes/'  
-            : 'https://05a1-2001-1c00-241e-b500-44ac-18d0-b3f-abc.ngrok-free.app/api/likes/';  // ngrok URL for testing
+    ? 'http://localhost:5001/api/likes/'  
+    : 'https://arthurross.nl.ngrok-free.app/api/likes/';
+
 
         console.log("Using API URL:", API_URL); // Debugging: Ensure the correct URL is used.
         
