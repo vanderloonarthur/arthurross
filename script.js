@@ -1,5 +1,5 @@
 let loggedInUserId = null; // This should be populated after successful login
-const API_URL = "https://www.arthurross.nl/api/likes/";  // Ensure it's declared once!
+const API_URL = "https://www.arthurross.nl/api/likes/"; // Ensure it's declared once!
 
 // Function to like/unlike an image
 async function likeImage(imageId) {
@@ -98,11 +98,11 @@ function loginWithFacebook() {
             if (response.authResponse) {
                 loggedInUserId = response.authResponse.userID;
                 alert("Logged in with Facebook");
-                fetchFacebookLikes(loggedInUserId);  // Fetch Facebook likes after login
+                fetchFacebookLikes(loggedInUserId); // Fetch Facebook likes after login
             } else {
                 alert("User cancelled login.");
             }
-        }, { scope: 'public_profile' });  // Removed email scope
+        }, { scope: 'public_profile' }); // Removed email scope
     } else {
         console.error('Facebook SDK not loaded');
     }
@@ -136,6 +136,7 @@ async function fetchFacebookLikes(userId) {
 function handleCredentialResponse(response) {
     loggedInUserId = response.credential; // Simply assign the new user ID
     alert("Logged in with Google");
+    // Optionally fetch or sync Google likes after login if needed
 }
 
 // Modal functions
