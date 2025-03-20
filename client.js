@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Select the image, text, button, and audio elements
+    // The DOM is now fully loaded and we can safely manipulate it
     var image = document.querySelector('.fullscreen-image');
     var introText = document.querySelector('.intro-text');
     var button = document.getElementById('enter-button');
@@ -44,6 +44,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Ensure button is focusable and accessible
     button.focus();
 
-    // Optionally, add accessibility hint for screen readers
-    button.setAttribute('aria-label', 'Enter website');
+    // Add a more specific accessibility hint for screen readers
+    button.setAttribute('aria-label', 'Start the experience');
+    button.setAttribute('role', 'button'); // Explicitly define role
+
+    // Optionally, if the user presses "Enter" or "Space", trigger the button click for accessibility
+    button.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            enterWebsite();
+        }
+    });
 });
