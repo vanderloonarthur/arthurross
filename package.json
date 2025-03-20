@@ -20,9 +20,10 @@
   "homepage": "https://mmistakes.github.io/minimal-mistakes/",
   "engines": {
     "node": "18.x"
-  },
+  },  
 
-  "main": "script.js",
+  "main": "script.js",  
+
   "directories": {
     "doc": "docs",
     "test": "test"
@@ -41,8 +42,6 @@
     "express-validator": "^7.2.1",
     "fb": "^2.0.0",
     "google-auth-library": "^9.15.1",
-    "javascript": "^1.0.0",
-    "module-name": "^0.0.1-security",
     "mongoose": "^8.12.1",
     "mysql2": "^3.13.0",
     "ngrok": "^5.0.0-beta.2",
