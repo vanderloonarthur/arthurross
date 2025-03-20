@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var button = document.getElementById('enter-button');
     var audio = document.getElementById('intro-tune');
 
+    // Ensure the elements exist before proceeding
+    if (!image || !introText || !button || !audio) {
+        console.error('Missing required DOM elements.');
+        return;
+    }
+
     // Function to handle the button click
     var enterWebsite = function () {
         // Play the audio on click (handling autoplay issues)
@@ -13,10 +19,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Fade out the image over 2 seconds
+        image.style.transition = 'opacity 2s'; // Add transition for smooth fade
         image.style.opacity = 0;
 
         // Fade in the intro text after a 2-second delay to match image fade-out
         setTimeout(function () {
+            introText.style.transition = 'opacity 2s'; // Add transition for smooth fade
             introText.style.opacity = 1;
         }, 2000); // Delay in milliseconds (2000ms = 2 seconds)
 
@@ -35,4 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Ensure button is focusable and accessible
     button.focus();
+
+    // Optionally, add accessibility hint for screen readers
+    button.setAttribute('aria-label', 'Enter website');
 });
