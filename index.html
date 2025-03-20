@@ -118,6 +118,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Check if required elements exist
             var image = document.querySelector('.fullscreen-image');
             var introText = document.querySelector('.intro-text');
             var button = document.getElementById('enter-button');
@@ -128,32 +129,41 @@
                 return;
             }
 
+            // Function to start the transition and play the audio
             var enterWebsite = function () {
+                // Play the audio on click or interaction
                 audio.play().catch(function (error) {
                     console.log('Autoplay failed:', error);
                 });
 
+                // Fade out the image
                 image.style.transition = 'opacity 2s';
                 image.style.opacity = 0;
 
+                // After the image fades, show the intro text
                 setTimeout(function () {
                     introText.style.transition = 'opacity 2s';
                     introText.style.opacity = 1;
                 }, 2000);
 
+                // Hide the enter button after click
                 button.style.display = 'none';
             };
 
+            // Add event listener for button click
             button.addEventListener('click', enterWebsite);
 
+            // Redirect to the next page after the audio ends
             audio.addEventListener('ended', function () {
                 window.location.href = '{{ site.baseurl }}/travelblog.html';
             });
 
+            // Set accessibility attributes
             button.focus();
             button.setAttribute('aria-label', 'Start the experience');
             button.setAttribute('role', 'button');
 
+            // Handle keyboard events for accessibility
             button.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
