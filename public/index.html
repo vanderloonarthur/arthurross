@@ -1,0 +1,178 @@
+---
+permalink: index.html
+---
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-25QWYDWGEP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-25QWYDWGEP');
+    </script>
+    <title>{{ page.title | default: site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    <link rel="icon" href="{{ site.baseurl }}/assets/images/europa.png" type="image/x-icon">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+        h1 {
+            color: red;
+        }
+        h2 {
+            color: blue;
+        }
+        h3 {
+            color: gold;
+        }
+        .fade-out-element {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            overflow: hidden;
+        }
+        .fullscreen-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .fullscreen-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+            transition: opacity 2s ease;
+        }
+        .intro-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 2s ease;
+            font-size: 1.2em;
+        }
+        .enter-button {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: 2px solid silver;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .enter-button:hover {
+            background-color: green;
+            color: white;
+        }
+        @media only screen and (max-width: 768px) {
+            .intro-text h1 {
+                font-size: 1.5em;
+            }
+            .intro-text p {
+                font-size: 1em;
+            }
+            .enter-button {
+                font-size: 0.8em;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TXS8FJVW" height="0" width="0" style="display: none; visibility: hidden;"></iframe>
+    </noscript>
+    <div class="fade-out-element">
+        <div class="fullscreen-container">
+            <img src="{{ site.baseurl }}/assets/images/eiffeltore.jpg" alt="Eiffel Tower at sunset" class="fullscreen-image" id="fade-out-image" />
+            <div class="intro-text">
+                <h1>Hij reist de wereld rond met 2 woorden in zijn broekzak:</h1>
+                <h3>Rugby</h3>
+                <h2>Kampioen</h2>
+            </div>
+            <button class="enter-button" id="enter-button" aria-label="Get ready to enter the website">
+                Haal diep adem
+            </button>
+        </div>
+    </div>
+    <audio id="intro-tune" src="{{ site.baseurl }}/assets/audio/intro_tune.wav" preload="auto"></audio>
+    <script src="/client.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if required elements exist
+            var image = document.querySelector('.fullscreen-image');
+            var introText = document.querySelector('.intro-text');
+            var button = document.getElementById('enter-button');
+            var audio = document.getElementById('intro-tune');
+
+            if (!image || !introText || !button || !audio) {
+                console.error('Missing required DOM elements.');
+                return;
+            }
+
+            // Function to start the transition and play the audio
+            var enterWebsite = function () {
+                // Play the audio on click or interaction
+                audio.play().catch(function (error) {
+                    console.log('Autoplay failed:', error);
+                });
+
+                // Fade out the image
+                image.style.transition = 'opacity 2s';
+                image.style.opacity = 0;
+
+                // After the image fades, show the intro text
+                setTimeout(function () {
+                    introText.style.transition = 'opacity 2s';
+                    introText.style.opacity = 1;
+                }, 2000);
+
+                // Hide the enter button after click
+                button.style.display = 'none';
+            };
+
+            // Add event listener for button click
+            button.addEventListener('click', enterWebsite);
+
+            // Redirect to the next page after the audio ends
+            audio.addEventListener('ended', function () {
+                window.location.href = '{{ site.baseurl }}/travelblog.html';
+            });
+
+            // Set accessibility attributes
+            button.focus();
+            button.setAttribute('aria-label', 'Start the experience');
+            button.setAttribute('role', 'button');
+
+            // Handle keyboard events for accessibility
+            button.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    enterWebsite();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
