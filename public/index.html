@@ -1,6 +1,3 @@
----
-permalink: index.html
----
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,7 +11,7 @@ permalink: index.html
     </script>
     <title>{{ page.title | default: site.title }}</title>
     <meta name="description" content="{{ page.description | default: site.description }}">
-    <link rel="icon" href="{{ site.baseurl }}/assets/images/europa.png" type="image/x-icon">
+    <link rel="icon" href="/assets/images/europa.png" type="image/x-icon">
     <style>
         body, html {
             margin: 0;
@@ -104,7 +101,7 @@ permalink: index.html
     </noscript>
     <div class="fade-out-element">
         <div class="fullscreen-container">
-            <img src="{{ site.baseurl }}/assets/images/eiffeltore.jpg" alt="Eiffel Tower at sunset" class="fullscreen-image" id="fade-out-image" />
+            <img src="/assets/images/eiffeltore.jpg" alt="Eiffel Tower at sunset" class="fullscreen-image" id="fade-out-image" />
             <div class="intro-text">
                 <h1>Hij reist de wereld rond met 2 woorden in zijn broekzak:</h1>
                 <h3>Rugby</h3>
@@ -115,7 +112,7 @@ permalink: index.html
             </button>
         </div>
     </div>
-    <audio id="intro-tune" src="{{ site.baseurl }}/assets/audio/intro_tune.wav" preload="auto"></audio>
+    <audio id="intro-tune" src="/assets/audio/intro_tune.wav" preload="auto"></audio>
     <script src="/client.js"></script>
 
     <script>
@@ -157,7 +154,7 @@ permalink: index.html
 
             // Redirect to the next page after the audio ends
             audio.addEventListener('ended', function () {
-                window.location.href = '{{ site.baseurl }}/travelblog.html';
+                window.location.href = '/travelblog.html';
             });
 
             // Set accessibility attributes
