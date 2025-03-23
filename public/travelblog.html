@@ -1,0 +1,227 @@
+---
+permalink: /travelblog.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Reis door Europa met Arthur Ross! Ontdek de schoonheid van Europa met deze boeiende reisverhalen.">
+    <meta name="keywords" content="Europa, reizen, Arthur Ross, reisverhalen, Milaan, Madrid, Stuttgart, Edinburgh">
+    
+    <!-- Open Graph (Facebook) -->
+    <meta property="og:title" content="Gallery - Reis door Europa met Arthur Ross!">
+    <meta property="og:description" content="Ontdek de schoonheid van Europa met deze boeiende reisverhalen van Arthur Ross.">
+    <meta property="og:image" content="https://www.arthurross.nl/assets/images/madride.png">
+    <meta property="og:url" content="https://www.arthurross.nl/travelblog.html">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gallery - Reis door Europa met Arthur Ross!">
+    <meta name="twitter:description" content="Ontdek de schoonheid van Europa met deze boeiende reisverhalen van Arthur Ross.">
+    <meta name="twitter:image" content="https://www.arthurross.nl/assets/images/madride.png">
+    
+    <title>Travel Blog</title>
+    <link rel="icon" href="/assets/images/europa.png" type="image/x-icon">
+    <link rel="stylesheet" href="/styles.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-25QWYDWGEP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-25QWYDWGEP');
+    </script>
+
+    <!-- Facebook SDK -->
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '626159790032742',
+                cookie     : true,
+                xfbml      : true,
+                version    : 'v13.0'
+            });
+            FB.AppEvents.logPageView();
+        };
+        (function(d, s, id) {
+            if (d.getElementById(id)) return;
+            var js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            var fjs = d.getElementsByTagName(s)[0];
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <!-- Axios for API requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <h1>Reis door Europa met Arthur Ross!*</h1>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/posts/milaan.html">Milaan</a></li>
+                <li><a href="/privacy_policy.md">Privacy Policy</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="image-gallery">
+            <!-- Blog Items -->
+            <div class="image-item" id="milaan">
+                <a href="/posts/milaan.html" class="golden-link">
+                    <img src="/assets/images/skyline.jpg" alt="Milaan">
+                    <div class="image-caption"><p>Bedevaart naar Milaan [mei/ juni 2016]</p></div>
+                </a>
+                <div class="like-container">
+                    <button class="like-button" id="milaan-like-btn" onclick="likeImage('milaan')">❤️ Like</button>
+                    <span id="milaan-like-count">0 Likes</span> <!-- Initial like count is 0 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Facebook Login Button -->
+        <div class="centered-button">
+            <button id="facebook-login-btn" class="facebook-login-btn" onclick="loginWithFacebook()">Login with Facebook</button>
+        </div>
+
+        <!-- Google Sign-In Button -->
+        <div class="centered-button">
+            <div id="g_id_onload"
+                 data-client_id="1066413110213-5qld3jtgiaarh31havq0l2372gdlt9l4.apps.googleusercontent.com"
+                 data-callback="handleCredentialResponse"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-size="large"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Arthur Ross. Alle rechten voorbehouden.</p>
+        <p><a href="/privacy_policy.md">Privacy Policy</a></p>
+    </footer>
+
+    <!-- Like Button Script -->
+    <script>
+        let loggedInUserId = null; // This will be populated after login
+
+        // Dynamically set API URL based on environment (localhost vs. production)
+        const API_URL = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')  
+            ? 'http://localhost:5001/api/likes/'  
+            : 'https://arthurross.nl/api/likes/';
+
+        console.log("Using API URL:", API_URL); // Debugging: Ensure the correct URL is used.
+
+        async function fetchLikeCount(imageId) {
+            try {
+                const response = await fetch(`${API_URL}${imageId}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include' // Use this if cookies/auth required
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                const data = await response.json();
+                console.log("Response Data:", data);
+
+                const likeCountElem = document.getElementById(`${imageId}-like-count`);
+                if (likeCountElem) likeCountElem.innerText = `${data.likeCount} Likes`;
+            } catch (error) {
+                console.error(`Error fetching like count for ${imageId}:`, error);
+            }
+        }
+
+        async function likeImage(imageId) {
+            if (!loggedInUserId) {
+                alert("You need to log in first.");
+                return;
+            }
+
+            const likeCountElem = document.getElementById(`${imageId}-like-count`);
+            if (!likeCountElem) return console.error(`Element ${imageId}-like-count not found`);
+
+            let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
+            let newLikeStatus = !isLiked;
+
+            // Update UI before API request
+            localStorage.setItem(`${imageId}-liked`, newLikeStatus);
+            likeCountElem.innerText = newLikeStatus ? `${parseInt(likeCountElem.innerText) + 1} Likes` : `${Math.max(0, parseInt(likeCountElem.innerText) - 1)} Likes`;
+
+            document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? 'Unlike' : '❤️ Like';
+
+            try {
+                const response = await fetch(`${API_URL}${imageId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus }),
+                });
+
+                if (!response.ok) throw new Error('Failed to update like status');
+
+                // After successful update, fetch updated like count
+                fetchLikeCount(imageId);
+            } catch (error) {
+                console.error('Error updating like:', error);
+                // Revert the UI if the API request fails
+                localStorage.setItem(`${imageId}-liked`, !newLikeStatus);
+                likeCountElem.innerText = newLikeStatus ? `${parseInt(likeCountElem.innerText) - 1} Likes` : `${parseInt(likeCountElem.innerText) + 1} Likes`;
+                document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? '❤️ Like' : 'Unlike';
+            }
+        }
+
+        // Run this when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            const imageIds = ['milaan']; // Add more image IDs as necessary
+            imageIds.forEach(imageId => {
+                fetchLikeCount(imageId);
+            });
+        });
+
+        // Ensure Facebook SDK is loaded before using it
+        function loginWithFacebook() {
+            if (typeof FB !== 'undefined' && FB) {
+                FB.login(response => {
+                    if (response.authResponse) {
+                        loggedInUserId = response.authResponse.userID;
+                        alert("Logged in with Facebook");
+                    } else {
+                        alert("User cancelled login.");
+                    }
+                }, { scope: 'public_profile' });
+            } else {
+                console.error('Facebook SDK not loaded');
+            }
+        }
+
+        // Google Sign-In Handling
+        window.handleCredentialResponse = function (response) {
+            if (response.credential) {
+                const decodedCredential = parseJwt(response.credential);
+                loggedInUserId = decodedCredential.sub;
+                alert(`Logged in as ${decodedCredential.name}`);
+            }
+        };
+
+        // Helper function to decode JWT
+        function parseJwt(token) {
+            let base64Url = token.split('.')[1];
+            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            let jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+            return JSON.parse(jsonPayload);
+        }
+    </script>
+        <script src="script.js"></script> <!-- Include your script here -->
+</body>
+</html>
