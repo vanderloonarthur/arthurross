@@ -30,9 +30,7 @@ permalink: /travelblog.html
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-25QWYDWGEP"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() {
-            dataLayer.push(arguments);
-        }
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-25QWYDWGEP');
     </script>
@@ -49,11 +47,13 @@ permalink: /travelblog.html
             FB.AppEvents.logPageView();
         };
         (function(d, s, id) {
-            if (d.getElementById(id)) return;
-            var js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            var fjs = d.getElementsByTagName(s)[0];
-            fjs.parentNode.insertBefore(js, fjs);
+            if (!d.getElementById(id)) {
+                var js = d.createElement(s); 
+                js.id = id;
+                js.src = "https://connect.facebook.net/en_US/sdk.js";
+                var fjs = d.getElementsByTagName(s)[0];
+                fjs.parentNode.insertBefore(js, fjs);
+            }
         }(document, 'script', 'facebook-jssdk'));
     </script>
 
@@ -86,22 +86,21 @@ permalink: /travelblog.html
                 </a>
                 <div class="like-container">
                     <button class="like-button" id="milaan-like-btn" onclick="likeImage('milaan')">❤️ Like</button>
-                    <span id="milaan-like-count">0 Likes</span> <!-- Initial like count is 0 -->
+                    <span id="milaan-like-count">0 Likes</span>
                 </div>
             </div>
         </section>
 
         <!-- Facebook Login Button -->
         <div class="centered-button">
-            <button id="facebook-login-btn" class="facebook-login-btn" onclick="loginWithFacebook()">Login with Facebook</button>
+            <button id="facebook-login-btn" onclick="loginWithFacebook()">Login with Facebook</button>
         </div>
 
         <!-- Google Sign-In Button -->
         <div class="centered-button">
             <div id="g_id_onload"
                  data-client_id="1066413110213-5qld3jtgiaarh31havq0l2372gdlt9l4.apps.googleusercontent.com"
-                 data-callback="handleCredentialResponse"
-                 data-auto_prompt="false">
+                 data-callback="handleCredentialResponse">
             </div>
             <div class="g_id_signin" data-type="standard" data-size="large"></div>
         </div>
@@ -114,30 +113,17 @@ permalink: /travelblog.html
 
     <!-- Like Button Script -->
     <script>
-        let loggedInUserId = null; // This will be populated after login
+        let loggedInUserId = null; 
 
-        // Dynamically set API URL based on environment (localhost vs. production)
-        const API_URL = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')  
+        const API_URL = (window.location.hostname === 'localhost')  
             ? 'http://localhost:5001/api/likes/'  
             : 'https://arthurross.nl/api/likes/';
 
-        console.log("Using API URL:", API_URL); // Debugging: Ensure the correct URL is used.
-
         async function fetchLikeCount(imageId) {
             try {
-                const response = await fetch(`${API_URL}${imageId}`, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include' // Use this if cookies/auth required
-                });
-
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
+                const response = await fetch(`${API_URL}${imageId}`);
                 const data = await response.json();
-                console.log("Response Data:", data);
-
-                const likeCountElem = document.getElementById(`${imageId}-like-count`);
-                if (likeCountElem) likeCountElem.innerText = `${data.likeCount} Likes`;
+                document.getElementById(`${imageId}-like-count`).innerText = `${data.likeCount} Likes`;
             } catch (error) {
                 console.error(`Error fetching like count for ${imageId}:`, error);
             }
@@ -149,79 +135,50 @@ permalink: /travelblog.html
                 return;
             }
 
-            const likeCountElem = document.getElementById(`${imageId}-like-count`);
-            if (!likeCountElem) return console.error(`Element ${imageId}-like-count not found`);
+            let likeBtn = document.getElementById(`${imageId}-like-btn`);
+            let likeCountElem = document.getElementById(`${imageId}-like-count`);
 
             let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
             let newLikeStatus = !isLiked;
 
-            // Update UI before API request
             localStorage.setItem(`${imageId}-liked`, newLikeStatus);
-            likeCountElem.innerText = newLikeStatus ? `${parseInt(likeCountElem.innerText) + 1} Likes` : `${Math.max(0, parseInt(likeCountElem.innerText) - 1)} Likes`;
-
-            document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? 'Unlike' : '❤️ Like';
+            likeBtn.innerText = newLikeStatus ? 'Unlike' : '❤️ Like';
 
             try {
-                const response = await fetch(`${API_URL}${imageId}`, {
+                await fetch(`${API_URL}${imageId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus }),
                 });
 
-                if (!response.ok) throw new Error('Failed to update like status');
-
-                // After successful update, fetch updated like count
                 fetchLikeCount(imageId);
             } catch (error) {
                 console.error('Error updating like:', error);
-                // Revert the UI if the API request fails
-                localStorage.setItem(`${imageId}-liked`, !newLikeStatus);
-                likeCountElem.innerText = newLikeStatus ? `${parseInt(likeCountElem.innerText) - 1} Likes` : `${parseInt(likeCountElem.innerText) + 1} Likes`;
-                document.querySelector(`#${imageId} .like-button`).innerText = newLikeStatus ? '❤️ Like' : 'Unlike';
             }
         }
 
-        // Run this when the page loads
         document.addEventListener("DOMContentLoaded", () => {
-            const imageIds = ['milaan']; // Add more image IDs as necessary
-            imageIds.forEach(imageId => {
-                fetchLikeCount(imageId);
-            });
+            fetchLikeCount('milaan');
         });
 
-        // Ensure Facebook SDK is loaded before using it
         function loginWithFacebook() {
-            if (typeof FB !== 'undefined' && FB) {
+            if (typeof FB !== 'undefined') {
                 FB.login(response => {
                     if (response.authResponse) {
                         loggedInUserId = response.authResponse.userID;
                         alert("Logged in with Facebook");
-                    } else {
-                        alert("User cancelled login.");
                     }
                 }, { scope: 'public_profile' });
-            } else {
-                console.error('Facebook SDK not loaded');
             }
         }
 
-        // Google Sign-In Handling
-        window.handleCredentialResponse = function (response) {
+        window.handleCredentialResponse = function(response) {
             if (response.credential) {
-                const decodedCredential = parseJwt(response.credential);
+                let decodedCredential = JSON.parse(atob(response.credential.split('.')[1]));
                 loggedInUserId = decodedCredential.sub;
                 alert(`Logged in as ${decodedCredential.name}`);
             }
         };
-
-        // Helper function to decode JWT
-        function parseJwt(token) {
-            let base64Url = token.split('.')[1];
-            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            let jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-            return JSON.parse(jsonPayload);
-        }
     </script>
-        <script src="script.js"></script> <!-- Include your script here -->
 </body>
 </html>
