@@ -1,7 +1,6 @@
 ---
 permalink: /travelblog.html
 ---
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -145,13 +144,14 @@ permalink: /travelblog.html
             likeBtn.innerText = newLikeStatus ? 'Unlike' : '❤️ Like';
 
             try {
-                await fetch(`${API_URL}${imageId}`, {
+                const response = await fetch(`${API_URL}${imageId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus }),
                 });
 
-                fetchLikeCount(imageId);
+                const data = await response.json();
+                document.getElementById(`${imageId}-like-count`).innerText = `${data.likeCount} Likes`;
             } catch (error) {
                 console.error('Error updating like:', error);
             }
