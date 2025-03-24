@@ -1,29 +1,38 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import mysql from 'mysql2/promise';
-import path from 'path';
-import { fileURLToPath } from 'url';
+// Import required modules
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const mysql = require('mysql2/promise');
+const path = require('path');
+const { fileURLToPath } = require('url');
 
 // Import routes
-import signupRouter from './routes/signup.js';
-import verifyEmailRouter from './routes/verifyEmail.js';
-import authRoutes from './routes/auth.js';
+const signupRouter = require('./routes/signup');
+const verifyEmailRouter = require('./routes/verifyEmail');
+const authRoutes = require('./routes/auth');
 
+// Load environment variables
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Database connection
-const db = await mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASS || '',
-    database: process.env.DB_NAME || 'travel_blog',
-});
+let db;
 
-console.log("Connected to MySQL Database");
+// Database connection setup using the connection URL
+async function connectDB() {
+    try {
+        // Use the connection URL from environment variables (JAWSDB_URL)
+        db = await mysql.createConnection(process.env.JAWSDB_URL);
+        console.log("Connected to MySQL Database via JAWSDB_URL");
+    } catch (error) {
+        console.error("Database connection failed:", error);
+        process.exit(1); // Exit the app if the database connection fails
+    }
+}
+
+// Establish the database connection
+connectDB();
 
 // Middleware
 app.use(cors());
@@ -44,11 +53,7 @@ app.get('/api/likes/:pageId', async (req, res) => {
     const { pageId } = req.params;
     try {
         const [rows] = await db.execute('SELECT like_count FROM likes WHERE page_id = ?', [pageId]);
-        if (rows.length > 0) {
-            res.json({ likeCount: rows[0].like_count });
-        } else {
-            res.json({ likeCount: 0 });
-        }
+        res.json({ likeCount: rows.length > 0 ? rows[0].like_count : 0 });
     } catch (error) {
         console.error("Error fetching likes:", error);
         res.status(500).json({ error: "Internal Server Error" });
