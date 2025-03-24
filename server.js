@@ -1,15 +1,14 @@
-// Import required modules
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const mysql = require('mysql2/promise');
-const path = require('path');
-const { fileURLToPath } = require('url');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import mysql from 'mysql2/promise';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Import routes
-const signupRouter = require('./routes/signup');
-const verifyEmailRouter = require('./routes/verifyEmail');
-const authRoutes = require('./routes/auth');
+import signupRouter from './routes/signup.js';
+import verifyEmailRouter from './routes/verifyEmail.js';
+import authRoutes from './routes/auth.js';
 
 // Load environment variables
 dotenv.config();
