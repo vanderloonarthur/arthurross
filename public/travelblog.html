@@ -127,33 +127,38 @@
         }
 
         async function likeImage(imageId) {
-            if (!loggedInUserId) {
-                alert("You need to log in first.");
-                return;
-            }
+    if (!loggedInUserId) {
+        alert("You need to log in first.");
+        return;
+    }
 
-            let likeBtn = document.getElementById(`${imageId}-like-btn`);
-            let likeCountElem = document.getElementById(`${imageId}-like-count`);
+    let likeBtn = document.getElementById(`${imageId}-like-btn`);
+    let likeCountElem = document.getElementById(`${imageId}-like-count`);
 
-            let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
-            let newLikeStatus = !isLiked;
+    let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
+    let newLikeStatus = !isLiked;
 
-            localStorage.setItem(`${imageId}-liked`, newLikeStatus);
-            likeBtn.innerText = newLikeStatus ? 'Unlike' : '❤️ Like';
+    try {
+        const response = await fetch(`/api/likes/${imageId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus })
+        });
 
-            try {
-                const response = await fetch(`${API_URL}${imageId}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus }),
-                });
-
-                const data = await response.json();
-                document.getElementById(`${imageId}-like-count`).innerText = `${data.likeCount} Likes`;
-            } catch (error) {
-                console.error('Error updating like:', error);
-            }
+        if (!response.ok) {
+            throw new Error("Failed to update like.");
         }
+
+        const data = await response.json();
+        likeCountElem.innerText = `${data.likeCount} Likes`;
+
+        localStorage.setItem(`${imageId}-liked`, newLikeStatus);
+        likeBtn.innerText = newLikeStatus ? '❤️ Unlike' : '❤️ Like';
+    } catch (error) {
+        console.error('Error updating like:', error);
+    }
+}
+
 
         document.addEventListener("DOMContentLoaded", () => {
             fetchLikeCount('milaan');

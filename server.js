@@ -64,25 +64,35 @@ app.get('/api/likes/:pageId', async (req, res) => {
     }
 });
 
-// Update likes for a page
 app.post('/api/likes/:pageId', async (req, res) => {
     const { pageId } = req.params;
-    const { isLiked } = req.body;
+    const { userId, isLiked } = req.body;
 
-    if (typeof isLiked !== 'boolean') {
-        return res.status(400).json({ error: 'Invalid input: "isLiked" must be a boolean value' });
+    if (!userId) {
+        return res.status(400).json({ error: 'User ID is required' });
     }
 
     try {
-        const [rows] = await db.execute('SELECT like_count FROM likes WHERE page_id = ?', [pageId]);
-        let likeCount = rows.length > 0 ? rows[0].like_count : 0;
-        likeCount = isLiked ? likeCount + 1 : Math.max(0, likeCount - 1);
+        // Check if the user already liked this page
+        const [existingLikes] = await db.execute('SELECT * FROM user_likes WHERE page_id = ? AND user_id = ?', [pageId, userId]);
 
-        // Use ON DUPLICATE KEY UPDATE to ensure likes are updated if the page_id exists
-        await db.execute(
-            'INSERT INTO likes (page_id, like_count) VALUES (?, ?) ON DUPLICATE KEY UPDATE like_count = ?',
-            [pageId, likeCount, likeCount]
-        );
+        if (isLiked) {
+            if (existingLikes.length === 0) {
+                // Add new like
+                await db.execute('INSERT INTO user_likes (page_id, user_id) VALUES (?, ?)', [pageId, userId]);
+                await db.execute('INSERT INTO likes (page_id, like_count) VALUES (?, 1) ON DUPLICATE KEY UPDATE like_count = like_count + 1');
+            }
+        } else {
+            if (existingLikes.length > 0) {
+                // Remove like
+                await db.execute('DELETE FROM user_likes WHERE page_id = ? AND user_id = ?', [pageId, userId]);
+                await db.execute('UPDATE likes SET like_count = GREATEST(0, like_count - 1) WHERE page_id = ?', [pageId]);
+            }
+        }
+
+        // Fetch updated like count
+        const [rows] = await db.execute('SELECT like_count FROM likes WHERE page_id = ?', [pageId]);
+        const likeCount = rows.length > 0 ? rows[0].like_count : 0;
 
         res.json({ likeCount });
     } catch (error) {
