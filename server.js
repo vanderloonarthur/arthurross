@@ -69,6 +69,7 @@ app.post('/api/likes/:pageId', async (req, res) => {
         let likeCount = rows.length > 0 ? rows[0].like_count : 0;
         likeCount = isLiked ? likeCount + 1 : Math.max(0, likeCount - 1);
 
+        // Use ON DUPLICATE KEY UPDATE to ensure likes are updated if the page_id exists
         await db.execute(
             'INSERT INTO likes (page_id, like_count) VALUES (?, ?) ON DUPLICATE KEY UPDATE like_count = ?',
             [pageId, likeCount, likeCount]
@@ -81,7 +82,7 @@ app.post('/api/likes/:pageId', async (req, res) => {
     }
 });
 
-// Use additional routes
+// Use additional routes for signup, verify email, and authentication
 app.use('/api', signupRouter);
 app.use('/api', verifyEmailRouter);
 app.use('/auth', authRoutes);
