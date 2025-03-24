@@ -116,15 +116,23 @@
             ? 'http://localhost:5001/api/likes/'  
             : 'https://arthurross.nl/api/likes/';
 
-        async function fetchLikeCount(imageId) {
-            try {
-                const response = await fetch(`${API_URL}${imageId}`);
-                const data = await response.json();
-                document.getElementById(`${imageId}-like-count`).innerText = `${data.likeCount} Likes`;
-            } catch (error) {
-                console.error(`Error fetching like count for ${imageId}:`, error);
-            }
+            async function fetchLikeCount(imageId) {
+    try {
+        const response = await fetch(`${API_URL}${imageId}`);
+        const data = await response.json();
+        document.getElementById(`${imageId}-like-count`).innerText = `${data.likeCount} Likes`;
+
+        if (loggedInUserId) {
+            const userLikeResponse = await fetch(`${API_URL}${imageId}/user/${loggedInUserId}`);
+            const userLikeData = await userLikeResponse.json();
+            let likeBtn = document.getElementById(`${imageId}-like-btn`);
+            likeBtn.innerText = userLikeData.isLiked ? '❤️ Unlike' : '❤️ Like';
         }
+    } catch (error) {
+        console.error(`Error fetching like count for ${imageId}:`, error);
+    }
+}
+
 
         async function likeImage(imageId) {
     if (!loggedInUserId) {
@@ -135,11 +143,16 @@
     let likeBtn = document.getElementById(`${imageId}-like-btn`);
     let likeCountElem = document.getElementById(`${imageId}-like-count`);
 
-    let isLiked = localStorage.getItem(`${imageId}-liked`) === 'true';
-    let newLikeStatus = !isLiked;
-
     try {
-        const response = await fetch(`/api/likes/${imageId}`, {
+        // Check if the user has already liked this image
+        const checkResponse = await fetch(`${API_URL}${imageId}/user/${loggedInUserId}`);
+        const checkData = await checkResponse.json();
+        let isCurrentlyLiked = checkData.isLiked;
+
+        let newLikeStatus = !isCurrentlyLiked;
+
+        // Send like/unlike request
+        const response = await fetch(`${API_URL}${imageId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: loggedInUserId, isLiked: newLikeStatus })
@@ -152,7 +165,6 @@
         const data = await response.json();
         likeCountElem.innerText = `${data.likeCount} Likes`;
 
-        localStorage.setItem(`${imageId}-liked`, newLikeStatus);
         likeBtn.innerText = newLikeStatus ? '❤️ Unlike' : '❤️ Like';
     } catch (error) {
         console.error('Error updating like:', error);

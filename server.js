@@ -51,18 +51,18 @@ app.get('/', (req, res) => {
     res.send('Welcome to the API!');
 });
 
-// Fetch likes for a page
-app.get('/api/likes/:pageId', async (req, res) => {
-    const { pageId } = req.params;
+// Fetch if user has liked a page
+app.get('/api/likes/:pageId/user/:userId', async (req, res) => {
+    const { pageId, userId } = req.params;
     try {
-        const [rows] = await db.execute('SELECT like_count FROM likes WHERE page_id = ?', [pageId]);
-        const likeCount = rows.length > 0 ? rows[0].like_count : 0;
-        res.json({ likeCount });
+        const [rows] = await db.execute('SELECT * FROM user_likes WHERE page_id = ? AND user_id = ?', [pageId, userId]);
+        res.json({ isLiked: rows.length > 0 });
     } catch (error) {
-        console.error("Error fetching likes:", error);
-        res.status(500).json({ error: "Internal Server Error: Unable to fetch likes" });
+        console.error("Error fetching user like status:", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
 
 app.post('/api/likes/:pageId', async (req, res) => {
     const { pageId } = req.params;
